@@ -12,7 +12,8 @@ import './App.css';
 import { throwDice, DiceThrowResult, suggestRolls } from '../logic/rolls';
 import { Rolls } from './Rolls';
 import { Die } from '../logic/die';
-import DiePicker from './DiePicker';
+import { DiePicker } from './DiePicker';
+import { NumberPicker } from './NumberPicker';
 
 const App: FC = () => {
   const [result, setResult] = useState<DiceThrowResult | null>(null);
@@ -57,15 +58,10 @@ const App: FC = () => {
         </Button>
         <FormGroup>
           <DiePicker title="Die Type" die={dieType} setDie={setDieType} />
-          <FormControlLabel
-            control={
-              <Input
-                type="number"
-                value={rollAmount}
-                onChange={(e) => setRollAmount(Number(e.target.value))}
-              />
-            }
-            label="Roll Amount"
+          <NumberPicker
+            title="Roll Amount"
+            number={rollAmount}
+            setNumber={setRollAmount}
           />
           <FormControlLabel
             control={

@@ -2,19 +2,24 @@ import React, { FC } from 'react';
 import { Box, IconButton, Typography, Chip } from '@material-ui/core';
 import PlusIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
-import { Die, DIE_TYPES } from '../logic/die';
 
-export interface DiePickerProps {
+export interface NumberPickerProps {
   title?: string;
-  die: Die;
-  setDie: (die: Die) => void;
+  number: number;
+  setNumber: (number: number) => void;
+  min?: number;
+  max?: number;
 }
 
-export const DiePicker: FC<DiePickerProps> = ({ title, die, setDie }) => {
-  const dieIndex = DIE_TYPES.indexOf(die);
-
-  const isFirst = dieIndex === 0;
-  const isLast = dieIndex === DIE_TYPES.length - 1;
+export const NumberPicker: FC<NumberPickerProps> = ({
+  title,
+  number,
+  setNumber,
+  min = -20,
+  max = 20,
+}) => {
+  const isFirst = number === min;
+  const isLast = number === max;
 
   return (
     <Box display="flex" alignItems="center">
@@ -24,7 +29,7 @@ export const DiePicker: FC<DiePickerProps> = ({ title, die, setDie }) => {
       <IconButton
         size="small"
         disabled={isFirst}
-        onClick={() => setDie(DIE_TYPES[dieIndex - 1])}
+        onClick={() => setNumber(number - 1)}
       >
         <MinusIcon />
       </IconButton>
@@ -36,13 +41,13 @@ export const DiePicker: FC<DiePickerProps> = ({ title, die, setDie }) => {
         width={40}
       >
         <Typography variant="h5" component="span">
-          {die}
+          {number}
         </Typography>
       </Box>
       <IconButton
         size="small"
         disabled={isLast}
-        onClick={() => setDie(DIE_TYPES[dieIndex + 1])}
+        onClick={() => setNumber(number + 1)}
       >
         <PlusIcon />
       </IconButton>
