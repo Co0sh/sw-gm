@@ -5,51 +5,40 @@ import {
   Switch,
   FormControlLabel,
   FormGroup,
-  Box,
-  Input,
+  CssBaseline,
 } from '@material-ui/core';
 import './App.css';
-import { throwDice, DiceThrowResult, suggestRolls } from '../logic/rolls';
-import { Rolls } from './Rolls';
+import { throwDice, DiceThrowResult } from '../logic/rolls';
 import { Die } from '../logic/die';
 import { DiePicker } from './DiePicker';
 import { NumberPicker } from './NumberPicker';
+import DiceRollResults from './DiceRollResults';
 
 const App: FC = () => {
   const [result, setResult] = useState<DiceThrowResult | null>(null);
   const [acing, setAcing] = useState(true);
   const [wildDie, setWildDie] = useState(true);
+  const [canFail, setCanFail] = useState(true);
   const [wildDieType, setWildDieType] = useState<Die>(6);
   const [dieType, setDieType] = useState<Die>(4);
   const [rollAmount, setRollAmount] = useState(1);
 
   const handleRoll = () => {
     setResult(
-      throwDice(dieType, rollAmount, { acing, wildDie: wildDie ? 6 : null }),
+      throwDice(dieType, rollAmount, {
+        acing,
+        wildDie: wildDie ? wildDieType : null,
+        canFail,
+      }),
     );
   };
 
   return (
     <div className="App">
+      <CssBaseline />
       <header className="App-header">
         {result ? (
-          <Box>
-            <Box display="flex">
-              <Rolls title="Rolls" rolls={result.mainRolls} />
-              {result.wildRoll && (
-                <>
-                  <Rolls title="Wild Roll" rolls={[result.wildRoll]} />
-                  <Rolls
-                    title="Suggested Final Rolls"
-                    rolls={suggestRolls(result.mainRolls, result.wildRoll)}
-                  />
-                </>
-              )}
-            </Box>
-            {result.isCriticalFail && (
-              <Typography variant="h5">Critical fail!</Typography>
-            )}
-          </Box>
+          <DiceRollResults results={result} />
         ) : (
           <Typography>Roll first</Typography>
         )}
@@ -80,6 +69,15 @@ const App: FC = () => {
               />
             }
             label="Wild Die"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={canFail}
+                onChange={(e) => setCanFail(e.target.checked)}
+              />
+            }
+            label="Can Fail"
           />
           {wildDie && (
             <DiePicker

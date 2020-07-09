@@ -15,7 +15,7 @@ export const Rolls: FC<RollsProps> = ({ title, rolls }) => {
       <List>
         {rolls.map((roll, index) => (
           <ListItem key={index}>
-            <RollView roll={roll} />
+            <RollView result={roll} />
           </ListItem>
         ))}
       </List>
