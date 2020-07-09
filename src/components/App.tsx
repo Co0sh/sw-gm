@@ -11,13 +11,15 @@ import {
 import './App.css';
 import { throwDice, DiceThrowResult, suggestRolls } from '../logic/rolls';
 import { Rolls } from './Rolls';
+import { Die } from '../logic/die';
+import DiePicker from './DiePicker';
 
 const App: FC = () => {
   const [result, setResult] = useState<DiceThrowResult | null>(null);
   const [acing, setAcing] = useState(true);
   const [wildDie, setWildDie] = useState(true);
-  const [wildDieType, setWildDieType] = useState(6);
-  const [dieType, setDieType] = useState(4);
+  const [wildDieType, setWildDieType] = useState<Die>(6);
+  const [dieType, setDieType] = useState<Die>(4);
   const [rollAmount, setRollAmount] = useState(1);
 
   const handleRoll = () => {
@@ -54,16 +56,7 @@ const App: FC = () => {
           Roll
         </Button>
         <FormGroup>
-          <FormControlLabel
-            control={
-              <Input
-                type="number"
-                value={dieType}
-                onChange={(e) => setDieType(Number(e.target.value))}
-              />
-            }
-            label="Die Type"
-          />
+          <DiePicker title="Die Type" die={dieType} setDie={setDieType} />
           <FormControlLabel
             control={
               <Input
@@ -93,15 +86,10 @@ const App: FC = () => {
             label="Wild Die"
           />
           {wildDie && (
-            <FormControlLabel
-              control={
-                <Input
-                  type="number"
-                  value={wildDieType}
-                  onChange={(e) => setWildDieType(Number(e.target.value))}
-                />
-              }
-              label="Wild Die Type"
+            <DiePicker
+              title="Wild Die Type"
+              die={wildDieType}
+              setDie={setWildDieType}
             />
           )}
         </FormGroup>

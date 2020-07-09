@@ -1,6 +1,8 @@
+import { Die } from './die';
+
 export interface DiceOptions {
   acing: boolean;
-  wildDie: number | null;
+  wildDie: Die | null;
   rollFn: RollFn;
 }
 
@@ -15,10 +17,10 @@ export interface DiceThrowResult {
   isCriticalFail: boolean;
 }
 
-export type RollFn = (dice: number) => number;
+export type RollFn = (dice: Die) => number;
 
-export const roll: RollFn = (dice: number): number => {
-  return Math.floor(Math.random() * dice) + 1;
+export const roll: RollFn = (die: Die): number => {
+  return Math.floor(Math.random() * die) + 1;
 };
 
 export const defaultDiceOptions: DiceOptions = {
@@ -28,7 +30,7 @@ export const defaultDiceOptions: DiceOptions = {
 };
 
 export const throwDice = (
-  dice: number,
+  dice: Die,
   times: number,
   options: Partial<DiceOptions> = {},
 ): DiceThrowResult => {
@@ -41,7 +43,7 @@ export const throwDice = (
 
   const isCriticalFail =
     wildRoll.sum === 1 &&
-    [wildRoll, ...mainRolls].filter((r) => r.sum === 1).length >=
+    [wildRoll, ...mainRolls].filter((r) => r.sum === 1).length >
       (mainRolls.length + 1) / 2;
 
   return {
@@ -51,21 +53,21 @@ export const throwDice = (
   };
 };
 
-export const notAce = (rollFn: RollFn) => (dice: number): RollResult => {
-  const result = rollFn(dice);
+export const notAce = (rollFn: RollFn) => (die: Die): RollResult => {
+  const result = rollFn(die);
   return {
     rolls: [result],
     sum: result,
   };
 };
 
-export const ace = (rollFn: RollFn) => (dice: number): RollResult => {
+export const ace = (rollFn: RollFn) => (die: Die): RollResult => {
   const rolls: number[] = [];
   let result;
   do {
-    result = rollFn(dice);
+    result = rollFn(die);
     rolls.push(result);
-  } while (result === dice);
+  } while (result === die);
   return { rolls, sum: rolls.reduce((a, b) => a + b) };
 };
 
