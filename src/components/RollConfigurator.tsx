@@ -65,7 +65,7 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
     <FormGroup>
       {dice.map((die, index) => (
         <Box
-          key={die}
+          key={index}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
