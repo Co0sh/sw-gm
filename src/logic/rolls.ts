@@ -38,8 +38,7 @@ export const defaultDiceOptions: DiceOptions = {
 };
 
 export const throwDice = (
-  dice: Die,
-  times: number,
+  dice: Die[],
   options: Partial<DiceOptions> = {},
 ): DiceThrowResult => {
   const { acing, wildDie, canFail, rollFn } = {
@@ -51,7 +50,7 @@ export const throwDice = (
 
   const chosenRollFn = acing ? ace(rollFn) : notAce(rollFn);
 
-  const mainRolls = new Array(times).fill(null).map(() => chosenRollFn(dice));
+  const mainRolls = dice.map((die) => chosenRollFn(die));
   const wildRoll = chosenRollFn(wildDie ?? 6, 'wild');
 
   const isCriticalFail =

@@ -39,7 +39,8 @@ const useStyles = makeStyles<Theme, { ace: boolean; type: RollType }>(
       borderRadius: '50%',
       borderStyle: 'solid',
       borderWidth: 2,
-      borderColor: (props) => (props.ace ? 'yellow' : 'transparent'),
+      borderColor: (props) =>
+        props.ace ? theme.palette.success.main : 'transparent',
     },
   }),
 );

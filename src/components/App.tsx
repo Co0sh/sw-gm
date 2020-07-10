@@ -6,8 +6,8 @@ import {
   FormControlLabel,
   FormGroup,
   CssBaseline,
+  Box,
 } from '@material-ui/core';
-import './App.css';
 import { throwDice, DiceThrowResult } from '../logic/rolls';
 import { Die } from '../logic/die';
 import { DiePicker } from './DiePicker';
@@ -25,7 +25,7 @@ const App: FC = () => {
 
   const handleRoll = () => {
     setResult(
-      throwDice(dieType, rollAmount, {
+      throwDice(new Array<Die>(rollAmount).fill(dieType), {
         acing,
         wildDie: wildDie ? wildDieType : null,
         canFail,
@@ -34,9 +34,15 @@ const App: FC = () => {
   };
 
   return (
-    <div className="App">
+    <Box
+      minHeight="100vh"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
       <CssBaseline />
-      <header className="App-header">
+      <Box display="flex" flexDirection="column" maxWidth={400} width="100%">
         {result ? (
           <DiceRollResults results={result} />
         ) : (
@@ -87,8 +93,8 @@ const App: FC = () => {
             />
           )}
         </FormGroup>
-      </header>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
