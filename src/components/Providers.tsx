@@ -16,8 +16,6 @@ const theme = createMuiTheme({
   },
 });
 
-const Providers: FC = ({ children }) => {
+export const Providers: FC = ({ children }) => {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
-
-export default Providers;

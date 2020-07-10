@@ -4,10 +4,10 @@ import { Die } from './die';
 export type RollType = 'regular' | 'wild';
 
 export interface DiceOptions {
+  dice: Die[];
   acing: boolean;
   wildDie: Die | null;
   canFail: boolean;
-  rollFn: RollFn;
 }
 
 export interface DiceThrowResult {
@@ -31,17 +31,16 @@ export const roll: RollFn = (die: Die): number => {
 };
 
 export const defaultDiceOptions: DiceOptions = {
+  dice: [4],
   acing: true,
   wildDie: 6,
   canFail: true,
-  rollFn: roll,
 };
 
-export const throwDice = (
-  dice: Die[],
+export const generateThrowDice = (rollFn: RollFn) => (
   options: Partial<DiceOptions> = {},
 ): DiceThrowResult => {
-  const { acing, wildDie, canFail, rollFn } = {
+  const { dice, acing, wildDie, canFail } = {
     ...defaultDiceOptions,
     ...options,
   };
@@ -66,6 +65,8 @@ export const throwDice = (
     uuid,
   };
 };
+
+export const throwDice = generateThrowDice(roll);
 
 export const notAce = (rollFn: RollFn) => (
   die: Die,
