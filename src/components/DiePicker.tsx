@@ -1,51 +1,67 @@
-import React, { FC } from 'react';
-import { Box, IconButton, Typography, Chip } from '@material-ui/core';
-import PlusIcon from '@material-ui/icons/Add';
-import MinusIcon from '@material-ui/icons/Remove';
-import { Die, DIE_TYPES } from '../logic/die';
+import React, { FC, useState } from 'react';
+import { Box, IconButton, SvgIcon, makeStyles } from '@material-ui/core';
+import { Die } from '../logic/die';
+import { DiceIcons } from '../logic/diceIcons';
+import { RollType } from '../logic/rolls';
 
 export interface DiePickerProps {
-  title?: string;
-  die: Die;
-  setDie: (die: Die) => void;
+  initialDie?: Die;
+  die?: Die;
+  setDie?: (die: Die) => void;
+  type?: RollType;
+  disabled?: boolean;
+  className?: string;
 }
 
-export const DiePicker: FC<DiePickerProps> = ({ title, die, setDie }) => {
-  const dieIndex = DIE_TYPES.indexOf(die);
-
-  const isFirst = dieIndex === 0;
-  const isLast = dieIndex === DIE_TYPES.length - 1;
+export const DiePicker: FC<DiePickerProps> = ({
+  initialDie,
+  die: propDie,
+  setDie,
+  type = 'regular',
+  disabled = false,
+  className,
+}) => {
+  const classes = useStyles();
+  const [stateDie, setStateDie] = useState(propDie ?? initialDie);
+  const die = propDie ?? stateDie;
+  const handleDie = (die: Die) => {
+    setDie?.(die);
+    setStateDie(die);
+  };
 
   return (
-    <Box display="flex" alignItems="center">
-      <Box display="flex" flexGrow={1}>
-        {title && <Chip label={title} />}
-      </Box>
-      <IconButton
-        size="small"
-        disabled={isFirst}
-        onClick={() => setDie(DIE_TYPES[dieIndex - 1])}
-      >
-        <MinusIcon />
-      </IconButton>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        width={40}
-      >
-        <Typography variant="h5" component="span">
-          {die}
-        </Typography>
-      </Box>
-      <IconButton
-        size="small"
-        disabled={isLast}
-        onClick={() => setDie(DIE_TYPES[dieIndex + 1])}
-      >
-        <PlusIcon />
-      </IconButton>
+    <Box display="flex" alignItems="center" className={className}>
+      {Object.keys(DiceIcons).map((key) => {
+        const dieType = Number(key) as Die;
+        const selected = dieType === die;
+        return (
+          <IconButton
+            key={dieType}
+            onClick={() => handleDie(dieType)}
+            disabled={disabled}
+            color={
+              selected
+                ? type === 'regular'
+                  ? 'primary'
+                  : 'secondary'
+                : 'default'
+            }
+          >
+            <SvgIcon
+              className={classes.icon}
+              component={DiceIcons[dieType]}
+              viewBox="0 0 100 100"
+            />
+          </IconButton>
+        );
+      })}
     </Box>
   );
 };
+
+const useStyles = makeStyles({
+  icon: {
+    width: '1.25em',
+    height: '1.25em',
+  },
+});

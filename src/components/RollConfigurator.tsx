@@ -6,8 +6,10 @@ import {
   FormControlLabel,
   Switch,
   Box,
-  Button,
+  IconButton,
+  makeStyles,
 } from '@material-ui/core';
+import Close from '@material-ui/icons/Close';
 import { DiePicker } from './DiePicker';
 
 export interface RollConfiguratorProps {
@@ -21,6 +23,7 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
   value,
   setValue,
 }) => {
+  const classes = useStyles();
   const [stateValue, setStateValue] = useState(value ?? initialValue);
   const options = value ?? stateValue;
   const { dice, acing, canFail, wildDie } = options;
@@ -31,9 +34,10 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
     setStateValue(updatedOptions);
   };
 
-  const addDie = () => {
+  const addDie = (die?: Die) => {
     const lastDie = dice[dice.length - 1];
-    handleChange({ dice: [...dice, lastDie] });
+    const dieToAdd = die ?? lastDie ?? 4;
+    handleChange({ dice: [...dice, dieToAdd] });
   };
 
   const removeDie = (index: number) => {
@@ -60,17 +64,27 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
   return (
     <FormGroup>
       {dice.map((die, index) => (
-        <Box display="flex">
+        <Box
+          key={die}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <DiePicker
             key={index}
-            title="Die Type"
             die={die}
             setDie={(newDie) => changeDie(index, newDie)}
           />
-          <Button onClick={() => removeDie(index)}>Remove</Button>
+          <IconButton onClick={() => removeDie(index)}>
+            <Close />
+          </IconButton>
         </Box>
       ))}
-      <Button onClick={addDie}>Add die</Button>
+      <DiePicker
+        key={dice.length}
+        setDie={(newDie) => addDie(newDie)}
+        className={classes.translucent}
+      />
 
       <FormControlLabel
         control={
@@ -84,28 +98,33 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
       <FormControlLabel
         control={
           <Switch
-            checked={wildDie !== null}
-            onChange={(e) => setWildDie(e.target.checked)}
-          />
-        }
-        label="Wild Die"
-      />
-      <FormControlLabel
-        control={
-          <Switch
             checked={canFail}
             onChange={(e) => handleChange({ canFail: e.target.checked })}
           />
         }
         label="Can Fail"
       />
-      {wildDie !== null && (
-        <DiePicker
-          title="Wild Die Type"
-          die={wildDie}
-          setDie={(newDie) => handleChange({ wildDie: newDie })}
-        />
-      )}
+      <FormControlLabel
+        control={
+          <Switch
+            checked={wildDie !== null}
+            onChange={(e) => setWildDie(e.target.checked)}
+          />
+        }
+        label="Wild Die"
+      />
+      <DiePicker
+        die={wildDie ?? undefined}
+        disabled={wildDie === null}
+        type="wild"
+        setDie={(newDie) => handleChange({ wildDie: newDie })}
+      />
     </FormGroup>
   );
 };
+
+const useStyles = makeStyles({
+  translucent: {
+    opacity: 1 / 3,
+  },
+});
