@@ -37,7 +37,7 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
   const addDie = (die?: Die) => {
     const lastDie = dice[dice.length - 1];
     const dieToAdd = die ?? lastDie ?? 4;
-    handleChange({ dice: [...dice, dieToAdd] });
+    handleChange({ dice: [dieToAdd, ...dice] });
   };
 
   const removeDie = (index: number) => {
@@ -52,17 +52,13 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
     handleChange({ dice: diceCopy });
   };
 
-  const setWildDie = (wildDieEnabled: boolean) => {
-    if (wildDieEnabled) {
-      const defaultWildDie: Die = wildDie ?? defaultDiceOptions.wildDie ?? 6;
-      handleChange({ wildDie: defaultWildDie });
-    } else {
-      handleChange({ wildDie: null });
-    }
-  };
-
   return (
-    <FormGroup>
+    <Box display="flex" flexDirection="column">
+      <DiePicker
+        key={dice.length}
+        setDie={(newDie) => addDie(newDie)}
+        className={classes.translucent}
+      />
       {dice.map((die, index) => (
         <Box
           key={index}
@@ -75,51 +71,52 @@ export const RollConfigurator: FC<RollConfiguratorProps> = ({
             die={die}
             setDie={(newDie) => changeDie(index, newDie)}
           />
-          <IconButton onClick={() => removeDie(index)}>
+          <IconButton
+            disabled={dice.length < 2}
+            onClick={() => removeDie(index)}
+          >
             <Close />
           </IconButton>
         </Box>
       ))}
-      <DiePicker
-        key={dice.length}
-        setDie={(newDie) => addDie(newDie)}
-        className={classes.translucent}
-      />
+      <Box display="flex" alignItems="center">
+        <Box flexGrow={1}>
+          <DiePicker
+            die={wildDie}
+            type="wild"
+            setDie={(newDie) => handleChange({ wildDie: newDie })}
+            className={wildDie === null ? classes.translucent : undefined}
+          />
+        </Box>
+        <IconButton
+          disabled={wildDie === null}
+          onClick={() => handleChange({ wildDie: null })}
+        >
+          <Close />
+        </IconButton>
+      </Box>
 
-      <FormControlLabel
-        control={
-          <Switch
-            checked={acing}
-            onChange={(e) => handleChange({ acing: e.target.checked })}
-          />
-        }
-        label="Ace"
-      />
-      <FormControlLabel
-        control={
-          <Switch
-            checked={canFail}
-            onChange={(e) => handleChange({ canFail: e.target.checked })}
-          />
-        }
-        label="Can Fail"
-      />
-      <FormControlLabel
-        control={
-          <Switch
-            checked={wildDie !== null}
-            onChange={(e) => setWildDie(e.target.checked)}
-          />
-        }
-        label="Wild Die"
-      />
-      <DiePicker
-        die={wildDie ?? undefined}
-        disabled={wildDie === null}
-        type="wild"
-        setDie={(newDie) => handleChange({ wildDie: newDie })}
-      />
-    </FormGroup>
+      <FormGroup row>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={acing}
+              onChange={(e) => handleChange({ acing: e.target.checked })}
+            />
+          }
+          label="Ace"
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={canFail}
+              onChange={(e) => handleChange({ canFail: e.target.checked })}
+            />
+          }
+          label="Can Fail"
+        />
+      </FormGroup>
+    </Box>
   );
 };
 

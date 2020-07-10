@@ -11,7 +11,6 @@ export const DiceRollResults: FC<DiceRollResultsProps> = ({ results }) => {
   return (
     <Box display="flex" flexDirection="column">
       <Rolls
-        title="Rolls"
         rolls={
           [...results.mainRolls, results.wildRoll].filter(
             Boolean,

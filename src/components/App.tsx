@@ -1,17 +1,8 @@
-import React, { useState, FC } from 'react';
-import { Button, CssBaseline, Box } from '@material-ui/core';
-import { throwDice, DiceThrowResult, defaultDiceOptions } from '../logic/rolls';
-import { DiceRollResults } from './DiceRollResults';
-import { RollConfigurator } from './RollConfigurator';
+import React, { FC } from 'react';
+import { CssBaseline, Box } from '@material-ui/core';
+import DiceRoller from './DiceRoller';
 
 const App: FC = () => {
-  const [result, setResult] = useState<DiceThrowResult | null>(null);
-  const [options, setOptions] = useState(defaultDiceOptions);
-
-  const handleRoll = () => {
-    setResult(throwDice(options));
-  };
-
   return (
     <Box minHeight="100vh" display="flex" justifyContent="center">
       <CssBaseline />
@@ -21,21 +12,9 @@ const App: FC = () => {
         maxWidth={400}
         width="100%"
         p={2}
+        justifyContent="flex-end"
       >
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="flex-end"
-          flexGrow={1}
-        >
-          {result && <DiceRollResults results={result} />}
-        </Box>
-        <Box display="flex" flexDirection="column" pb={2}>
-          <RollConfigurator value={options} setValue={setOptions} />
-        </Box>
-        <Button size="large" variant="contained" onClick={handleRoll}>
-          Roll
-        </Button>
+        <DiceRoller />
       </Box>
     </Box>
   );
