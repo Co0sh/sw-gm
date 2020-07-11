@@ -1,20 +1,22 @@
 import React, { FC } from 'react';
-import { RollResult } from '../logic/rolls';
+import { MultiRollResult, ThrowType } from '../logic/rolls';
 import { List, ListItem, makeStyles } from '@material-ui/core';
 import { RollView } from './RollView';
 
 export interface RollsProps {
-  rolls: RollResult[];
+  rolls: MultiRollResult[];
+  type?: ThrowType;
+  className?: string;
 }
 
-export const Rolls: FC<RollsProps> = ({ rolls }) => {
+export const Rolls: FC<RollsProps> = ({ rolls, type, className }) => {
   const classes = useStyles();
 
   return (
-    <List>
+    <List className={className}>
       {rolls.map((roll, index) => (
         <ListItem key={index}>
-          <RollView result={roll} className={classes.grows} />
+          <RollView result={roll} type={type} className={classes.grows} />
         </ListItem>
       ))}
     </List>

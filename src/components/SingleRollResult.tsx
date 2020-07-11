@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core';
-import { RollType } from '../logic/rolls';
+import { ThrowType } from '../logic/rolls';
 
 export interface SingleRollResultProps {
   value: number;
   ace?: boolean;
-  type?: RollType;
+  type?: ThrowType;
 }
 
 export const SingleRollResult: FC<SingleRollResultProps> = ({
@@ -24,7 +24,7 @@ export const SingleRollResult: FC<SingleRollResultProps> = ({
   );
 };
 
-const useStyles = makeStyles<Theme, { ace: boolean; type: RollType }>(
+const useStyles = makeStyles<Theme, { ace: boolean; type: ThrowType }>(
   (theme) => ({
     root: {
       backgroundColor: (props) =>

@@ -2,13 +2,13 @@ import React, { FC, useState } from 'react';
 import { Box, IconButton, SvgIcon, makeStyles } from '@material-ui/core';
 import { Die } from '../logic/die';
 import { DiceIcons } from '../logic/diceIcons';
-import { RollType } from '../logic/rolls';
+import { ThrowType } from '../logic/rolls';
 
 export interface DiePickerProps {
   initialDie?: Die | null;
   die?: Die | null;
   setDie?: (die: Die) => void;
-  type?: RollType;
+  type?: ThrowType;
   disabled?: boolean;
   className?: string;
 }

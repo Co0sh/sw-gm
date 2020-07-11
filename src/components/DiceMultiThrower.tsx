@@ -1,21 +1,21 @@
 import React, { FC, useState } from 'react';
 import { Box, Button } from '@material-ui/core';
 import {
-  DiceOptions,
-  DiceThrowResult,
+  MultiThrowOptions,
+  MultiThrowResult,
   defaultDiceOptions,
   throwDice,
 } from '../logic/rolls';
 import { DiceRollResults } from './DiceRollResults';
-import { RollConfigurator } from './RollConfigurator';
+import { MultiThrowConfigurator } from './MultiThrowConfigurator';
 
 interface DiceRollerProps {
-  initialOptions?: DiceOptions;
+  initialOptions?: MultiThrowOptions;
   className?: string;
 }
 
 const DiceRoller: FC<DiceRollerProps> = ({ initialOptions }) => {
-  const [result, setResult] = useState<DiceThrowResult | null>(null);
+  const [result, setResult] = useState<MultiThrowResult | null>(null);
   const [options, setOptions] = useState(initialOptions ?? defaultDiceOptions);
 
   const handleRoll = () => {
@@ -29,11 +29,12 @@ const DiceRoller: FC<DiceRollerProps> = ({ initialOptions }) => {
         flexDirection="column"
         justifyContent="flex-start"
         flexGrow={1}
+        pb={2}
       >
         {result && <DiceRollResults results={result} />}
       </Box>
       <Box display="flex" flexDirection="column" pb={2}>
-        <RollConfigurator value={options} setValue={setOptions} />
+        <MultiThrowConfigurator value={options} setValue={setOptions} />
       </Box>
       <Button
         color="primary"

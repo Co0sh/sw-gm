@@ -1,15 +1,20 @@
 import React, { FC } from 'react';
-import { RollResult } from '../logic/rolls';
+import { MultiRollResult, ThrowType } from '../logic/rolls';
 import { Typography, Box, makeStyles, SvgIcon } from '@material-ui/core';
 import { SingleRollResult } from './SingleRollResult';
 import { DiceIcons } from '../logic/diceIcons';
 
 export interface RollViewProps {
-  result: RollResult;
+  result: MultiRollResult;
+  type?: ThrowType;
   className?: string;
 }
 
-export const RollView: FC<RollViewProps> = ({ result, className }) => {
+export const RollView: FC<RollViewProps> = ({
+  result,
+  type = 'regular',
+  className,
+}) => {
   const classes = useStyles();
 
   return (
@@ -19,13 +24,13 @@ export const RollView: FC<RollViewProps> = ({ result, className }) => {
           component={DiceIcons[result.die]}
           viewBox="0 0 100 100"
           className={classes.dice}
-          color={result.type === 'regular' ? 'primary' : 'secondary'}
+          color={type === 'regular' ? 'primary' : 'secondary'}
         />
         <Box className={classes.results}>
           {result.rolls.map((roll, index) => (
             <SingleRollResult
               key={index}
-              type={result.type}
+              type={type}
               ace={roll === result.die && index < result.rolls.length - 1}
               value={roll}
             />

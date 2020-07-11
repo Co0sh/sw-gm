@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { CssBaseline, Box } from '@material-ui/core';
-import DiceRoller from './DiceRoller';
+import DiceRoller from './DiceMultiThrower';
 
 const App: FC = () => {
   return (
