@@ -29,10 +29,12 @@ export const RollView: FC<RollViewProps> = ({
         <Box className={classes.results}>
           {result.rolls.map((roll, index) => (
             <SingleRollResult
-              key={index}
+              key={roll.key}
               type={type}
-              ace={roll === result.die && index < result.rolls.length - 1}
-              value={roll}
+              ace={
+                roll.result === result.die && index < result.rolls.length - 1
+              }
+              value={roll.result}
             />
           ))}
         </Box>

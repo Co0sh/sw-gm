@@ -17,7 +17,7 @@ export const DiceRollResults: FC<DiceRollResultsProps> = ({ results }) => {
         </Typography>
       )}
       {results.throwResults.map((throwResult, index) => (
-        <Paper key={index}>
+        <Paper key={throwResult.key}>
           <Rolls
             rolls={throwResult.multiRolls}
             type={throwResult.type}

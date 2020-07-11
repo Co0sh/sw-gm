@@ -10,6 +10,7 @@ import {
 import { Die } from '../logic/die';
 import { DiePicker } from './DiePicker';
 import { NumberPicker } from './NumberPicker';
+import { getKey } from '../logic/key';
 
 export interface ThrowConfiguratorProps {
   initialValue?: ThrowOptions;
@@ -40,20 +41,21 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   };
 
   const addDie = (die?: Die) => {
-    const lastDie = dice[dice.length - 1];
-    const dieToAdd = die ?? lastDie ?? defaultRegularDie;
-    handleChange({ dice: [dieToAdd, ...dice] });
+    const dieToAdd = die ?? defaultRegularDie;
+    handleChange({ dice: [{ key: getKey(), sides: dieToAdd }, ...dice] });
   };
 
-  const removeDie = (index: number) => {
+  const removeDie = (key: string) => {
     const diceCopy = [...dice];
+    const index = diceCopy.findIndex((d) => d.key === key);
     diceCopy.splice(index, 1);
     handleChange({ dice: diceCopy });
   };
 
-  const changeDie = (index: number, die: Die) => {
+  const changeDie = (key: string, die: Die) => {
     const diceCopy = [...dice];
-    diceCopy.splice(index, 1, die);
+    const index = diceCopy.findIndex((d) => d.key === key);
+    diceCopy.splice(index, 1, { key, sides: die });
     handleChange({ dice: diceCopy });
   };
 
@@ -79,7 +81,6 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             pr={0.5}
           >
             <DiePicker
-              key={dice.length}
               die={null}
               setDie={(newDie) => addDie(newDie)}
               className={classes.newDie}
@@ -89,21 +90,20 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             </IconButton>
           </Box>
         )}
-        {dice.map((die, index) => (
+        {dice.map((die) => (
           <Box
-            key={index}
+            key={die.key}
             display="flex"
             justifyContent="space-between"
             alignItems="center"
             pr={0.5}
           >
             <DiePicker
-              key={index}
-              die={die}
-              setDie={(newDie) => changeDie(index, newDie)}
+              die={die.sides}
+              setDie={(newDie) => changeDie(die.key, newDie)}
               type={type}
             />
-            <IconButton size="small" onClick={() => removeDie(index)}>
+            <IconButton size="small" onClick={() => removeDie(die.key)}>
               <Close />
             </IconButton>
           </Box>

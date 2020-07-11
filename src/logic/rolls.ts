@@ -1,13 +1,20 @@
 import { v4 } from 'uuid';
 import { Die } from './die';
+import { getKey } from './key';
 
 export type ThrowType = 'regular' | 'wild';
 
 export interface ThrowOptions {
+  key: string;
   type: ThrowType;
-  dice: Die[];
+  dice: UniqueDie[];
   target: number;
   modifier: number;
+}
+
+export interface UniqueDie {
+  key: string;
+  sides: Die;
 }
 
 export interface MultiThrowOptions {
@@ -23,6 +30,7 @@ export interface MultiThrowResult {
 }
 
 export interface ThrowResult {
+  key: string;
   multiRolls: MultiRollResult[];
   type: ThrowType;
   target: number;
@@ -30,9 +38,15 @@ export interface ThrowResult {
   isAdditional: boolean;
 }
 
+export interface UniqueRoll {
+  key: string;
+  result: number;
+}
+
 export interface MultiRollResult {
+  key: string;
   die: Die;
-  rolls: number[];
+  rolls: UniqueRoll[];
   sum: number;
 }
 
@@ -51,15 +65,17 @@ export const defaultRegularDie: Die = 4;
 export const defaultWildDie: Die = 6;
 
 export const defaultRegularThrow: ThrowOptions = {
+  key: getKey(),
   type: 'regular',
-  dice: [defaultRegularDie],
+  dice: [{ key: getKey(), sides: defaultRegularDie }],
   target: defaultTarget,
   modifier: defaultModifier,
 };
 
 export const defaultWildThrow: ThrowOptions = {
+  key: getKey(),
   type: 'wild',
-  dice: [defaultWildDie],
+  dice: [{ key: getKey(), sides: defaultWildDie }],
   target: defaultTarget,
   modifier: defaultModifier,
 };
@@ -87,8 +103,8 @@ export const generateThrowDice = (rollFn: RollFn) => (
     isAdditional = false,
   ): ThrowResult => {
     const { dice, type, target, modifier } = aThrow;
-    const multiRolls = dice.map((die) => chosenRollFn(die));
-    return { multiRolls, type, target, modifier, isAdditional };
+    const multiRolls = dice.map((die) => chosenRollFn(die.sides));
+    return { key: getKey(), multiRolls, type, target, modifier, isAdditional };
   };
 
   const throwResults = throws.map((aThrow) => resolveThrow(aThrow));
@@ -138,18 +154,24 @@ export const throwDice = generateThrowDice(roll);
 export const notAce = (rollFn: RollFn) => (die: Die): MultiRollResult => {
   const result = rollFn(die);
   return {
+    key: getKey(),
     die,
-    rolls: [result],
+    rolls: [{ key: getKey(), result }],
     sum: result,
   };
 };
 
 export const ace = (rollFn: RollFn) => (die: Die): MultiRollResult => {
-  const rolls: number[] = [];
+  const rolls: UniqueRoll[] = [];
   let result;
   do {
     result = rollFn(die);
-    rolls.push(result);
+    rolls.push({ key: getKey(), result });
   } while (result === die);
-  return { die, rolls, sum: rolls.reduce((a, b) => a + b) };
+  return {
+    key: getKey(),
+    die,
+    rolls,
+    sum: rolls.reduce((acc, next) => acc + next.result, 0),
+  };
 };

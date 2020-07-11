@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import { ThrowConfigurator } from './ThrowConfigurator';
 import { NumberPicker } from './NumberPicker';
+import { getKey } from '../logic/key';
 
 export interface RollConfiguratorProps {
   initialValue?: MultiThrowOptions;
@@ -39,7 +40,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   };
 
   const addThrow = (throwOptions: ThrowOptions) => {
-    handleChange({ throws: [throwOptions, ...throws] });
+    handleChange({ throws: [{ ...throwOptions, key: getKey() }, ...throws] });
   };
 
   const modifyThrow = (index: number) => (throwOptions: ThrowOptions) => {
@@ -66,6 +67,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
 
   const regularThrows = throws.filter((t) => t.type === 'regular');
   const emptyRegularThrow: ThrowOptions = {
+    key: getKey(),
     dice: [],
     modifier: defaultModifier,
     target: defaultTarget,
@@ -74,6 +76,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
 
   const wildThrow = throws.find((t) => t.type !== 'regular');
   const emptyWildThrow: ThrowOptions = {
+    key: getKey(),
     dice: [],
     modifier: defaultModifier,
     target: defaultTarget,
@@ -109,7 +112,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
       {regularThrows.map((aThrow, index) => {
         return (
           <ThrowConfigurator
-            key={index}
+            key={aThrow.key}
             value={aThrow}
             setValue={modifyThrow(index)}
           />

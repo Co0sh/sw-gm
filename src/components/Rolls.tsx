@@ -15,7 +15,7 @@ export const Rolls: FC<RollsProps> = ({ rolls, type, className }) => {
   return (
     <List className={className}>
       {rolls.map((roll, index) => (
-        <ListItem key={index}>
+        <ListItem key={roll.key}>
           <RollView result={roll} type={type} className={classes.grows} />
         </ListItem>
       ))}
