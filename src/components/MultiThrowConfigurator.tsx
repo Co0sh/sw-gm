@@ -15,22 +15,22 @@ import { FlagSwitch } from './FlagSwitch';
 export interface RollConfiguratorProps {
   initialValue?: MultiThrowOptions;
   value?: MultiThrowOptions;
-  setValue?: (options: MultiThrowOptions) => void;
+  onChange?: (value: MultiThrowOptions) => void;
 }
 
 export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   initialValue = defaultDiceOptions,
-  value,
-  setValue,
+  value: propValue,
+  onChange,
 }) => {
   const classes = useStyles();
-  const [stateValue, setStateValue] = useState(value ?? initialValue);
-  const options = value ?? stateValue;
-  const { throws, acing, canFail } = options;
+  const [stateValue, setStateValue] = useState(propValue ?? initialValue);
+  const value = propValue ?? stateValue;
+  const { throws, acing, canFail } = value;
 
   const handleChange = (partialOptions: Partial<MultiThrowOptions>) => {
-    const updatedOptions = { ...options, ...partialOptions };
-    setValue?.(updatedOptions);
+    const updatedOptions = { ...value, ...partialOptions };
+    onChange?.(updatedOptions);
     setStateValue(updatedOptions);
   };
 
@@ -100,7 +100,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
       <Box pb={2} className={classes.spacing}>
         <ThrowConfigurator
           value={emptyRegularThrow}
-          setValue={addThrow}
+          onChange={addThrow}
           hasModifier={false}
           hasTarget={false}
         />
@@ -110,14 +110,14 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
             <ThrowConfigurator
               key={aThrow.key}
               value={aThrow}
-              setValue={modifyThrow(index)}
+              onChange={modifyThrow(index)}
             />
           );
         })}
 
         <ThrowConfigurator
           value={wildThrow ?? emptyWildThrow}
-          setValue={modifyWildThrow}
+          onChange={modifyWildThrow}
           maxRolls={1}
           hasTarget={Boolean(wildThrow)}
           hasModifier={Boolean(wildThrow)}
@@ -127,25 +127,25 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
       <Box display="flex" justifyContent="space-evenly">
         <NumberPicker
           title="Target"
-          number={globalTarget}
-          setNumber={handleGlobalTarget}
+          value={globalTarget}
+          onChange={handleGlobalTarget}
           className={isGlobalTargetUsed ? undefined : classes.translucent}
         />
         <NumberPicker
           title="Modifier"
-          number={globalModifier}
-          setNumber={handleGlobalModifier}
+          value={globalModifier}
+          onChange={handleGlobalModifier}
           className={isGlobalModifierUsed ? undefined : classes.translucent}
         />
         <FlagSwitch
           title="Acing"
           value={acing}
-          setValue={(acing) => handleChange({ acing })}
+          onChange={(acing) => handleChange({ acing })}
         />
         <FlagSwitch
           title="Can Fail"
           value={canFail}
-          setValue={(canFail) => handleChange({ canFail })}
+          onChange={(canFail) => handleChange({ canFail })}
         />
       </Box>
     </Box>

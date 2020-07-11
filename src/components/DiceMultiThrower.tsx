@@ -10,18 +10,18 @@ import {
   defaultDiceOptions,
   throwDice,
 } from '../logic/rolls';
-import { DiceRollResults } from './DiceRollResults';
+import { MultiThrowView } from './MultiThrowView';
 import { MultiThrowConfigurator } from './MultiThrowConfigurator';
 
 export interface DiceRollerProps {
-  initialOptions?: MultiThrowOptions;
+  initialValue?: MultiThrowOptions;
   className?: string;
 }
 
-export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialOptions }) => {
+export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialValue }) => {
   const classes = useStyles();
   const [result, setResult] = useState<MultiThrowResult | null>(null);
-  const [options, setOptions] = useState(initialOptions ?? defaultDiceOptions);
+  const [options, setOptions] = useState(initialValue ?? defaultDiceOptions);
 
   const handleRoll = () => {
     setResult(throwDice(options));
@@ -32,7 +32,7 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialOptions }) => {
   };
 
   const reset = () => {
-    setOptions(initialOptions ?? defaultDiceOptions);
+    setOptions(initialValue ?? defaultDiceOptions);
   };
 
   return (
@@ -45,12 +45,12 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialOptions }) => {
           flexGrow={1}
           pb={2}
         >
-          {result && <DiceRollResults results={result} />}
+          {result && <MultiThrowView value={result} />}
         </Box>
       )}
       {!result && (
         <Box display="flex" flexDirection="column" pb={2}>
-          <MultiThrowConfigurator value={options} setValue={setOptions} />
+          <MultiThrowConfigurator value={options} onChange={setOptions} />
         </Box>
       )}
       <Box className={classes.buttonBar}>

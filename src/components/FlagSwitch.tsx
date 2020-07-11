@@ -5,20 +5,20 @@ export interface FlagSwitchProps {
   title?: string;
   initialValue?: boolean;
   value?: boolean;
-  setValue?: (value: boolean) => void;
+  onChange?: (value: boolean) => void;
 }
 
 export const FlagSwitch: FC<FlagSwitchProps> = ({
   title,
   initialValue,
   value: propValue,
-  setValue = () => {},
+  onChange = () => {},
 }) => {
   const classes = useStyles();
   const [stateValue, setStateValue] = useState(propValue ?? initialValue);
   const value = propValue ?? stateValue;
   const handleChange = (newValue: boolean) => {
-    setValue(newValue);
+    onChange(newValue);
     setStateValue(newValue);
   };
 

@@ -5,27 +5,27 @@ import { DiceIcons } from '../logic/diceIcons';
 import { ThrowType } from '../logic/rolls';
 
 export interface DiePickerProps {
-  initialDie?: Die | null;
-  die?: Die | null;
-  setDie?: (die: Die) => void;
+  initialValue?: Die | null;
+  value?: Die | null;
+  onChange?: (value: Die) => void;
   type?: ThrowType;
   disabled?: boolean;
   className?: string;
 }
 
 export const DiePicker: FC<DiePickerProps> = ({
-  initialDie,
-  die: propDie,
-  setDie,
+  initialValue,
+  value: propValue,
+  onChange,
   type = 'regular',
   disabled = false,
   className,
 }) => {
   const classes = useStyles({ type });
-  const [stateDie, setStateDie] = useState(propDie ?? initialDie ?? null);
-  const die = propDie !== undefined ? propDie : stateDie;
+  const [stateDie, setStateDie] = useState(propValue ?? initialValue ?? null);
+  const die = propValue !== undefined ? propValue : stateDie;
   const handleDie = (die: Die) => {
-    setDie?.(die);
+    onChange?.(die);
     setStateDie(die);
   };
 

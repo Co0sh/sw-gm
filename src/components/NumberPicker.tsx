@@ -5,9 +5,9 @@ import MinusIcon from '@material-ui/icons/Remove';
 
 export interface NumberPickerProps {
   title?: string;
-  initialNumber?: number;
-  number?: number;
-  setNumber?: (number: number) => void;
+  initialValue?: number;
+  value?: number;
+  onChange?: (value: number) => void;
   min?: number;
   max?: number;
   className?: string;
@@ -15,18 +15,18 @@ export interface NumberPickerProps {
 
 export const NumberPicker: FC<NumberPickerProps> = ({
   title,
-  initialNumber = 0,
-  number: propNumber,
-  setNumber = () => {},
+  initialValue = 0,
+  value: propValue,
+  onChange = () => {},
   min = -20,
   max = 20,
   className,
 }) => {
   const classes = useStyles();
-  const [stateNumber, setStateNumber] = useState(propNumber ?? initialNumber);
-  const number = propNumber ?? stateNumber;
+  const [stateNumber, setStateNumber] = useState(propValue ?? initialValue);
+  const number = propValue ?? stateNumber;
   const handleNumber = (number: number) => {
-    setNumber(number);
+    onChange(number);
     setStateNumber(number);
   };
 

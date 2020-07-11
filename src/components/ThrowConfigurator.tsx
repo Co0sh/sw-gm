@@ -16,28 +16,28 @@ import { getKey } from '../logic/key';
 export interface ThrowConfiguratorProps {
   initialValue?: ThrowOptions;
   value?: ThrowOptions;
-  setValue?: (value: ThrowOptions) => void;
+  onChange?: (value: ThrowOptions) => void;
   maxRolls?: number;
   hasTarget?: boolean;
   hasModifier?: boolean;
 }
 
 export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
-  value,
-  setValue,
+  value: propValue,
+  onChange,
   initialValue = defaultRegularThrow,
   maxRolls,
   hasTarget = true,
   hasModifier = true,
 }) => {
-  const [stateValue, setStateValue] = useState(value ?? initialValue);
-  const options = value ?? stateValue;
-  const { dice, type, modifier, target } = options;
+  const [stateValue, setStateValue] = useState(propValue ?? initialValue);
+  const value = propValue ?? stateValue;
+  const { dice, type, modifier, target } = value;
   const classes = useStyles({ type });
 
   const handleChange = (partialOptions: Partial<ThrowOptions>) => {
-    const updatedOptions = { ...options, ...partialOptions };
-    setValue?.(updatedOptions);
+    const updatedOptions = { ...value, ...partialOptions };
+    onChange?.(updatedOptions);
     setStateValue(updatedOptions);
   };
 
@@ -87,8 +87,8 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             pr={0.5}
           >
             <DiePicker
-              die={null}
-              setDie={(newDie) => addDie(newDie)}
+              value={null}
+              onChange={(newDie) => addDie(newDie)}
               className={classes.newDie}
             />
             <IconButton size="small" disabled className={classes.invisible}>
@@ -105,8 +105,8 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             pr={0.5}
           >
             <DiePicker
-              die={die.sides}
-              setDie={(newDie) => changeDie(die.key, newDie)}
+              value={die.sides}
+              onChange={(newDie) => changeDie(die.key, newDie)}
               type={type}
             />
             <IconButton size="small" onClick={() => removeDie(die.key)}>
@@ -120,8 +120,8 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
           {hasTarget && (
             <NumberPicker
               title="Target"
-              number={target}
-              setNumber={(target) => handleChange({ target })}
+              value={target}
+              onChange={(target) => handleChange({ target })}
               min={0}
               max={99}
             />
@@ -129,8 +129,8 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
           {hasModifier && (
             <NumberPicker
               title="Modifier"
-              number={modifier}
-              setNumber={(modifier) => handleChange({ modifier })}
+              value={modifier}
+              onChange={(modifier) => handleChange({ modifier })}
               min={-99}
               max={99}
             />
