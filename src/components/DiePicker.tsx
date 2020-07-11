@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Box, IconButton, SvgIcon, makeStyles } from '@material-ui/core';
+import { Box, IconButton, SvgIcon, makeStyles, Theme } from '@material-ui/core';
 import { Die } from '../logic/die';
 import { DiceIcons } from '../logic/diceIcons';
 import { ThrowType } from '../logic/rolls';
@@ -21,7 +21,7 @@ export const DiePicker: FC<DiePickerProps> = ({
   disabled = false,
   className,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ type });
   const [stateDie, setStateDie] = useState(propDie ?? initialDie ?? null);
   const die = propDie !== undefined ? propDie : stateDie;
   const handleDie = (die: Die) => {
@@ -30,7 +30,13 @@ export const DiePicker: FC<DiePickerProps> = ({
   };
 
   return (
-    <Box display="flex" alignItems="center" className={className}>
+    <Box
+      display="flex"
+      alignItems="center"
+      flexGrow={1}
+      justifyContent="space-between"
+      className={className}
+    >
       {Object.keys(DiceIcons).map((key) => {
         const dieType = Number(key) as Die;
         const selected = dieType === die;
@@ -40,13 +46,7 @@ export const DiePicker: FC<DiePickerProps> = ({
             onClick={() => handleDie(dieType)}
             size="small"
             disabled={disabled}
-            color={
-              selected
-                ? type === 'regular'
-                  ? 'primary'
-                  : 'secondary'
-                : 'default'
-            }
+            className={selected ? classes.selected : undefined}
           >
             <SvgIcon
               className={classes.icon}
@@ -60,9 +60,21 @@ export const DiePicker: FC<DiePickerProps> = ({
   );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
   icon: {
     width: '1.35em',
     height: '1.35em',
   },
-});
+  selected: {
+    backgroundColor: ({ type }) =>
+      type === 'regular'
+        ? theme.palette.primary.main
+        : theme.palette.secondary.main,
+    '&:hover': {
+      backgroundColor: ({ type }) =>
+        type === 'regular'
+          ? theme.palette.primary.dark
+          : theme.palette.secondary.dark,
+    },
+  },
+}));

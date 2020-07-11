@@ -1,56 +1,78 @@
-import React, { FC } from 'react';
-import { Box, IconButton, Typography, Chip } from '@material-ui/core';
+import React, { FC, useState } from 'react';
+import { Box, IconButton, Typography, makeStyles } from '@material-ui/core';
 import PlusIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
 
 export interface NumberPickerProps {
   title?: string;
-  number: number;
-  setNumber: (number: number) => void;
+  initialNumber?: number;
+  number?: number;
+  setNumber?: (number: number) => void;
   min?: number;
   max?: number;
 }
 
 export const NumberPicker: FC<NumberPickerProps> = ({
   title,
-  number,
-  setNumber,
+  initialNumber = 0,
+  number: propNumber,
+  setNumber = () => {},
   min = -20,
   max = 20,
 }) => {
+  const classes = useStyles();
+  const [stateNumber, setStateNumber] = useState(propNumber ?? initialNumber);
+  const number = propNumber ?? stateNumber;
+  const handleNumber = (number: number) => {
+    setNumber(number);
+    setStateNumber(number);
+  };
+
   const isFirst = number === min;
   const isLast = number === max;
 
   return (
-    <Box display="flex" alignItems="center">
-      <Box display="flex" flexGrow={1}>
-        {title && <Chip label={title} />}
-      </Box>
-      <IconButton
-        size="small"
-        disabled={isFirst}
-        onClick={() => setNumber(number - 1)}
-      >
-        <MinusIcon />
-      </IconButton>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        width={40}
-      >
-        <Typography variant="h5" component="span">
-          {number}
+    <Box display="flex" flexDirection="column" position="relative" pt={0.5}>
+      {title && (
+        <Typography variant="caption" className={classes.title}>
+          {title}
         </Typography>
+      )}
+      <Box display="flex" flexGrow={1} alignItems="center">
+        <IconButton
+          size="small"
+          disabled={isFirst}
+          onClick={() => handleNumber(number - 1)}
+        >
+          <MinusIcon />
+        </IconButton>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          width={32}
+        >
+          <Typography variant="h5" component="span">
+            {number}
+          </Typography>
+        </Box>
+        <IconButton
+          size="small"
+          disabled={isLast}
+          onClick={() => handleNumber(number + 1)}
+        >
+          <PlusIcon />
+        </IconButton>
       </Box>
-      <IconButton
-        size="small"
-        disabled={isLast}
-        onClick={() => setNumber(number + 1)}
-      >
-        <PlusIcon />
-      </IconButton>
     </Box>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  title: {
+    position: 'absolute',
+    top: -theme.spacing(0.5),
+    opacity: 0.5,
+  },
+}));

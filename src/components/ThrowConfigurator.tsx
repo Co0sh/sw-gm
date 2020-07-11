@@ -1,15 +1,18 @@
 import React, { FC, useState } from 'react';
-import { Paper, makeStyles, Box, IconButton } from '@material-ui/core';
+import { Paper, makeStyles, Box, IconButton, Theme } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
-import { ThrowOptions, defaultRegularThrow } from '../logic/rolls';
+import { ThrowOptions, defaultRegularThrow, ThrowType } from '../logic/rolls';
 import { Die } from '../logic/die';
 import { DiePicker } from './DiePicker';
+import { NumberPicker } from './NumberPicker';
 
 export interface ThrowConfiguratorProps {
   initialValue?: ThrowOptions;
   value?: ThrowOptions;
   setValue?: (value: ThrowOptions) => void;
   maxRolls?: number;
+  hasTarget?: boolean;
+  hasModifier?: boolean;
 }
 
 export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
@@ -17,11 +20,13 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   setValue,
   initialValue = defaultRegularThrow,
   maxRolls,
+  hasTarget = true,
+  hasModifier = true,
 }) => {
-  const classes = useStyles();
   const [stateValue, setStateValue] = useState(value ?? initialValue);
   const options = value ?? stateValue;
-  const { dice, type } = options;
+  const { dice, type, modifier, target } = options;
+  const classes = useStyles({ type });
 
   const handleChange = (partialOptions: Partial<ThrowOptions>) => {
     const updatedOptions = { ...options, ...partialOptions };
@@ -48,39 +53,101 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   };
 
   return (
-    <Box component={Paper} p={1}>
-      {(maxRolls === undefined || dice.length < maxRolls) && (
-        <DiePicker
-          key={dice.length}
-          die={null}
-          setDie={(newDie) => addDie(newDie)}
-          className={classes.translucent}
-        />
-      )}
-      {dice.map((die, index) => (
-        <Box
-          key={index}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <DiePicker
+    <Box
+      component={Paper}
+      p={1}
+      display="flex"
+      flexDirection="column"
+      className={[classes.border, classes.spaced].join(' ')}
+    >
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="flex-end"
+        className={classes.spaced}
+      >
+        {(maxRolls === undefined || dice.length < maxRolls) && (
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            pr={0.5}
+          >
+            <DiePicker
+              key={dice.length}
+              die={null}
+              setDie={(newDie) => addDie(newDie)}
+              className={classes.newDie}
+            />
+            <IconButton size="small" disabled>
+              <Close />
+            </IconButton>
+          </Box>
+        )}
+        {dice.map((die, index) => (
+          <Box
             key={index}
-            die={die}
-            setDie={(newDie) => changeDie(index, newDie)}
-            type={type}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            pr={0.5}
+          >
+            <DiePicker
+              key={index}
+              die={die}
+              setDie={(newDie) => changeDie(index, newDie)}
+              type={type}
+            />
+            <IconButton size="small" onClick={() => removeDie(index)}>
+              <Close />
+            </IconButton>
+          </Box>
+        ))}
+      </Box>
+      <Box
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-evenly"
+        flexGrow={1}
+      >
+        {hasTarget && (
+          <NumberPicker
+            title="Target"
+            number={target}
+            setNumber={(target) => handleChange({ target })}
+            min={0}
+            max={99}
           />
-          <IconButton size="small" onClick={() => removeDie(index)}>
-            <Close />
-          </IconButton>
-        </Box>
-      ))}
+        )}
+        {hasModifier && (
+          <NumberPicker
+            title="Modifier"
+            number={modifier}
+            setNumber={(modifier) => handleChange({ modifier })}
+            min={-99}
+            max={99}
+          />
+        )}
+      </Box>
     </Box>
   );
 };
 
-const useStyles = makeStyles({
-  translucent: {
+const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
+  newDie: {
     opacity: 1 / 3,
   },
-});
+  border: {
+    borderLeftWidth: 4,
+    borderLeftStyle: 'solid',
+    borderLeftColor: ({ type }) =>
+      type === 'regular'
+        ? theme.palette.primary.main
+        : theme.palette.secondary.main,
+  },
+  spaced: {
+    '& > :not(:last-child)': {
+      marginBottom: theme.spacing(1),
+    },
+  },
+}));

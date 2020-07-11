@@ -53,8 +53,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   dice: {
-    width: 40,
-    height: 40,
+    width: '2.rem',
+    height: '2.5rem',
     marginRight: theme.spacing(1),
   },
 }));

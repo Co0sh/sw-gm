@@ -61,36 +61,47 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
     }
   };
 
+  const regularThrows = throws.filter((t) => t.type === 'regular');
+  const emptyRegularThrow: ThrowOptions = {
+    dice: [],
+    modifier: 0,
+    target: 4,
+    type: 'regular',
+  };
+
+  const wildThrow = throws.find((t) => t.type !== 'regular');
+  const emptyWildThrow: ThrowOptions = {
+    dice: [],
+    modifier: 0,
+    target: 4,
+    type: 'wild',
+  };
+
   return (
     <Box display="flex" flexDirection="column" className={classes.root}>
       <ThrowConfigurator
-        value={{ dice: [], modifier: 0, target: 4, type: 'regular' }}
+        value={emptyRegularThrow}
         setValue={addThrow}
+        hasModifier={false}
+        hasTarget={false}
       />
 
-      {throws
-        .filter((t) => t.type === 'regular')
-        .map((aThrow, index) => {
-          return (
-            <ThrowConfigurator
-              key={index}
-              value={aThrow}
-              setValue={modifyThrow(index)}
-            />
-          );
-        })}
+      {regularThrows.map((aThrow, index) => {
+        return (
+          <ThrowConfigurator
+            key={index}
+            value={aThrow}
+            setValue={modifyThrow(index)}
+          />
+        );
+      })}
 
       <ThrowConfigurator
-        value={
-          throws.find((t) => t.type !== 'regular') ?? {
-            dice: [],
-            modifier: 0,
-            target: 4,
-            type: 'wild',
-          }
-        }
+        value={wildThrow ?? emptyWildThrow}
         setValue={modifyWildThrow}
         maxRolls={1}
+        hasTarget={Boolean(wildThrow)}
+        hasModifier={Boolean(wildThrow)}
       />
 
       <FormGroup row>
