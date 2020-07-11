@@ -64,6 +64,7 @@ const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
   icon: {
     width: '1.35em',
     height: '1.35em',
+    opacity: 0.9,
   },
   selected: {
     backgroundColor: ({ type }) =>

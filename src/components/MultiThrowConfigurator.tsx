@@ -6,16 +6,11 @@ import {
   defaultModifier,
   defaultTarget,
 } from '../logic/rolls';
-import {
-  FormGroup,
-  FormControlLabel,
-  Switch,
-  Box,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import { ThrowConfigurator } from './ThrowConfigurator';
 import { NumberPicker } from './NumberPicker';
 import { getKey } from '../logic/key';
+import { FlagSwitch } from './FlagSwitch';
 
 export interface RollConfiguratorProps {
   initialValue?: MultiThrowOptions;
@@ -101,52 +96,33 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" className={classes.root}>
-      <ThrowConfigurator
-        value={emptyRegularThrow}
-        setValue={addThrow}
-        hasModifier={false}
-        hasTarget={false}
-      />
-
-      {regularThrows.map((aThrow, index) => {
-        return (
-          <ThrowConfigurator
-            key={aThrow.key}
-            value={aThrow}
-            setValue={modifyThrow(index)}
-          />
-        );
-      })}
-
-      <ThrowConfigurator
-        value={wildThrow ?? emptyWildThrow}
-        setValue={modifyWildThrow}
-        maxRolls={1}
-        hasTarget={Boolean(wildThrow)}
-        hasModifier={Boolean(wildThrow)}
-      />
-
-      <FormGroup row>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={acing}
-              onChange={(e) => handleChange({ acing: e.target.checked })}
-            />
-          }
-          label="Ace"
+    <Box display="flex" flexDirection="column">
+      <Box pb={2} className={classes.spacing}>
+        <ThrowConfigurator
+          value={emptyRegularThrow}
+          setValue={addThrow}
+          hasModifier={false}
+          hasTarget={false}
         />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={canFail}
-              onChange={(e) => handleChange({ canFail: e.target.checked })}
+
+        {regularThrows.map((aThrow, index) => {
+          return (
+            <ThrowConfigurator
+              key={aThrow.key}
+              value={aThrow}
+              setValue={modifyThrow(index)}
             />
-          }
-          label="Can Fail"
+          );
+        })}
+
+        <ThrowConfigurator
+          value={wildThrow ?? emptyWildThrow}
+          setValue={modifyWildThrow}
+          maxRolls={1}
+          hasTarget={Boolean(wildThrow)}
+          hasModifier={Boolean(wildThrow)}
         />
-      </FormGroup>
+      </Box>
 
       <Box display="flex" justifyContent="space-evenly">
         <NumberPicker
@@ -161,13 +137,23 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
           setNumber={handleGlobalModifier}
           className={isGlobalModifierUsed ? undefined : classes.translucent}
         />
+        <FlagSwitch
+          title="Acing"
+          value={acing}
+          setValue={(acing) => handleChange({ acing })}
+        />
+        <FlagSwitch
+          title="Can Fail"
+          value={canFail}
+          setValue={(canFail) => handleChange({ canFail })}
+        />
       </Box>
     </Box>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  spacing: {
     '& > :not(:last-child)': {
       marginBottom: theme.spacing(1),
     },

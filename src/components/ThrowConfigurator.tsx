@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Paper, makeStyles, Box, IconButton, Theme } from '@material-ui/core';
-import Close from '@material-ui/icons/Close';
+import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
   ThrowOptions,
   defaultRegularThrow,
@@ -59,10 +60,15 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
     handleChange({ dice: diceCopy });
   };
 
+  const clearAll = () => {
+    handleChange({ dice: [] });
+  };
+
   return (
     <Box
       component={Paper}
       p={1}
+      pb={0}
       display="flex"
       flexDirection="column"
       className={[classes.border, classes.spaced].join(' ')}
@@ -85,8 +91,8 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
               setDie={(newDie) => addDie(newDie)}
               className={classes.newDie}
             />
-            <IconButton size="small" disabled>
-              <Close />
+            <IconButton size="small" disabled className={classes.invisible}>
+              <CloseIcon />
             </IconButton>
           </Box>
         )}
@@ -104,34 +110,36 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
               type={type}
             />
             <IconButton size="small" onClick={() => removeDie(die.key)}>
-              <Close />
+              <CloseIcon />
             </IconButton>
           </Box>
         ))}
       </Box>
-      <Box
-        display="flex"
-        flexDirection="row"
-        justifyContent="space-evenly"
-        flexGrow={1}
-      >
-        {hasTarget && (
-          <NumberPicker
-            title="Target"
-            number={target}
-            setNumber={(target) => handleChange({ target })}
-            min={0}
-            max={99}
-          />
-        )}
-        {hasModifier && (
-          <NumberPicker
-            title="Modifier"
-            number={modifier}
-            setNumber={(modifier) => handleChange({ modifier })}
-            min={-99}
-            max={99}
-          />
+      <Box display="flex" alignItems="center">
+        <Box display="flex" justifyContent="space-evenly" flexGrow={1}>
+          {hasTarget && (
+            <NumberPicker
+              title="Target"
+              number={target}
+              setNumber={(target) => handleChange({ target })}
+              min={0}
+              max={99}
+            />
+          )}
+          {hasModifier && (
+            <NumberPicker
+              title="Modifier"
+              number={modifier}
+              setNumber={(modifier) => handleChange({ modifier })}
+              min={-99}
+              max={99}
+            />
+          )}
+        </Box>
+        {dice.length > 0 && (
+          <IconButton size="small" onClick={clearAll}>
+            <DeleteIcon />
+          </IconButton>
         )}
       </Box>
     </Box>
@@ -139,6 +147,9 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
 };
 
 const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
+  invisible: {
+    opacity: 0,
+  },
   newDie: {
     opacity: 1 / 3,
   },

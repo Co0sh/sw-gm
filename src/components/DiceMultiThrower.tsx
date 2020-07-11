@@ -1,5 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Box, Button, makeStyles } from '@material-ui/core';
+import ResetIcon from '@material-ui/icons/Restore';
+import RollIcon from '@material-ui/icons/Check';
+import RerollIcon from '@material-ui/icons/Cached';
+import BackIcon from '@material-ui/icons/ArrowBack';
 import {
   MultiThrowOptions,
   MultiThrowResult,
@@ -27,6 +31,10 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialOptions }) => {
     setResult(null);
   };
 
+  const reset = () => {
+    setOptions(initialOptions ?? defaultDiceOptions);
+  };
+
   return (
     <Box display="flex" flexDirection="column">
       {result && (
@@ -46,23 +54,23 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialOptions }) => {
         </Box>
       )}
       <Box className={classes.buttonBar}>
-        {result && (
-          <Button
-            color="secondary"
-            size="large"
-            variant="contained"
-            fullWidth
-            onClick={clear}
-          >
-            Clear
-          </Button>
-        )}
+        <Button
+          color="secondary"
+          size="large"
+          variant="contained"
+          fullWidth
+          onClick={!result ? reset : clear}
+          startIcon={!result ? <ResetIcon /> : <BackIcon />}
+        >
+          {!result ? 'Reset' : 'Back'}
+        </Button>
         <Button
           color="primary"
           size="large"
           variant="contained"
           fullWidth
           onClick={handleRoll}
+          startIcon={!result ? <RollIcon /> : <RerollIcon />}
         >
           {!result ? 'Roll' : 'Reroll'}
         </Button>

@@ -37,6 +37,7 @@ export const NumberPicker: FC<NumberPickerProps> = ({
     <Box
       display="flex"
       flexDirection="column"
+      alignItems="center"
       position="relative"
       pt={0.5}
       className={className}
@@ -80,7 +81,7 @@ export const NumberPicker: FC<NumberPickerProps> = ({
 const useStyles = makeStyles((theme) => ({
   title: {
     position: 'absolute',
-    top: -theme.spacing(0.5),
+    top: -theme.spacing(1),
     opacity: 0.5,
   },
 }));
