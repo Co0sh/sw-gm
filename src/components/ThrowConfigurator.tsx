@@ -1,7 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Paper, makeStyles, Box, IconButton, Theme } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
-import { ThrowOptions, defaultRegularThrow, ThrowType } from '../logic/rolls';
+import {
+  ThrowOptions,
+  defaultRegularThrow,
+  ThrowType,
+  defaultRegularDie,
+} from '../logic/rolls';
 import { Die } from '../logic/die';
 import { DiePicker } from './DiePicker';
 import { NumberPicker } from './NumberPicker';
@@ -36,7 +41,7 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
 
   const addDie = (die?: Die) => {
     const lastDie = dice[dice.length - 1];
-    const dieToAdd = die ?? lastDie ?? 4;
+    const dieToAdd = die ?? lastDie ?? defaultRegularDie;
     handleChange({ dice: [dieToAdd, ...dice] });
   };
 

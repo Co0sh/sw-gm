@@ -3,6 +3,8 @@ import {
   MultiThrowOptions,
   defaultDiceOptions,
   ThrowOptions,
+  defaultModifier,
+  defaultTarget,
 } from '../logic/rolls';
 import {
   FormGroup,
@@ -12,6 +14,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { ThrowConfigurator } from './ThrowConfigurator';
+import { NumberPicker } from './NumberPicker';
 
 export interface RollConfiguratorProps {
   initialValue?: MultiThrowOptions;
@@ -64,17 +67,34 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   const regularThrows = throws.filter((t) => t.type === 'regular');
   const emptyRegularThrow: ThrowOptions = {
     dice: [],
-    modifier: 0,
-    target: 4,
+    modifier: defaultModifier,
+    target: defaultTarget,
     type: 'regular',
   };
 
   const wildThrow = throws.find((t) => t.type !== 'regular');
   const emptyWildThrow: ThrowOptions = {
     dice: [],
-    modifier: 0,
-    target: 4,
+    modifier: defaultModifier,
+    target: defaultTarget,
     type: 'wild',
+  };
+
+  const [globalTarget, setGlobalTarget] = useState(defaultTarget);
+  const [globalModifier, setGlobalModifier] = useState(defaultModifier);
+
+  const isGlobalTargetUsed = throws.every((t) => t.target === globalTarget);
+  const isGlobalModifierUsed = throws.every(
+    (t) => t.modifier === globalModifier,
+  );
+
+  const handleGlobalTarget = (target: number) => {
+    setGlobalTarget(target);
+    handleChange({ throws: throws.map((t) => ({ ...t, target })) });
+  };
+  const handleGlobalModifier = (modifier: number) => {
+    setGlobalModifier(modifier);
+    handleChange({ throws: throws.map((t) => ({ ...t, modifier })) });
   };
 
   return (
@@ -124,6 +144,21 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
           label="Can Fail"
         />
       </FormGroup>
+
+      <Box display="flex" justifyContent="space-evenly">
+        <NumberPicker
+          title="Target"
+          number={globalTarget}
+          setNumber={handleGlobalTarget}
+          className={isGlobalTargetUsed ? undefined : classes.translucent}
+        />
+        <NumberPicker
+          title="Modifier"
+          number={globalModifier}
+          setNumber={handleGlobalModifier}
+          className={isGlobalModifierUsed ? undefined : classes.translucent}
+        />
+      </Box>
     </Box>
   );
 };
@@ -133,5 +168,8 @@ const useStyles = makeStyles((theme) => ({
     '& > :not(:last-child)': {
       marginBottom: theme.spacing(1),
     },
+  },
+  translucent: {
+    opacity: 0.5,
   },
 }));

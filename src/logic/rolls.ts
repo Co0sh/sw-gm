@@ -42,18 +42,26 @@ export const roll: RollFn = (die: Die): number => {
   return Math.floor(Math.random() * die) + 1;
 };
 
+export const defaultTarget: number = 4;
+
+export const defaultModifier: number = 0;
+
+export const defaultRegularDie: Die = 4;
+
+export const defaultWildDie: Die = 6;
+
 export const defaultRegularThrow: ThrowOptions = {
   type: 'regular',
-  dice: [4],
-  target: 4,
-  modifier: 0,
+  dice: [defaultRegularDie],
+  target: defaultTarget,
+  modifier: defaultModifier,
 };
 
 export const defaultWildThrow: ThrowOptions = {
   type: 'wild',
-  dice: [6],
-  target: 4,
-  modifier: 0,
+  dice: [defaultWildDie],
+  target: defaultTarget,
+  modifier: defaultModifier,
 };
 
 export const defaultDiceOptions: MultiThrowOptions = {

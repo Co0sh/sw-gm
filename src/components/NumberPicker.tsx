@@ -10,6 +10,7 @@ export interface NumberPickerProps {
   setNumber?: (number: number) => void;
   min?: number;
   max?: number;
+  className?: string;
 }
 
 export const NumberPicker: FC<NumberPickerProps> = ({
@@ -19,6 +20,7 @@ export const NumberPicker: FC<NumberPickerProps> = ({
   setNumber = () => {},
   min = -20,
   max = 20,
+  className,
 }) => {
   const classes = useStyles();
   const [stateNumber, setStateNumber] = useState(propNumber ?? initialNumber);
@@ -32,7 +34,13 @@ export const NumberPicker: FC<NumberPickerProps> = ({
   const isLast = number === max;
 
   return (
-    <Box display="flex" flexDirection="column" position="relative" pt={0.5}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      position="relative"
+      pt={0.5}
+      className={className}
+    >
       {title && (
         <Typography variant="caption" className={classes.title}>
           {title}
