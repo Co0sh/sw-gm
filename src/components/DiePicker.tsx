@@ -38,6 +38,7 @@ export const DiePicker: FC<DiePickerProps> = ({
           <IconButton
             key={dieType}
             onClick={() => handleDie(dieType)}
+            size="small"
             disabled={disabled}
             color={
               selected
@@ -61,7 +62,7 @@ export const DiePicker: FC<DiePickerProps> = ({
 
 const useStyles = makeStyles({
   icon: {
-    width: '1.25em',
-    height: '1.25em',
+    width: '1.35em',
+    height: '1.35em',
   },
 });

@@ -90,6 +90,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
           }
         }
         setValue={modifyWildThrow}
+        maxRolls={1}
       />
 
       <FormGroup row>

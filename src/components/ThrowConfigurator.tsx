@@ -9,12 +9,14 @@ export interface ThrowConfiguratorProps {
   initialValue?: ThrowOptions;
   value?: ThrowOptions;
   setValue?: (value: ThrowOptions) => void;
+  maxRolls?: number;
 }
 
 export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   value,
   setValue,
   initialValue = defaultRegularThrow,
+  maxRolls,
 }) => {
   const classes = useStyles();
   const [stateValue, setStateValue] = useState(value ?? initialValue);
@@ -46,13 +48,15 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   };
 
   return (
-    <Paper>
-      <DiePicker
-        key={dice.length}
-        die={null}
-        setDie={(newDie) => addDie(newDie)}
-        className={classes.translucent}
-      />
+    <Box component={Paper} p={1}>
+      {(maxRolls === undefined || dice.length < maxRolls) && (
+        <DiePicker
+          key={dice.length}
+          die={null}
+          setDie={(newDie) => addDie(newDie)}
+          className={classes.translucent}
+        />
+      )}
       {dice.map((die, index) => (
         <Box
           key={index}
@@ -66,12 +70,12 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             setDie={(newDie) => changeDie(index, newDie)}
             type={type}
           />
-          <IconButton onClick={() => removeDie(index)}>
+          <IconButton size="small" onClick={() => removeDie(index)}>
             <Close />
           </IconButton>
         </Box>
       ))}
-    </Paper>
+    </Box>
   );
 };
 

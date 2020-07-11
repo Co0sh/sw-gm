@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { CssBaseline, Box } from '@material-ui/core';
-import DiceRoller from './DiceMultiThrower';
+import { DiceMultiThrower } from './DiceMultiThrower';
 
 const App: FC = () => {
   return (
@@ -14,7 +14,7 @@ const App: FC = () => {
         p={2}
         justifyContent="flex-end"
       >
-        <DiceRoller />
+        <DiceMultiThrower />
       </Box>
     </Box>
   );
