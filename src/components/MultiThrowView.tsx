@@ -18,12 +18,7 @@ export const MultiThrowView: FC<MultiThrowViewProps> = ({ value }) => {
       )}
       {value.throwResults.map((throwResult, index) => (
         <Paper key={throwResult.key}>
-          <ThrowView
-            value={throwResult}
-            className={
-              throwResult.isAdditional ? classes.translucent : undefined
-            }
-          />
+          <ThrowView value={throwResult} />
         </Paper>
       ))}
     </Box>
@@ -35,8 +30,5 @@ const useStyles = makeStyles((theme) => ({
     '& > :not(:last-child)': {
       marginBottom: theme.spacing(1),
     },
-  },
-  translucent: {
-    opacity: 1 / 3,
   },
 }));

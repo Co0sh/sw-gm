@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { MultiRollResult, ThrowType } from '../logic/rolls';
-import { Typography, Box, makeStyles, SvgIcon } from '@material-ui/core';
+import { Box, makeStyles, SvgIcon } from '@material-ui/core';
 import { RollView } from './RollView';
 import { DiceIcons } from '../logic/diceIcons';
 
@@ -37,9 +37,6 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
           ))}
         </Box>
       </Box>
-      <Typography variant="h4" component="span">
-        {value.sum}
-      </Typography>
     </Box>
   );
 };

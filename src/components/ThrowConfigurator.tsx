@@ -160,6 +160,12 @@ const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
       type === 'regular'
         ? theme.palette.primary.main
         : theme.palette.secondary.main,
+    borderRightWidth: 4,
+    borderRightStyle: 'solid',
+    borderRightColor: ({ type }) =>
+      type === 'regular'
+        ? theme.palette.primary.main
+        : theme.palette.secondary.main,
   },
   spaced: {
     '& > :not(:last-child)': {

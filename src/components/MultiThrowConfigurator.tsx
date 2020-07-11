@@ -26,7 +26,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   const classes = useStyles();
   const [stateValue, setStateValue] = useState(propValue ?? initialValue);
   const value = propValue ?? stateValue;
-  const { throws, acing, canFail } = value;
+  const { throws, acing, canFail, globalModifier, globalTarget } = value;
 
   const handleChange = (partialOptions: Partial<MultiThrowOptions>) => {
     const updatedOptions = { ...value, ...partialOptions };
@@ -78,21 +78,23 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
     type: 'wild',
   };
 
-  const [globalTarget, setGlobalTarget] = useState(defaultTarget);
-  const [globalModifier, setGlobalModifier] = useState(defaultModifier);
-
   const isGlobalTargetUsed = throws.every((t) => t.target === globalTarget);
   const isGlobalModifierUsed = throws.every(
     (t) => t.modifier === globalModifier,
   );
 
   const handleGlobalTarget = (target: number) => {
-    setGlobalTarget(target);
-    handleChange({ throws: throws.map((t) => ({ ...t, target })) });
+    handleChange({
+      throws: throws.map((t) => ({ ...t, target })),
+      globalTarget: target,
+    });
   };
+
   const handleGlobalModifier = (modifier: number) => {
-    setGlobalModifier(modifier);
-    handleChange({ throws: throws.map((t) => ({ ...t, modifier })) });
+    handleChange({
+      throws: throws.map((t) => ({ ...t, modifier })),
+      globalModifier: modifier,
+    });
   };
 
   return (

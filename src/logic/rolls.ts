@@ -21,6 +21,8 @@ export interface MultiThrowOptions {
   throws: ThrowOptions[];
   acing: boolean;
   canFail: boolean;
+  globalTarget: number;
+  globalModifier: number;
 }
 
 export interface MultiThrowResult {
@@ -84,6 +86,8 @@ export const defaultDiceOptions: MultiThrowOptions = {
   throws: [defaultRegularThrow, defaultWildThrow],
   acing: true,
   canFail: true,
+  globalModifier: defaultModifier,
+  globalTarget: defaultTarget,
 };
 
 export const generateThrowDice = (rollFn: RollFn) => (
