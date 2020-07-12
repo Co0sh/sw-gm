@@ -19,7 +19,10 @@ export interface DiceRollerProps {
   className?: string;
 }
 
-export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialValue }) => {
+export const DiceMultiThrower: FC<DiceRollerProps> = ({
+  initialValue,
+  className,
+}) => {
   const classes = useStyles();
   const [result, setResult] = useState<MultiThrowResult | null>(null);
   const [options, setOptions] = useState(initialValue ?? defaultDiceOptions);
@@ -37,7 +40,7 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialValue }) => {
   };
 
   return (
-    <Div>
+    <Div className={className}>
       {result && (
         <Div justify="flex-start" grows className={classes.pb2}>
           {result && <MultiThrowView value={result} />}

@@ -1,30 +1,21 @@
 import React, { FC } from 'react';
-import { CssBaseline, makeStyles } from '@material-ui/core';
-import { DiceMultiThrower } from './DiceMultiThrower';
-import { Div } from './Div';
+import { CssBaseline } from '@material-ui/core';
+import { Route, Switch } from 'react-router-dom';
+import { Layout } from './Layout';
+import DicePage from '../pages/DicePage';
+import CardsPage from '../pages/CardsPage';
 
 const App: FC = () => {
-  const classes = useStyles();
-
   return (
-    <Div row justify="center" className={classes.root}>
+    <Layout>
       <CssBaseline />
-      <Div justify="flex-end" className={classes.content}>
-        <DiceMultiThrower />
-      </Div>
-    </Div>
+
+      <Switch>
+        <Route exact path="/" component={DicePage} />
+        <Route exact path="/cards" component={CardsPage} />
+      </Switch>
+    </Layout>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    minHeight: '100vh',
-  },
-  content: {
-    maxWidth: 400,
-    width: '100%',
-    padding: theme.spacing(2),
-  },
-}));
 
 export default App;
