@@ -1,46 +1,44 @@
 import React, { FC } from 'react';
 import { Card, CardRank, CardSuit } from '../logic/useDeck';
-import { Typography, makeStyles, SvgIcon, Paper } from '@material-ui/core';
-import { Div } from './Div';
+import {
+  Typography,
+  makeStyles,
+  SvgIcon,
+  Button,
+  darken,
+} from '@material-ui/core';
 import { CardIcons } from '../logic/cardIcons';
 import { cn } from '../logic/cn';
 
 export interface CardViewProps {
   card: Card;
+  onClick?: () => void;
 }
 
-export const CardView: FC<CardViewProps> = ({ card }) => {
+export const CardView: FC<CardViewProps> = ({ card, onClick }) => {
   const classes = useStyles();
 
   if (card.type === 'joker') {
     const { color } = card;
     return (
-      <Div
-        component={Paper}
-        align="center"
-        justify="center"
-        className={cn(classes.root, classes[color])}
-      >
+      <Button className={cn(classes.root, classes[color])} onClick={onClick}>
         <SvgIcon
           className={classes.joker}
           component={CardIcons.joker}
           viewBox="0 0 100 100"
         />
-      </Div>
+      </Button>
     );
   }
   const { rank, suit } = card;
   return (
-    <Div
-      component={Paper}
-      row
-      align="center"
-      justify="center"
+    <Button
       className={cn(classes.root, classes[colors[suit]])}
+      onClick={onClick}
     >
       <SvgIcon component={CardIcons[suit]} viewBox="0 0 100 100" />
       <Typography className={classes.rank}>{rankSymbols[rank]}</Typography>
-    </Div>
+    </Button>
   );
 };
 
@@ -70,8 +68,16 @@ const colors: { [key in CardSuit]: 'red' | 'black' } = {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
+    '&:hover': {
+      backgroundColor: darken(theme.palette.common.white, 0.1),
+    },
     height: 40,
     width: 64,
+    cursor: 'pointer',
+    padding: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   rank: {
     fontWeight: 'bold',

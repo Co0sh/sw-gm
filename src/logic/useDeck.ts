@@ -79,7 +79,7 @@ export const shuffleDeck = (deck: Card[]): Card[] => {
 export const useDeck = () => {
   const [deck, setDeck] = useState(shuffleDeck(createDeck()));
   const draw = useCallback(
-    (count: number) => {
+    (count = 1) => {
       const copy = [...deck];
       const picked = copy.splice(copy.length - count, count);
       setDeck(copy);
