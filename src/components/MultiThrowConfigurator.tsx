@@ -39,8 +39,9 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
     handleChange({ throws: [{ ...throwOptions, key: getKey() }, ...throws] });
   };
 
-  const modifyThrow = (index: number) => (throwOptions: ThrowOptions) => {
+  const modifyThrow = (key: string) => (throwOptions: ThrowOptions) => {
     const throwsCopy = [...throws];
+    const index = throwsCopy.findIndex((t) => t.key === key);
     if (throwOptions.dice.length) {
       throwsCopy.splice(index, 1, throwOptions);
     } else {
@@ -50,12 +51,11 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   };
 
   const modifyWildThrow = (throwOptions: ThrowOptions) => {
-    const currentIndex = throws.findIndex((t) => t.type !== 'regular');
+    const currentWildThrow = throws.find((t) => t.type !== 'regular');
     const shouldAdd = throwOptions.dice.length > 0;
-    const exists = currentIndex >= 0;
 
-    if (exists) {
-      modifyThrow(currentIndex)(throwOptions);
+    if (currentWildThrow) {
+      modifyThrow(currentWildThrow.key)(throwOptions);
     } else if (shouldAdd) {
       addThrow(throwOptions);
     }
@@ -113,7 +113,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
             <ThrowConfigurator
               key={aThrow.key}
               value={aThrow}
-              onChange={modifyThrow(index)}
+              onChange={modifyThrow(aThrow.key)}
             />
           );
         })}

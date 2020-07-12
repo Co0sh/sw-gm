@@ -13,6 +13,7 @@ import { DiePicker } from './DiePicker';
 import { NumberPicker } from './NumberPicker';
 import { getKey } from '../logic/key';
 import { Div } from './Div';
+import { cn } from '../logic/cn';
 
 export interface ThrowConfiguratorProps {
   initialValue?: ThrowOptions;
@@ -71,18 +72,13 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
       spacing
       className={[classes.root, classes.border].join(' ')}
     >
-      <Div justify="flex-end" className={classes.spaced}>
+      <Div justify="flex-end" spacing>
         {(maxRolls === undefined || dice.length < maxRolls) && (
-          <Div
-            row
-            justify="space-between"
-            align="center"
-            className={classes.pr05}
-          >
+          <Div row justify="space-between" align="center">
             <DiePicker
               value={null}
               onChange={(newDie) => addDie(newDie)}
-              className={classes.newDie}
+              className={cn(classes.newDie, classes.pr05)}
             />
             <IconButton size="small" disabled className={classes.invisible}>
               <CloseIcon />
@@ -90,17 +86,12 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
           </Div>
         )}
         {dice.map((die) => (
-          <Div
-            key={die.key}
-            row
-            justify="space-between"
-            align="center"
-            className={classes.pr05}
-          >
+          <Div key={die.key} row justify="space-between" align="center">
             <DiePicker
               value={die.sides}
               onChange={(newDie) => changeDie(die.key, newDie)}
               type={type}
+              className={classes.pr05}
             />
             <IconButton size="small" onClick={() => removeDie(die.key)}>
               <CloseIcon />
