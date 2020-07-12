@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { MultiThrowResult } from '../logic/rolls';
-import { Typography, Paper, makeStyles } from '@material-ui/core';
+import { Typography, Paper } from '@material-ui/core';
 import { ThrowView } from './ThrowView';
 import { Div } from './Div';
 
@@ -9,9 +9,8 @@ export interface MultiThrowViewProps {
 }
 
 export const MultiThrowView: FC<MultiThrowViewProps> = ({ value }) => {
-  const classes = useStyles();
   return (
-    <Div className={classes.root}>
+    <Div spacing>
       {value.isCriticalFail && (
         <Typography variant="h4" color="error" align="center">
           CRITICAL FAILURE
@@ -25,11 +24,3 @@ export const MultiThrowView: FC<MultiThrowViewProps> = ({ value }) => {
     </Div>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > :not(:last-child)': {
-      marginBottom: theme.spacing(1),
-    },
-  },
-}));

@@ -27,7 +27,7 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
           className={classes.dice}
           color={type === 'regular' ? 'primary' : 'secondary'}
         />
-        <Div row className={classes.results}>
+        <Div row spacing className={classes.results}>
           {value.rolls.map((roll, index) => (
             <RollView
               key={roll.key}
@@ -45,9 +45,6 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
 const useStyles = makeStyles((theme) => ({
   results: {
     marginRight: theme.spacing(2),
-    '& > :not(:last-child)': {
-      marginRight: theme.spacing(1),
-    },
   },
   dice: {
     width: '2.rem',

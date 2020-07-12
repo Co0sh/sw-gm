@@ -68,7 +68,8 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   return (
     <Div
       component={Paper}
-      className={[classes.root, classes.border, classes.spaced].join(' ')}
+      spacing
+      className={[classes.root, classes.border].join(' ')}
     >
       <Div justify="flex-end" className={classes.spaced}>
         {(maxRolls === undefined || dice.length < maxRolls) && (
@@ -165,10 +166,5 @@ const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
       type === 'regular'
         ? theme.palette.primary.main
         : theme.palette.secondary.main,
-  },
-  spaced: {
-    '& > :not(:last-child)': {
-      marginBottom: theme.spacing(1),
-    },
   },
 }));

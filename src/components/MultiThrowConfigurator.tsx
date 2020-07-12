@@ -100,7 +100,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
 
   return (
     <Div>
-      <Div className={classes.spacing}>
+      <Div spacing className={classes.spacing}>
         <ThrowConfigurator
           value={emptyRegularThrow}
           onChange={addThrow}
@@ -158,9 +158,6 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
 const useStyles = makeStyles((theme) => ({
   spacing: {
     marginBottom: theme.spacing(2),
-    '& > :not(:last-child)': {
-      marginBottom: theme.spacing(1),
-    },
   },
   translucent: {
     opacity: 0.5,

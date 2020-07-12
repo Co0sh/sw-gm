@@ -51,7 +51,7 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
           <MultiThrowConfigurator value={options} onChange={setOptions} />
         </Div>
       )}
-      <Div row className={classes.buttonBar}>
+      <Div row spacing>
         <Button
           color="secondary"
           size="large"
@@ -80,10 +80,5 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
 const useStyles = makeStyles((theme) => ({
   pb2: {
     paddingBottom: theme.spacing(2),
-  },
-  buttonBar: {
-    '& > :not(:last-child)': {
-      marginRight: theme.spacing(2),
-    },
   },
 }));

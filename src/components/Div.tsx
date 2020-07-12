@@ -17,6 +17,7 @@ export interface DivProps {
   grows?: boolean;
   align?: FlexPosition;
   justify?: FlexPosition;
+  spacing?: boolean;
   className?: string;
   component?: ComponentType<{ className?: string }>;
   [key: string]: any;
@@ -27,6 +28,7 @@ export const Div: FC<DivProps> = ({
   grows = false,
   align,
   justify,
+  spacing = false,
   component: Component = 'div',
   className,
   children,
@@ -43,6 +45,7 @@ export const Div: FC<DivProps> = ({
         grows && classes.grows,
         align && (classes as any)[`align-${align}`],
         justify && (classes as any)[`justify-${justify}`],
+        spacing && classes.spacing,
         className,
       )}
     >
@@ -58,6 +61,16 @@ const useStyles = makeStyles({
   },
   row: {
     flexDirection: 'row',
+    '&$spacing': {
+      '& > :not(:last-child)': {
+        marginRight: 8,
+      },
+    },
+  },
+  spacing: {
+    '&:not($row) > :not(:last-child)': {
+      marginBottom: 8,
+    },
   },
   grows: {
     flexGrow: 1,
