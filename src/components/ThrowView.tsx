@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
 import { ThrowResult } from '../logic/rolls';
-import { List, ListItem, makeStyles, Box, Typography } from '@material-ui/core';
+import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
 import { MultiRollView } from './MultiRollView';
 import { cn } from '../logic/cn';
 import { NumberPicker } from './NumberPicker';
 import { RaiseBar } from './RaiseBar';
+import { Div } from './Div';
 
 export interface ThrowViewProps {
   value: ThrowResult;
@@ -27,8 +28,8 @@ export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
   const raises = passed ? Math.floor((total - target) / 4) : 0;
 
   return (
-    <Box display="flex" flexDirection="column">
-      <Box display="flex">
+    <Div>
+      <Div row>
         <List
           dense
           className={cn(
@@ -47,21 +48,19 @@ export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
             </ListItem>
           ))}
         </List>
-        <Box display="flex" flexDirection="column" m={1} position="relative">
-          <Box
-            width={40}
-            height={40}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            className={passed ? classes.passed : undefined}
+        <Div className={classes.totalBox}>
+          <Div
+            row
+            justify="center"
+            align="center"
+            className={cn(classes.total, passed && classes.passed)}
           >
             <Typography variant="h5">{total}</Typography>
-          </Box>
+          </Div>
           <RaiseBar className={classes.bar} value={raises} />
-        </Box>
-      </Box>
-      <Box display="flex" justifyContent="space-evenly">
+        </Div>
+      </Div>
+      <Div row justify="space-evenly">
         <NumberPicker
           title="target"
           value={target}
@@ -76,12 +75,20 @@ export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
           min={-99}
           max={99}
         />
-      </Box>
-    </Box>
+      </Div>
+    </Div>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
+  totalBox: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  total: {
+    width: 40,
+    height: 40,
+  },
   grows: {
     flexGrow: 1,
   },

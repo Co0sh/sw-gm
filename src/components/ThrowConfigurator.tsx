@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Paper, makeStyles, Box, IconButton, Theme } from '@material-ui/core';
+import { Paper, makeStyles, IconButton, Theme } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {
@@ -12,6 +12,7 @@ import { Die } from '../logic/die';
 import { DiePicker } from './DiePicker';
 import { NumberPicker } from './NumberPicker';
 import { getKey } from '../logic/key';
+import { Div } from './Div';
 
 export interface ThrowConfiguratorProps {
   initialValue?: ThrowOptions;
@@ -65,26 +66,17 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   };
 
   return (
-    <Box
+    <Div
       component={Paper}
-      p={1}
-      pb={0}
-      display="flex"
-      flexDirection="column"
-      className={[classes.border, classes.spaced].join(' ')}
+      className={[classes.root, classes.border, classes.spaced].join(' ')}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="flex-end"
-        className={classes.spaced}
-      >
+      <Div justify="flex-end" className={classes.spaced}>
         {(maxRolls === undefined || dice.length < maxRolls) && (
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            pr={0.5}
+          <Div
+            row
+            justify="space-between"
+            align="center"
+            className={classes.pr05}
           >
             <DiePicker
               value={null}
@@ -94,15 +86,15 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             <IconButton size="small" disabled className={classes.invisible}>
               <CloseIcon />
             </IconButton>
-          </Box>
+          </Div>
         )}
         {dice.map((die) => (
-          <Box
+          <Div
             key={die.key}
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            pr={0.5}
+            row
+            justify="space-between"
+            align="center"
+            className={classes.pr05}
           >
             <DiePicker
               value={die.sides}
@@ -112,11 +104,11 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             <IconButton size="small" onClick={() => removeDie(die.key)}>
               <CloseIcon />
             </IconButton>
-          </Box>
+          </Div>
         ))}
-      </Box>
-      <Box display="flex" alignItems="center">
-        <Box display="flex" justifyContent="space-evenly" flexGrow={1}>
+      </Div>
+      <Div row align="center">
+        <Div row justify="space-evenly" grows>
           {hasTarget && (
             <NumberPicker
               title="Target"
@@ -135,14 +127,14 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
               max={99}
             />
           )}
-        </Box>
+        </Div>
         {dice.length > 0 && (
           <IconButton size="small" onClick={clearAll}>
             <DeleteIcon />
           </IconButton>
         )}
-      </Box>
-    </Box>
+      </Div>
+    </Div>
   );
 };
 
@@ -152,6 +144,13 @@ const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
   },
   newDie: {
     opacity: 1 / 3,
+  },
+  root: {
+    padding: theme.spacing(1),
+    paddingBottom: 0,
+  },
+  pr05: {
+    paddingRight: theme.spacing(0.5),
   },
   border: {
     borderLeftWidth: 4,

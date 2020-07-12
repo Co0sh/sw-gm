@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { MultiRollResult, ThrowType } from '../logic/rolls';
-import { Box, makeStyles, SvgIcon } from '@material-ui/core';
+import { makeStyles, SvgIcon } from '@material-ui/core';
 import { RollView } from './RollView';
 import { DiceIcons } from '../logic/diceIcons';
+import { Div } from './Div';
 
 export interface MultiRollViewProps {
   value: MultiRollResult;
@@ -18,15 +19,15 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
   const classes = useStyles();
 
   return (
-    <Box display="flex" alignItems="center" className={className}>
-      <Box display="flex" alignItems="center" flexGrow={1}>
+    <Div row align="center" className={className}>
+      <Div row align="center" grows>
         <SvgIcon
           component={DiceIcons[value.die]}
           viewBox="0 0 100 100"
           className={classes.dice}
           color={type === 'regular' ? 'primary' : 'secondary'}
         />
-        <Box className={classes.results}>
+        <Div row className={classes.results}>
           {value.rolls.map((roll, index) => (
             <RollView
               key={roll.key}
@@ -35,15 +36,14 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
               value={roll.result}
             />
           ))}
-        </Box>
-      </Box>
-    </Box>
+        </Div>
+      </Div>
+    </Div>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
   results: {
-    display: 'flex',
     marginRight: theme.spacing(2),
     '& > :not(:last-child)': {
       marginRight: theme.spacing(1),

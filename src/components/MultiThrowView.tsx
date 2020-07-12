@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { MultiThrowResult } from '../logic/rolls';
-import { Box, Typography, Paper, makeStyles } from '@material-ui/core';
+import { Typography, Paper, makeStyles } from '@material-ui/core';
 import { ThrowView } from './ThrowView';
+import { Div } from './Div';
 
 export interface MultiThrowViewProps {
   value: MultiThrowResult;
@@ -10,7 +11,7 @@ export interface MultiThrowViewProps {
 export const MultiThrowView: FC<MultiThrowViewProps> = ({ value }) => {
   const classes = useStyles();
   return (
-    <Box display="flex" flexDirection="column" className={classes.root}>
+    <Div className={classes.root}>
       {value.isCriticalFail && (
         <Typography variant="h4" color="error" align="center">
           CRITICAL FAILURE
@@ -21,7 +22,7 @@ export const MultiThrowView: FC<MultiThrowViewProps> = ({ value }) => {
           <ThrowView value={throwResult} />
         </Paper>
       ))}
-    </Box>
+    </Div>
   );
 };
 

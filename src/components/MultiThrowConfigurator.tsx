@@ -6,11 +6,12 @@ import {
   defaultModifier,
   defaultTarget,
 } from '../logic/rolls';
-import { Box, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { ThrowConfigurator } from './ThrowConfigurator';
 import { NumberPicker } from './NumberPicker';
 import { getKey } from '../logic/key';
 import { FlagSwitch } from './FlagSwitch';
+import { Div } from './Div';
 
 export interface RollConfiguratorProps {
   initialValue?: MultiThrowOptions;
@@ -98,8 +99,8 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column">
-      <Box pb={2} className={classes.spacing}>
+    <Div>
+      <Div className={classes.spacing}>
         <ThrowConfigurator
           value={emptyRegularThrow}
           onChange={addThrow}
@@ -124,9 +125,9 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
           hasTarget={Boolean(wildThrow)}
           hasModifier={Boolean(wildThrow)}
         />
-      </Box>
+      </Div>
 
-      <Box display="flex" justifyContent="space-evenly">
+      <Div row justify="space-evenly">
         <NumberPicker
           title="Target"
           value={globalTarget}
@@ -149,13 +150,14 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
           value={canFail}
           onChange={(canFail) => handleChange({ canFail })}
         />
-      </Box>
-    </Box>
+      </Div>
+    </Div>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
   spacing: {
+    marginBottom: theme.spacing(2),
     '& > :not(:last-child)': {
       marginBottom: theme.spacing(1),
     },

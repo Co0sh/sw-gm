@@ -1,23 +1,30 @@
 import React, { FC } from 'react';
-import { CssBaseline, Box } from '@material-ui/core';
+import { CssBaseline, makeStyles } from '@material-ui/core';
 import { DiceMultiThrower } from './DiceMultiThrower';
+import { Div } from './Div';
 
 const App: FC = () => {
+  const classes = useStyles();
+
   return (
-    <Box minHeight="100vh" display="flex" justifyContent="center">
+    <Div row justify="center" className={classes.root}>
       <CssBaseline />
-      <Box
-        display="flex"
-        flexDirection="column"
-        maxWidth={400}
-        width="100%"
-        p={2}
-        justifyContent="flex-end"
-      >
+      <Div justify="flex-end" className={classes.content}>
         <DiceMultiThrower />
-      </Box>
-    </Box>
+      </Div>
+    </Div>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    minHeight: '100vh',
+  },
+  content: {
+    maxWidth: 400,
+    width: '100%',
+    padding: theme.spacing(2),
+  },
+}));
 
 export default App;

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { makeStyles, Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import { Div } from './Div';
 
 export interface RaiseBarProps {
   value?: number;
@@ -14,11 +15,11 @@ export const RaiseBar: FC<RaiseBarProps> = ({ value, className }) => {
   }
 
   return (
-    <Box display="flex" justifyContent="center" className={className}>
+    <Div row justify="center" className={className}>
       {new Array(value).fill(null).map((_, index) => (
         <div key={index} className={classes.dot} />
       ))}
-    </Box>
+    </Div>
   );
 };
 

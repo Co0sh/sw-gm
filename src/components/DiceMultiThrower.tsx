@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Box, Button, makeStyles } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import ResetIcon from '@material-ui/icons/Restore';
 import RollIcon from '@material-ui/icons/Check';
 import RerollIcon from '@material-ui/icons/Cached';
@@ -12,6 +12,7 @@ import {
 } from '../logic/rolls';
 import { MultiThrowView } from './MultiThrowView';
 import { MultiThrowConfigurator } from './MultiThrowConfigurator';
+import { Div } from './Div';
 
 export interface DiceRollerProps {
   initialValue?: MultiThrowOptions;
@@ -36,24 +37,18 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialValue }) => {
   };
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Div>
       {result && (
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="flex-start"
-          flexGrow={1}
-          pb={2}
-        >
+        <Div justify="flex-start" grows className={classes.pb2}>
           {result && <MultiThrowView value={result} />}
-        </Box>
+        </Div>
       )}
       {!result && (
-        <Box display="flex" flexDirection="column" pb={2}>
+        <Div className={classes.pb2}>
           <MultiThrowConfigurator value={options} onChange={setOptions} />
-        </Box>
+        </Div>
       )}
-      <Box className={classes.buttonBar}>
+      <Div row className={classes.buttonBar}>
         <Button
           color="secondary"
           size="large"
@@ -74,15 +69,16 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({ initialValue }) => {
         >
           {!result ? 'Roll' : 'Reroll'}
         </Button>
-      </Box>
-    </Box>
+      </Div>
+    </Div>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
+  pb2: {
+    paddingBottom: theme.spacing(2),
+  },
   buttonBar: {
-    display: 'flex',
-    flexDirection: 'row',
     '& > :not(:last-child)': {
       marginRight: theme.spacing(2),
     },

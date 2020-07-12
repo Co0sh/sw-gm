@@ -1,11 +1,14 @@
 import React, { FC, useState } from 'react';
-import { Box, Switch, Typography, makeStyles } from '@material-ui/core';
+import { Switch, Typography, makeStyles } from '@material-ui/core';
+import { Div } from './Div';
+import { cn } from '../logic/cn';
 
 export interface FlagSwitchProps {
   title?: string;
   initialValue?: boolean;
   value?: boolean;
   onChange?: (value: boolean) => void;
+  className?: string;
 }
 
 export const FlagSwitch: FC<FlagSwitchProps> = ({
@@ -13,6 +16,7 @@ export const FlagSwitch: FC<FlagSwitchProps> = ({
   initialValue,
   value: propValue,
   onChange = () => {},
+  className,
 }) => {
   const classes = useStyles();
   const [stateValue, setStateValue] = useState(propValue ?? initialValue);
@@ -23,12 +27,7 @@ export const FlagSwitch: FC<FlagSwitchProps> = ({
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      position="relative"
-    >
+    <Div align="center" className={cn(classes.relative, className)}>
       <Typography variant="caption" className={classes.title}>
         {title}
       </Typography>
@@ -36,11 +35,14 @@ export const FlagSwitch: FC<FlagSwitchProps> = ({
         checked={value}
         onChange={(e) => handleChange(e.target.checked)}
       />
-    </Box>
+    </Div>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
+  relative: {
+    position: 'relative',
+  },
   title: {
     position: 'absolute',
     top: -theme.spacing(1),

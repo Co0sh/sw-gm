@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Box, IconButton, SvgIcon, makeStyles, Theme } from '@material-ui/core';
+import { IconButton, SvgIcon, makeStyles, Theme } from '@material-ui/core';
 import { Die } from '../logic/die';
 import { DiceIcons } from '../logic/diceIcons';
 import { ThrowType } from '../logic/rolls';
+import { Div } from './Div';
 
 export interface DiePickerProps {
   initialValue?: Die | null;
@@ -30,13 +31,7 @@ export const DiePicker: FC<DiePickerProps> = ({
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      flexGrow={1}
-      justifyContent="space-between"
-      className={className}
-    >
+    <Div row align="center" justify="space-between" grows className={className}>
       {Object.keys(DiceIcons).map((key) => {
         const dieType = Number(key) as Die;
         const selected = dieType === die;
@@ -56,7 +51,7 @@ export const DiePicker: FC<DiePickerProps> = ({
           </IconButton>
         );
       })}
-    </Box>
+    </Div>
   );
 };
 

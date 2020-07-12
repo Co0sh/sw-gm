@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { Box, makeStyles, Theme, Typography } from '@material-ui/core';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
 import { ThrowType } from '../logic/rolls';
+import { Div } from './Div';
 
 export interface RollViewProps {
   value: number;
@@ -16,11 +17,11 @@ export const RollView: FC<RollViewProps> = ({
   const classes = useStyles({ ace, type });
 
   return (
-    <Box component="span" className={classes.root}>
+    <Div row align="center" justify="center" className={classes.root}>
       <Typography variant="h5" component="span" className={classes.number}>
         {value}
       </Typography>
-    </Box>
+    </Div>
   );
 };
 
@@ -31,9 +32,6 @@ const useStyles = makeStyles<Theme, { ace: boolean; type: ThrowType }>(
         props.type === 'regular'
           ? theme.palette.primary.main
           : theme.palette.secondary.main,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
       width: '2.5rem',
       height: '2.5rem',
       borderRadius: '50%',

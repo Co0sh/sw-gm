@@ -1,7 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Box, IconButton, Typography, makeStyles } from '@material-ui/core';
+import { IconButton, Typography, makeStyles } from '@material-ui/core';
 import PlusIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
+import { Div } from './Div';
+import { cn } from '../logic/cn';
 
 export interface NumberPickerProps {
   title?: string;
@@ -34,20 +36,13 @@ export const NumberPicker: FC<NumberPickerProps> = ({
   const isLast = number === max;
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      position="relative"
-      pt={0.5}
-      className={className}
-    >
+    <Div align="center" pt={0.5} className={cn(classes.root, className)}>
       {title && (
         <Typography variant="caption" className={classes.title}>
           {title}
         </Typography>
       )}
-      <Box display="flex" flexGrow={1} alignItems="center">
+      <Div row grows align="center">
         <IconButton
           size="small"
           disabled={isFirst}
@@ -55,17 +50,11 @@ export const NumberPicker: FC<NumberPickerProps> = ({
         >
           <MinusIcon />
         </IconButton>
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          width={32}
-        >
+        <Div justify="center" align="center" className={classes.width32}>
           <Typography variant="h5" component="span">
             {number}
           </Typography>
-        </Box>
+        </Div>
         <IconButton
           size="small"
           disabled={isLast}
@@ -73,15 +62,22 @@ export const NumberPicker: FC<NumberPickerProps> = ({
         >
           <PlusIcon />
         </IconButton>
-      </Box>
-    </Box>
+      </Div>
+    </Div>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: theme.spacing(0.5),
+    position: 'relative',
+  },
   title: {
     position: 'absolute',
     top: -theme.spacing(1),
     opacity: 0.5,
+  },
+  width32: {
+    width: 32,
   },
 }));
