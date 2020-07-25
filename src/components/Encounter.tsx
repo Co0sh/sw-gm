@@ -4,17 +4,17 @@ import {
   IconButton,
   Button,
   makeStyles,
-  Typography,
   List,
   ListItem,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Character } from '../logic/character';
 import { getKey } from '../logic/key';
-import { Div } from '../components/Div';
-import CharacterPreview from '../components/CharacterPreview';
+import { Div } from './Div';
+import EncounterCharacterPreview from './EncounterCharacterPreview';
 import { Card, useDeck } from '../logic/useDeck';
-import { CardView } from '../components/CardView';
+import { CardView } from './CardView';
+import { CardPlaceholder } from './CardPlaceholder';
 
 export interface CharacterData {
   character: Character;
@@ -116,21 +116,26 @@ export const Encounter: FC<EncounterProps> = ({ initialValue, className }) => {
       <List>
         {characters.map(({ character, cards, slots }) => (
           <ListItem key={character.key}>
-            <CharacterPreview character={character} onDelete={removeCharacter}>
-              {cards.length > 0 ? (
-                <Div row>
-                  {cards.map((card) => (
-                    <CardView
-                      key={card.key}
-                      card={card}
-                      onClick={() => redrawCard(card.key)}
-                    />
-                  ))}
-                </Div>
-              ) : (
-                <Typography>Slots: {slots}</Typography>
-              )}
-            </CharacterPreview>
+            <EncounterCharacterPreview
+              character={character}
+              onDelete={removeCharacter}
+            >
+              <Div row justify="flex-end" grows>
+                {cards.length > 0
+                  ? cards.map((card) => (
+                      <CardView
+                        key={card.key}
+                        card={card}
+                        onClick={() => redrawCard(card.key)}
+                      />
+                    ))
+                  : new Array(slots)
+                      .fill(null)
+                      .map((_, index) => (
+                        <CardPlaceholder key={index} onClick={() => {}} />
+                      ))}
+              </Div>
+            </EncounterCharacterPreview>
           </ListItem>
         ))}
       </List>

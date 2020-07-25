@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Character } from '../logic/character';
 import { Div } from './Div';
-import { Typography, IconButton } from '@material-ui/core';
+import { Typography, IconButton, makeStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 interface CharacterPreviewProps {
@@ -9,18 +9,19 @@ interface CharacterPreviewProps {
   onDelete?: (key: string) => void;
 }
 
-const CharacterPreview: FC<CharacterPreviewProps> = ({
+const EncounterCharacterPreview: FC<CharacterPreviewProps> = ({
   character,
   onDelete,
   children,
 }) => {
+  const classes = useStyles();
   const { name, key } = character;
   return (
-    <Div row align="center">
+    <Div row align="center" className={classes.root}>
       <IconButton size="small" onClick={() => onDelete?.(key)}>
         <DeleteIcon />
       </IconButton>
-      <Div row>
+      <Div row grows align="center">
         <Typography>{name}</Typography>
         {children}
       </Div>
@@ -28,4 +29,10 @@ const CharacterPreview: FC<CharacterPreviewProps> = ({
   );
 };
 
-export default CharacterPreview;
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+});
+
+export default EncounterCharacterPreview;
