@@ -13,6 +13,7 @@ import {
 import { MultiThrowView } from './MultiThrowView';
 import { MultiThrowConfigurator } from './MultiThrowConfigurator';
 import { Div } from './Div';
+import { useDiceHistory } from './DiceHistoryManager';
 
 export interface DiceRollerProps {
   initialValue?: MultiThrowOptions;
@@ -26,9 +27,12 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
   const classes = useStyles();
   const [result, setResult] = useState<MultiThrowResult | null>(null);
   const [options, setOptions] = useState(initialValue ?? defaultDiceOptions);
+  const { recordDiceResult } = useDiceHistory();
 
   const handleRoll = () => {
-    setResult(throwDice(options));
+    const result = throwDice(options);
+    setResult(result);
+    recordDiceResult(result);
   };
 
   const clear = () => {
