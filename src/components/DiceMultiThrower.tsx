@@ -25,22 +25,30 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
   className,
 }) => {
   const classes = useStyles();
+  const [rerollCounter, setRerollCounter] = useState(0);
   const [result, setResult] = useState<MultiThrowResult | null>(null);
   const [options, setOptions] = useState(initialValue ?? defaultDiceOptions);
   const { recordDiceResult } = useDiceHistory();
 
   const handleRoll = () => {
-    const result = throwDice(options);
+    const newName =
+      rerollCounter === 0
+        ? options.name
+        : `${options.name} Reroll ${rerollCounter}`;
+    const result = throwDice({ ...options, name: newName });
     setResult(result);
+    setRerollCounter((previousCounter) => previousCounter + 1);
     recordDiceResult(result);
   };
 
   const clear = () => {
     setResult(null);
+    setRerollCounter(0);
   };
 
   const reset = () => {
     setOptions(initialValue ?? defaultDiceOptions);
+    setRerollCounter(0);
   };
 
   return (

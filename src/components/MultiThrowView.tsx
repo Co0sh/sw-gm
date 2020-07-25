@@ -16,6 +16,7 @@ export const MultiThrowView: FC<MultiThrowViewProps> = ({ value }) => {
           CRITICAL FAILURE
         </Typography>
       )}
+      <Typography>{value.name}</Typography>
       {value.throwResults.map((throwResult) => (
         <Paper key={throwResult.key}>
           <ThrowView value={throwResult} />

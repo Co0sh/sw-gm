@@ -6,6 +6,7 @@ export type ThrowType = 'regular' | 'wild';
 
 export interface ThrowOptions {
   key: string;
+  name: string;
   type: ThrowType;
   dice: UniqueDie[];
   target: number;
@@ -18,6 +19,7 @@ export interface UniqueDie {
 }
 
 export interface MultiThrowOptions {
+  name: string;
   throws: ThrowOptions[];
   acing: boolean;
   canFail: boolean;
@@ -26,6 +28,7 @@ export interface MultiThrowOptions {
 }
 
 export interface MultiThrowResult {
+  name: string;
   throwResults: ThrowResult[];
   isCriticalFail: boolean;
   uuid: string;
@@ -33,6 +36,7 @@ export interface MultiThrowResult {
 
 export interface ThrowResult {
   key: string;
+  name: string;
   multiRolls: MultiRollResult[];
   type: ThrowType;
   target: number;
@@ -66,8 +70,15 @@ export const defaultRegularDie: Die = 4;
 
 export const defaultWildDie: Die = 6;
 
+export const defaultMultiThrowName = 'Custom';
+
+export const defaultThrowName = 'Regular';
+
+export const defaultWildThrowName = 'Wild Die';
+
 export const defaultRegularThrow: ThrowOptions = {
   key: getKey(),
+  name: `${defaultThrowName} 1`,
   type: 'regular',
   dice: [{ key: getKey(), sides: defaultRegularDie }],
   target: defaultTarget,
@@ -76,6 +87,7 @@ export const defaultRegularThrow: ThrowOptions = {
 
 export const defaultWildThrow: ThrowOptions = {
   key: getKey(),
+  name: defaultWildThrowName,
   type: 'wild',
   dice: [{ key: getKey(), sides: defaultWildDie }],
   target: defaultTarget,
@@ -83,6 +95,7 @@ export const defaultWildThrow: ThrowOptions = {
 };
 
 export const defaultDiceOptions: MultiThrowOptions = {
+  name: defaultMultiThrowName,
   throws: [defaultRegularThrow, defaultWildThrow],
   acing: true,
   canFail: true,
@@ -93,7 +106,7 @@ export const defaultDiceOptions: MultiThrowOptions = {
 export const generateThrowDice = (rollFn: RollFn) => (
   options: Partial<MultiThrowOptions> = {},
 ): MultiThrowResult => {
-  const { throws, acing, canFail } = {
+  const { throws, acing, canFail, name } = {
     ...defaultDiceOptions,
     ...options,
   };
@@ -104,14 +117,25 @@ export const generateThrowDice = (rollFn: RollFn) => (
 
   const resolveThrow = (
     aThrow: ThrowOptions,
+    index: number | null,
     isAdditional = false,
   ): ThrowResult => {
-    const { dice, type, target, modifier } = aThrow;
+    const { dice, type, target, modifier, name } = aThrow;
     const multiRolls = dice.map((die) => chosenRollFn(die.sides));
-    return { key: getKey(), multiRolls, type, target, modifier, isAdditional };
+    return {
+      key: getKey(),
+      name,
+      multiRolls,
+      type,
+      target,
+      modifier,
+      isAdditional,
+    };
   };
 
-  const throwResults = throws.map((aThrow) => resolveThrow(aThrow));
+  const throwResults = throws.map((aThrow, index) =>
+    resolveThrow(aThrow, index),
+  );
 
   const getThrowSum = (throwResult: ThrowResult) =>
     throwResult.multiRolls.reduce((acc, next) => acc + next.sum, 0);
@@ -127,7 +151,8 @@ export const generateThrowDice = (rollFn: RollFn) => (
     const isFailed = fails > allSums.length / 2;
 
     if (isFailed) {
-      const backupWildThrow = wildThrow ?? resolveThrow(defaultWildThrow, true);
+      const backupWildThrow =
+        wildThrow ?? resolveThrow(defaultWildThrow, null, true);
       const wildThrowSum = getThrowSum(backupWildThrow);
 
       return {
@@ -147,6 +172,7 @@ export const generateThrowDice = (rollFn: RollFn) => (
     : { isCriticalFail: false, additionalWildThrows: [] };
 
   return {
+    name,
     throwResults: [...throwResults, ...additionalWildThrows],
     isCriticalFail,
     uuid,

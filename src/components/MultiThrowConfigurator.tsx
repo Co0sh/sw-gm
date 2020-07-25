@@ -3,8 +3,8 @@ import {
   MultiThrowOptions,
   defaultDiceOptions,
   ThrowOptions,
-  defaultModifier,
-  defaultTarget,
+  defaultThrowName,
+  defaultWildThrowName,
 } from '../logic/rolls';
 import { makeStyles } from '@material-ui/core';
 import { ThrowConfigurator } from './ThrowConfigurator';
@@ -29,6 +29,26 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   const value = propValue ?? stateValue;
   const { throws, acing, canFail, globalModifier, globalTarget } = value;
 
+  const regularThrows = throws.filter((t) => t.type === 'regular');
+  const emptyRegularThrow: ThrowOptions = {
+    key: getKey(),
+    name: defaultThrowName,
+    dice: [],
+    modifier: globalModifier,
+    target: globalTarget,
+    type: 'regular',
+  };
+
+  const wildThrow = throws.find((t) => t.type !== 'regular');
+  const emptyWildThrow: ThrowOptions = {
+    key: getKey(),
+    name: defaultWildThrowName,
+    dice: [],
+    modifier: globalModifier,
+    target: globalTarget,
+    type: 'wild',
+  };
+
   const handleChange = (partialOptions: Partial<MultiThrowOptions>) => {
     const updatedOptions = { ...value, ...partialOptions };
     onChange?.(updatedOptions);
@@ -36,7 +56,19 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
   };
 
   const addThrow = (throwOptions: ThrowOptions) => {
-    handleChange({ throws: [{ ...throwOptions, key: getKey() }, ...throws] });
+    handleChange({
+      throws: [
+        {
+          ...throwOptions,
+          key: getKey(),
+          name:
+            throwOptions.type === 'wild'
+              ? throwOptions.name
+              : `${throwOptions.name} ${regularThrows.length + 1}`,
+        },
+        ...throws,
+      ],
+    });
   };
 
   const modifyThrow = (key: string) => (throwOptions: ThrowOptions) => {
@@ -59,24 +91,6 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
     } else if (shouldAdd) {
       addThrow(throwOptions);
     }
-  };
-
-  const regularThrows = throws.filter((t) => t.type === 'regular');
-  const emptyRegularThrow: ThrowOptions = {
-    key: getKey(),
-    dice: [],
-    modifier: defaultModifier,
-    target: defaultTarget,
-    type: 'regular',
-  };
-
-  const wildThrow = throws.find((t) => t.type !== 'regular');
-  const emptyWildThrow: ThrowOptions = {
-    key: getKey(),
-    dice: [],
-    modifier: defaultModifier,
-    target: defaultTarget,
-    type: 'wild',
   };
 
   const isGlobalTargetUsed = throws.every((t) => t.target === globalTarget);

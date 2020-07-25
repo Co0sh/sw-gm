@@ -15,6 +15,7 @@ export interface ThrowViewProps {
 export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
   const classes = useStyles();
   const {
+    name,
     isAdditional,
     modifier: propModifier,
     target: propTarget,
@@ -29,6 +30,9 @@ export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
 
   return (
     <Div>
+      <Div className={classes.padding}>
+        <Typography variant="body2">{name}</Typography>
+      </Div>
       <Div row>
         <List
           dense
@@ -103,5 +107,9 @@ const useStyles = makeStyles((theme) => ({
   passed: {
     backgroundColor: theme.palette.success.main,
     borderRadius: '50%',
+  },
+  padding: {
+    padding: theme.spacing(1),
+    paddingBottom: 0,
   },
 }));
