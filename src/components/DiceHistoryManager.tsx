@@ -12,38 +12,40 @@ import { MultiThrowResult } from '../logic/rolls';
 
 export interface DiceHistoryManagerProps {}
 
-const DiceHistoryManager: FC<DiceHistoryManagerProps> = ({ children }) => {
-  const initialHistory = JSON.parse(
-    localStorage.getItem('diceHistory') ?? '[]',
-  );
+export const DiceHistoryManager: FC<DiceHistoryManagerProps> = memo(
+  ({ children }) => {
+    const initialHistory = JSON.parse(
+      localStorage.getItem('diceHistory') ?? '[]',
+    );
 
-  const [diceHistory, setDiceHistory] = useState<MultiThrowResult[]>(
-    initialHistory,
-  );
+    const [diceHistory, setDiceHistory] = useState<MultiThrowResult[]>(
+      initialHistory,
+    );
 
-  useEffect(() => {
-    localStorage.setItem('diceHistory', JSON.stringify(diceHistory));
-  }, [diceHistory]);
+    useEffect(() => {
+      localStorage.setItem('diceHistory', JSON.stringify(diceHistory));
+    }, [diceHistory]);
 
-  const recordDiceResult = useCallback((result: MultiThrowResult) => {
-    setDiceHistory((previousHistory) => [...previousHistory, result]);
-  }, []);
+    const recordDiceResult = useCallback((result: MultiThrowResult) => {
+      setDiceHistory((previousHistory) => [...previousHistory, result]);
+    }, []);
 
-  const clearDiceHistory = useCallback(() => {
-    setDiceHistory([]);
-  }, []);
+    const clearDiceHistory = useCallback(() => {
+      setDiceHistory([]);
+    }, []);
 
-  const value = useMemo(
-    () => ({ diceHistory, recordDiceResult, clearDiceHistory }),
-    [diceHistory, recordDiceResult, clearDiceHistory],
-  );
+    const value = useMemo(
+      () => ({ diceHistory, recordDiceResult, clearDiceHistory }),
+      [diceHistory, recordDiceResult, clearDiceHistory],
+    );
 
-  return (
-    <DiceHistoryContext.Provider value={value}>
-      {children}
-    </DiceHistoryContext.Provider>
-  );
-};
+    return (
+      <DiceHistoryContext.Provider value={value}>
+        {children}
+      </DiceHistoryContext.Provider>
+    );
+  },
+);
 
 interface DiceHistoryContextType {
   diceHistory: MultiThrowResult[];
@@ -64,5 +66,3 @@ const DiceHistoryContext = createContext<DiceHistoryContextType>(
 export const useDiceHistory = () => {
   return useContext(DiceHistoryContext);
 };
-
-export default memo(DiceHistoryManager);

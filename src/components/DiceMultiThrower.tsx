@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
-import { Button, makeStyles } from '@material-ui/core';
-import ResetIcon from '@material-ui/icons/Restore';
+import { Link } from 'react-router-dom';
+import { Button, makeStyles, IconButton } from '@material-ui/core';
+import ResetIcon from '@material-ui/icons/Replay';
+import HistoryIcon from '@material-ui/icons/History';
 import RollIcon from '@material-ui/icons/Check';
 import RerollIcon from '@material-ui/icons/Cached';
 import BackIcon from '@material-ui/icons/ArrowBack';
@@ -63,7 +65,7 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
           <MultiThrowConfigurator value={options} onChange={setOptions} />
         </Div>
       )}
-      <Div row spacing>
+      <Div row spacing align="center">
         <Button
           color="secondary"
           size="large"
@@ -74,6 +76,9 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
         >
           {!result ? 'Reset' : 'Back'}
         </Button>
+        <IconButton component={Link} to="/history" size="small">
+          <HistoryIcon />
+        </IconButton>
         <Button
           color="primary"
           size="large"

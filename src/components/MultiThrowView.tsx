@@ -6,11 +6,15 @@ import { Div } from './Div';
 
 export interface MultiThrowViewProps {
   value: MultiThrowResult;
+  className?: string;
 }
 
-export const MultiThrowView: FC<MultiThrowViewProps> = ({ value }) => {
+export const MultiThrowView: FC<MultiThrowViewProps> = ({
+  value,
+  className,
+}) => {
   return (
-    <Div spacing>
+    <Div spacing className={className}>
       {value.isCriticalFail && (
         <Typography variant="h4" color="error" align="center">
           CRITICAL FAILURE
