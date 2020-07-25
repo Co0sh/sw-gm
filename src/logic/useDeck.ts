@@ -76,8 +76,8 @@ export const shuffleDeck = (deck: Card[]): Card[] => {
   return picked;
 };
 
-export const useDeck = () => {
-  const [deck, setDeck] = useState(shuffleDeck(createDeck()));
+export const useDeck = (initialDeck?: Card[]) => {
+  const [deck, setDeck] = useState(initialDeck ?? shuffleDeck(createDeck()));
   const draw = useCallback(
     (count = 1) => {
       const copy = [...deck];

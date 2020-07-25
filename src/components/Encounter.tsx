@@ -1,4 +1,4 @@
-import React, { FC, useState, KeyboardEvent } from 'react';
+import React, { FC, useState, KeyboardEvent, useEffect } from 'react';
 import {
   Input,
   IconButton,
@@ -23,17 +23,26 @@ export interface CharacterData {
 }
 
 export interface EncounterProps {
-  initialValue?: CharacterData[];
+  initialCharacters?: CharacterData[];
+  initialDeck?: Card[];
   className?: string;
 }
 
-export const Encounter: FC<EncounterProps> = ({ initialValue, className }) => {
+export const Encounter: FC<EncounterProps> = ({
+  initialCharacters,
+  initialDeck,
+  className,
+}) => {
   const classes = useStyles();
   const [characters, setCharacters] = useState<CharacterData[]>(
-    initialValue ?? [],
+    initialCharacters ?? [],
   );
   const [name, setName] = useState('');
-  const { deck, draw, shuffle } = useDeck();
+  const { deck, draw, shuffle } = useDeck(initialDeck);
+
+  useEffect(() => {
+    localStorage.setItem('encounter', JSON.stringify({ characters, deck }));
+  }, [characters, deck]);
 
   const addCharacter = () => {
     if (name.length > 0) {

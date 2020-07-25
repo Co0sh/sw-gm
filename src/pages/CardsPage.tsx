@@ -7,9 +7,17 @@ import { Div } from '../components/Div';
 export const CardsPage: FC<RouteProps> = () => {
   const classes = useStyles();
 
+  const { characters, deck } = JSON.parse(
+    localStorage.getItem('encounter') ?? '{}',
+  );
+
   return (
     <Div align="center" justify="flex-end" grows>
-      <Encounter className={classes.root} />
+      <Encounter
+        initialCharacters={characters}
+        initialDeck={deck}
+        className={classes.root}
+      />
     </Div>
   );
 };
