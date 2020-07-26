@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
-import { Character } from '../logic/character';
+import { EncounterCharacter } from '../logic/encounterCharacter';
 import { Div } from './Div';
 import { Typography, IconButton, makeStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 interface CharacterPreviewProps {
-  character: Character;
+  character: EncounterCharacter;
   onDelete?: (key: string) => void;
 }
 
-const EncounterCharacterPreview: FC<CharacterPreviewProps> = ({
+export const EncounterCharacterPreview: FC<CharacterPreviewProps> = ({
   character,
   onDelete,
   children,
@@ -36,5 +36,3 @@ const useStyles = makeStyles({
     width: '100%',
   },
 });
-
-export default EncounterCharacterPreview;

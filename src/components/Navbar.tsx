@@ -6,6 +6,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router';
+import CharactersIcon from '@material-ui/icons/People';
 import { DiceIcons } from '../logic/diceIcons';
 import { ReactComponent as CardsIcon } from '../assets/cards.svg';
 
@@ -32,6 +33,11 @@ export const Navbar: FC<NavbarProps> = () => {
         label="Cards"
         value="/cards"
         icon={<SvgIcon component={CardsIcon} viewBox="0 0 100 100" />}
+      />
+      <BottomNavigationAction
+        label="Characters"
+        value="/characters"
+        icon={<SvgIcon component={CharactersIcon} />}
       />
     </BottomNavigation>
   );

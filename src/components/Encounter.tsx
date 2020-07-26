@@ -8,22 +8,22 @@ import {
   ListItem,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Character } from '../logic/character';
+import { EncounterCharacter } from '../logic/encounterCharacter';
 import { getKey } from '../logic/key';
 import { Div } from './Div';
-import EncounterCharacterPreview from './EncounterCharacterPreview';
+import { EncounterCharacterPreview } from './EncounterCharacterPreview';
 import { Card, useDeck } from '../logic/useDeck';
 import { CardView } from './CardView';
 import { CardPlaceholder } from './CardPlaceholder';
 
-export interface CharacterData {
-  character: Character;
+export interface EncounterCharacterData {
+  character: EncounterCharacter;
   slots: number;
   cards: Card[];
 }
 
 export interface EncounterProps {
-  initialCharacters?: CharacterData[];
+  initialCharacters?: EncounterCharacterData[];
   initialDeck?: Card[];
   className?: string;
 }
@@ -34,7 +34,7 @@ export const Encounter: FC<EncounterProps> = ({
   className,
 }) => {
   const classes = useStyles();
-  const [characters, setCharacters] = useState<CharacterData[]>(
+  const [characters, setCharacters] = useState<EncounterCharacterData[]>(
     initialCharacters ?? [],
   );
   const [name, setName] = useState('');
@@ -83,7 +83,7 @@ export const Encounter: FC<EncounterProps> = ({
 
   const dealCards = () => {
     const drawn = draw(amountToDraw);
-    const newCharacters: CharacterData[] = [...characters].map(
+    const newCharacters: EncounterCharacterData[] = [...characters].map(
       ({ character, slots }) => {
         return {
           character,
@@ -96,7 +96,7 @@ export const Encounter: FC<EncounterProps> = ({
   };
 
   const clearCards = () => {
-    const newCharacters: CharacterData[] = [
+    const newCharacters: EncounterCharacterData[] = [
       ...characters,
     ].map(({ character, slots }) => ({ character, slots, cards: [] }));
     setCharacters(newCharacters);
