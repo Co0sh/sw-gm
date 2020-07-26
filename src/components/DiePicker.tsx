@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
-import { IconButton, SvgIcon, makeStyles, Theme } from '@material-ui/core';
+import { IconButton, makeStyles, Theme } from '@material-ui/core';
 import { Die } from '../logic/die';
 import { DiceIcons } from '../logic/diceIcons';
 import { ThrowType } from '../logic/rolls';
 import { Div } from './Div';
+import { DieIcon } from './DieIcon';
 
 export interface DiePickerProps {
   initialValue?: Die | null;
@@ -43,11 +44,7 @@ export const DiePicker: FC<DiePickerProps> = ({
             disabled={disabled}
             className={selected ? classes.selected : undefined}
           >
-            <SvgIcon
-              className={classes.icon}
-              component={DiceIcons[dieType]}
-              viewBox="0 0 100 100"
-            />
+            <DieIcon type={dieType} />
           </IconButton>
         );
       })}
@@ -56,11 +53,6 @@ export const DiePicker: FC<DiePickerProps> = ({
 };
 
 const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
-  icon: {
-    width: '1.35em',
-    height: '1.35em',
-    opacity: 0.9,
-  },
   selected: {
     backgroundColor: ({ type }) =>
       type === 'regular'

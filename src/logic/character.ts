@@ -3,7 +3,13 @@ import { Die } from './die';
 export interface Character {
   name: string;
   wildCard: boolean;
+  bennies?: number;
+  wounds?: number;
+  fatigue?: number;
+  statuses?: string[];
+  profession?: string;
   bio?: string;
+  image?: string;
   originId: string;
   pace: number;
   runningDie: Die;
@@ -16,7 +22,12 @@ export interface Character {
   powers?: Power[];
 }
 
-type AttributeName = 'strength' | 'agility' | 'vigor' | 'smarts' | 'spirit';
+export type AttributeName =
+  | 'strength'
+  | 'agility'
+  | 'vigor'
+  | 'smarts'
+  | 'spirits';
 
 export type Attributes = { [key in AttributeName]: TraitLevel };
 
@@ -29,6 +40,7 @@ export interface Origin {
   id: string;
   name: string;
   description?: string;
+  defaultImage?: string;
 }
 
 export interface Skill {

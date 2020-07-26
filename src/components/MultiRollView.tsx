@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { MultiRollResult, ThrowType } from '../logic/rolls';
-import { makeStyles, SvgIcon } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { RollView } from './RollView';
-import { DiceIcons } from '../logic/diceIcons';
 import { Div } from './Div';
+import { DieIcon } from './DieIcon';
 
 export interface MultiRollViewProps {
   value: MultiRollResult;
@@ -20,12 +20,11 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
 
   return (
     <Div row align="center" className={className}>
-      <Div row align="center" grows>
-        <SvgIcon
-          component={DiceIcons[value.die]}
-          viewBox="0 0 100 100"
-          className={classes.dice}
+      <Div row align="center" grows spacing>
+        <DieIcon
+          type={value.die}
           color={type === 'regular' ? 'primary' : 'secondary'}
+          size={2.5}
         />
         <Div row spacing className={classes.results}>
           {value.rolls.map((roll, index) => (
@@ -45,10 +44,5 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
 const useStyles = makeStyles((theme) => ({
   results: {
     marginRight: theme.spacing(2),
-  },
-  dice: {
-    width: '2.rem',
-    height: '2.5rem',
-    marginRight: theme.spacing(1),
   },
 }));
