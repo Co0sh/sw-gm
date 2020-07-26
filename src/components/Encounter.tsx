@@ -120,29 +120,62 @@ export const Encounter: FC<EncounterProps> = ({
     setCharacters(copy);
   };
 
+  const addSlot = (characterKey: string) => {
+    const characterIndex = characters.findIndex(
+      ({ character }) => character.key === characterKey,
+    );
+    const character = characters[characterIndex];
+    if (!character) {
+      return;
+    }
+    const characterCopy = { ...character };
+    characterCopy.slots++;
+    const charactersCopy = [...characters];
+    charactersCopy.splice(characterIndex, 1, characterCopy);
+    setCharacters(charactersCopy);
+  };
+
+  const removeSlot = (characterKey: string) => {
+    const characterIndex = characters.findIndex(
+      ({ character }) => character.key === characterKey,
+    );
+    const character = characters[characterIndex];
+    if (!character) {
+      return;
+    }
+    const characterCopy = { ...character };
+    characterCopy.slots = Math.max(characterCopy.slots - 1, 0);
+    const charactersCopy = [...characters];
+    charactersCopy.splice(characterIndex, 1, characterCopy);
+    setCharacters(charactersCopy);
+  };
+
   return (
     <Div className={className}>
       <List>
         {characters.map(({ character, cards, slots }) => (
-          <ListItem key={character.key}>
+          <ListItem key={character.key} className={classes.noPadding}>
             <EncounterCharacterPreview
               character={character}
               onDelete={removeCharacter}
             >
-              <Div row justify="flex-end" grows>
-                {cards.length > 0
-                  ? cards.map((card) => (
-                      <CardView
-                        key={card.key}
-                        card={card}
-                        onClick={() => redrawCard(card.key)}
-                      />
-                    ))
-                  : new Array(slots)
-                      .fill(null)
-                      .map((_, index) => (
-                        <CardPlaceholder key={index} onClick={() => {}} />
-                      ))}
+              <Div row justify="flex-end" grows align="center" spacing>
+                <IconButton size="small" onClick={() => addSlot(character.key)}>
+                  <AddIcon />
+                </IconButton>
+                {new Array(slots - cards.length).fill(null).map((_, index) => (
+                  <CardPlaceholder
+                    key={index}
+                    onClick={() => removeSlot(character.key)}
+                  />
+                ))}
+                {cards.map((card) => (
+                  <CardView
+                    key={card.key}
+                    card={card}
+                    onClick={() => redrawCard(card.key)}
+                  />
+                ))}
               </Div>
             </EncounterCharacterPreview>
           </ListItem>
@@ -175,10 +208,18 @@ export const Encounter: FC<EncounterProps> = ({
           variant="contained"
           color="primary"
           fullWidth
+          onClick={clearCards}
+        >
+          Clear
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
           onClick={dealCards}
           disabled={needsToShuffle}
         >
-          Deal Cards
+          Deal
         </Button>
       </Div>
     </Div>
@@ -188,6 +229,10 @@ export const Encounter: FC<EncounterProps> = ({
 const useStyles = makeStyles((theme) => ({
   characters: {
     paddingBottom: theme.spacing(2),
+  },
+  noPadding: {
+    paddingLeft: 0,
+    paddingRight: 0,
   },
 }));
 

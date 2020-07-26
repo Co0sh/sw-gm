@@ -17,12 +17,14 @@ const EncounterCharacterPreview: FC<CharacterPreviewProps> = ({
   const classes = useStyles();
   const { name, key } = character;
   return (
-    <Div row align="center" className={classes.root}>
+    <Div row align="center" className={classes.root} spacing>
       <IconButton size="small" onClick={() => onDelete?.(key)}>
         <DeleteIcon />
       </IconButton>
       <Div row grows align="center">
-        <Typography>{name}</Typography>
+        <Typography variant="h5" component="span">
+          {name}
+        </Typography>
         {children}
       </Div>
     </Div>
