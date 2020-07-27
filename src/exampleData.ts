@@ -87,6 +87,7 @@ export const exampleCompendium: Compendium = {
 };
 
 export const exampleCharacter: Character = {
+  id: 'teodor',
   name: 'Teodor',
   wildCard: true,
   image:

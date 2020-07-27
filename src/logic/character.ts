@@ -1,6 +1,7 @@
 import { Die } from './die';
 
 export interface Character {
+  id: string;
   name: string;
   wildCard: boolean;
   bennies?: number;
