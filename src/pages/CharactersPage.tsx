@@ -24,5 +24,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     padding: theme.spacing(2),
     paddingTop: 0,
+    flexGrow: 1,
   },
 }));
