@@ -17,7 +17,7 @@ export const TraitLevel: FC<TraitLevelProps> = ({ color, base, bonus }) => {
   return (
     <Div row spacing>
       {traitDice.map((die) => (
-        <Div className={classes.die}>
+        <Div key={die} className={classes.die}>
           <DieIcon
             type={die}
             color={color}
