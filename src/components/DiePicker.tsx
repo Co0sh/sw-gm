@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
-import { IconButton, makeStyles, Theme } from '@material-ui/core';
+import React, { FC, useState, memo } from 'react';
+import { makeStyles } from '@material-ui/core';
 import { Die } from '../logic/die';
 import { DiceIcons } from '../logic/diceIcons';
 import { ThrowType } from '../logic/rolls';
 import { Div } from './Div';
 import { DieIcon } from './DieIcon';
+import { cn } from '../logic/cn';
 
 export interface DiePickerProps {
   initialValue?: Die | null;
@@ -15,7 +16,7 @@ export interface DiePickerProps {
   className?: string;
 }
 
-export const DiePicker: FC<DiePickerProps> = ({
+const DiePicker: FC<DiePickerProps> = ({
   initialValue,
   value: propValue,
   onChange,
@@ -37,32 +38,56 @@ export const DiePicker: FC<DiePickerProps> = ({
         const dieType = Number(key) as Die;
         const selected = dieType === die;
         return (
-          <IconButton
+          <button
             key={dieType}
             onClick={() => handleDie(dieType)}
-            size="small"
             disabled={disabled}
-            className={selected ? classes.selected : undefined}
+            className={cn(
+              classes.iconButton,
+              selected &&
+                (type === 'regular'
+                  ? classes.selectedRegular
+                  : classes.selectedWild),
+            )}
           >
-            <DieIcon type={dieType} />
-          </IconButton>
+            <DieIcon type={dieType} size="small" />
+          </button>
         );
       })}
     </Div>
   );
 };
 
-const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
-  selected: {
-    backgroundColor: ({ type }) =>
-      type === 'regular'
-        ? theme.palette.primary.main
-        : theme.palette.secondary.main,
+const MemoDiePicker = memo(DiePicker) as typeof DiePicker;
+export { MemoDiePicker as DiePicker };
+
+const useStyles = makeStyles((theme) => ({
+  iconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: '50%',
+    border: 'none',
+    backgroundColor: 'transparent',
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    outline: 'none',
+    transition: theme.transitions.create('background-color'),
     '&:hover': {
-      backgroundColor: ({ type }) =>
-        type === 'regular'
-          ? theme.palette.primary.dark
-          : theme.palette.secondary.dark,
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+  selectedRegular: {
+    backgroundColor: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  selectedWild: {
+    backgroundColor: theme.palette.secondary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
     },
   },
 }));

@@ -21,7 +21,6 @@ export const TraitLevel: FC<TraitLevelProps> = ({ color, base, bonus }) => {
           <DieIcon
             type={die}
             color={color}
-            size={2.5}
             className={
               die < base
                 ? classes.inactive

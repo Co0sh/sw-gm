@@ -1,38 +1,55 @@
 import React, { FC } from 'react';
-import { SvgIcon, makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { DiceIcons } from '../logic/diceIcons';
 import { Die } from '../logic/die';
 import { cn } from '../logic/cn';
 
 export interface DieIconProps {
   type: Die;
-  color?: 'primary' | 'secondary';
-  size?: number;
+  color?: 'primary' | 'secondary' | 'default';
+  size?: 'small' | 'medium' | 'large';
   className?: string;
 }
 
 export const DieIcon: FC<DieIconProps> = ({
   type,
-  color,
-  size = 2,
+  color = 'default',
+  size = 'medium',
   className,
 }) => {
-  const classes = useStyles({ size });
+  const classes = useStyles();
+  const Component = DiceIcons[type];
 
   return (
-    <SvgIcon
-      className={cn(classes.root, className)}
-      component={DiceIcons[type]}
-      viewBox="0 0 100 100"
-      color={color}
+    <Component
+      className={cn(classes.root, classes[size], classes[color], className)}
     />
   );
 };
 
-const useStyles = makeStyles<Theme, Pick<DieIconProps, 'size'>>((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: ({ size }) => `${size}rem`,
-    height: ({ size }) => `${size}rem`,
     opacity: 0.9,
+  },
+  small: {
+    width: '2rem',
+    height: '2rem',
+  },
+  medium: {
+    width: '2.5rem',
+    height: '2.5rem',
+  },
+  large: {
+    width: '3rem',
+    height: '3rem',
+  },
+  primary: {
+    fill: theme.palette.primary.main,
+  },
+  secondary: {
+    fill: theme.palette.secondary.main,
+  },
+  default: {
+    fill: theme.palette.text.primary,
   },
 }));

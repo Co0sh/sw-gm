@@ -49,7 +49,7 @@ export const CharacterSheet: FC<CharacterSheetProps> = ({
             grows
           >
             <AttributeIcon type={id as AttributeName} size={2} />
-            <DieIcon type={attribute.base} size={3} color="secondary" />
+            <DieIcon type={attribute.base} size="large" color="secondary" />
           </Div>
         ))}
       </Div>

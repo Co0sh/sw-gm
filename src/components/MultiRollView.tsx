@@ -24,7 +24,6 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
         <DieIcon
           type={value.die}
           color={type === 'regular' ? 'primary' : 'secondary'}
-          size={2.5}
         />
         <Div row spacing className={classes.results}>
           {value.rolls.map((roll, index) => (
