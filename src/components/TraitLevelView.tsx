@@ -4,35 +4,46 @@ import { Div } from './Div';
 import { DieIcon } from './DieIcon';
 import { makeStyles } from '@material-ui/core';
 import { RaiseBar } from './RaiseBar';
+import { TraitLevel } from '../logic/character';
 
-export interface TraitLevelProps {
+export interface TraitLevelViewProps {
   color: 'primary' | 'secondary';
-  base: Die;
+  base: Die | undefined;
   bonus?: number;
+  onChange?: (level?: TraitLevel) => void;
 }
 
-export const TraitLevel: FC<TraitLevelProps> = ({ color, base, bonus }) => {
+export const TraitLevelView: FC<TraitLevelViewProps> = ({
+  color,
+  base,
+  bonus,
+  onChange,
+}) => {
   const classes = useStyles();
 
   return (
     <Div row spacing>
       {traitDice.map((die) => (
-        <Div key={die} className={classes.die}>
+        <button
+          key={die}
+          className={classes.die}
+          onClick={() => onChange?.(die !== base ? { base: die } : undefined)}
+        >
           <DieIcon
             type={die}
             color={color}
             className={
-              die < base
+              die === base
+                ? undefined
+                : !base || die < base || onChange
                 ? classes.inactive
-                : die > base
-                ? classes.hidden
-                : undefined
+                : classes.hidden
             }
           />
           {bonus && die === base && (
             <RaiseBar className={classes.bonus} value={bonus} />
           )}
-        </Div>
+        </button>
       ))}
     </Div>
   );
@@ -49,6 +60,17 @@ const useStyles = makeStyles((theme) => ({
   },
   die: {
     position: 'relative',
+    backgroundColor: 'transparent',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+    outline: 'none',
+    border: 'none',
+    padding: 0,
+    cursor: 'pointer',
+    userSelect: 'none',
+    WebkitTapHighlightColor: 'transparent',
+    borderRadius: '50%',
   },
   bonus: {
     position: 'absolute',

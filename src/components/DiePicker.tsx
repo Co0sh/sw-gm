@@ -73,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     outline: 'none',
+    cursor: 'pointer',
+    userSelect: 'none',
+    WebkitTapHighlightColor: 'transparent',
     transition: theme.transitions.create('background-color'),
     '&:hover': {
       backgroundColor: theme.palette.action.hover,

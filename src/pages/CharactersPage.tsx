@@ -1,17 +1,27 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { RouteProps } from 'react-router';
 import { makeStyles } from '@material-ui/core';
 import { CharacterSheet } from '../components/CharacterSheet';
-import { exampleCharacter } from '../exampleData';
 import { Div } from '../components/Div';
+import { Character } from '../logic/character';
+import { exampleCharacter } from '../exampleData';
 
 export const CharactersPage: FC<RouteProps> = () => {
   const classes = useStyles();
 
+  const [character, setCharacter] = useState<Character | null>(
+    JSON.parse(localStorage.getItem('character') ?? 'null'),
+  );
+
+  useEffect(() => {
+    localStorage.setItem('character', JSON.stringify(character));
+  }, [character]);
+
   return (
     <Div justify="flex-end" align="center" grows>
       <CharacterSheet
-        character={exampleCharacter}
+        character={character ?? exampleCharacter}
+        onChange={setCharacter}
         className={classes.content}
       />
     </Div>

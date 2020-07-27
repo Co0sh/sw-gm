@@ -1,22 +1,55 @@
 import React, { FC } from 'react';
 import { Div } from './Div';
-import { Character, AttributeName } from '../logic/character';
+import { Character, AttributeName, TraitLevel } from '../logic/character';
 import { AttributeIcon } from './AttributeIcon';
 import { Paper, Typography, makeStyles } from '@material-ui/core';
 import { DieIcon } from './DieIcon';
-import { TraitLevel } from './TraitLevel';
-import { byId } from '../logic/byId';
+import { TraitLevelView } from './TraitLevelView';
 import { useCompendium } from './CompendiumManager';
 
 export interface CharacterTraitsProps {
   character: Character;
+  onChange?: (character: Character) => void;
 }
 
-export const CharacterTraits: FC<CharacterTraitsProps> = ({ character }) => {
+export const CharacterTraits: FC<CharacterTraitsProps> = ({
+  character,
+  onChange,
+}) => {
   const classes = useStyles();
   const { compendium } = useCompendium();
   const { baseSkills } = compendium;
   const { attributes, skills } = character;
+
+  const handleSkillChange = (skillId: string) => (level?: TraitLevel) => {
+    if (!onChange) {
+      return;
+    }
+    const characterCopy = { ...character };
+    const skillsCopy = [...characterCopy.skills];
+    const skillIndex = skillsCopy.findIndex(
+      (skill) => skill.skillId === skillId,
+    );
+    const skillCopy = level
+      ? skillIndex < 0
+        ? { skillId, level }
+        : { ...skillsCopy[skillIndex], level }
+      : undefined;
+    if (skillIndex < 0) {
+      if (skillCopy) {
+        skillsCopy.push(skillCopy);
+      }
+    } else {
+      if (skillCopy) {
+        skillsCopy.splice(skillIndex, 1, skillCopy);
+      } else {
+        skillsCopy.splice(skillIndex, 1);
+      }
+    }
+    characterCopy.skills = skillsCopy;
+    onChange(characterCopy);
+  };
+
   return (
     <>
       <Div spacing row>
@@ -35,21 +68,29 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({ character }) => {
         ))}
       </Div>
       <Div spacing>
-        {skills.map(({ skillId, level }) => {
-          const skill = baseSkills.find(byId(skillId))!;
+        {baseSkills.map((baseSkill) => {
+          const skill = skills.find(({ skillId }) => skillId === baseSkill.id);
+
+          if (!skill && !onChange) {
+            return null;
+          }
+
           return (
-            <Div key={skillId} row justify="space-between" align="center">
+            <Div key={baseSkill.id} row justify="space-between" align="center">
               <Typography
                 className={classes.skillName}
                 variant="h5"
                 component="span"
               >
-                {skill.shortcut}
+                {baseSkill.shortcut}
               </Typography>
-              <TraitLevel
-                base={level.base}
-                bonus={level.bonus}
+              <TraitLevelView
+                base={skill?.level.base}
+                bonus={skill?.level.bonus}
                 color="primary"
+                onChange={
+                  onChange ? handleSkillChange(baseSkill.id) : undefined
+                }
               />
             </Div>
           );
