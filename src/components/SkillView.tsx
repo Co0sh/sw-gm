@@ -7,6 +7,7 @@ import { TraitLevel, Attributes } from '../logic/character';
 import { useCompendium } from './CompendiumManager';
 import { byId } from '../logic/byId';
 import { AttributeIcon } from './AttributeIcon';
+import { FastIconButton } from './FastIconButton';
 
 export interface SkillViewProps {
   skillId: string;
@@ -42,12 +43,12 @@ export const SkillView: FC<SkillViewProps> = ({
       <Div row>
         {traitDice.map((die) => {
           return (
-            <button
+            <FastIconButton
               key={die}
-              className={classes.die}
               onClick={() =>
                 onChange?.(die !== base ? { base: die } : undefined)
               }
+              disabled={!onChange}
             >
               <DieIcon
                 type={die}
@@ -67,7 +68,7 @@ export const SkillView: FC<SkillViewProps> = ({
               {bonus && die === base && (
                 <RaiseBar className={classes.bonus} value={bonus} />
               )}
-            </button>
+            </FastIconButton>
           );
         })}
       </Div>
@@ -90,20 +91,6 @@ const useStyles = makeStyles((theme) => ({
   },
   hidden: {
     opacity: 0,
-  },
-  die: {
-    position: 'relative',
-    backgroundColor: 'transparent',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-    outline: 'none',
-    border: 'none',
-    padding: 0,
-    cursor: 'pointer',
-    userSelect: 'none',
-    WebkitTapHighlightColor: 'transparent',
-    borderRadius: '50%',
   },
   bonus: {
     position: 'absolute',

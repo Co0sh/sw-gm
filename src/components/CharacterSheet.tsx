@@ -41,12 +41,14 @@ export const CharacterSheet: FC<CharacterSheetProps> = ({
         <Tab className={classes.tab} label="Items" />
         <Tab className={classes.tab} label="Powers" />
       </Tabs>
-      {tab === 0 && (
-        <CharacterTraits
-          character={character}
-          onChange={editing ? setCharacter : undefined}
-        />
-      )}
+      <Div className={classes.content}>
+        {tab === 0 && (
+          <CharacterTraits
+            character={character}
+            onChange={editing ? setCharacter : undefined}
+          />
+        )}
+      </Div>
       <Fab
         color="secondary"
         className={classes.fab}
@@ -74,12 +76,15 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     zIndex: theme.zIndex.appBar,
   },
+  content: {
+    paddingBottom: 60,
+  },
   tab: {
     minWidth: 'auto',
   },
   fab: {
     position: 'absolute',
     bottom: theme.spacing(2),
-    right: 0,
+    right: theme.spacing(2),
   },
 }));

@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 import { Div } from './Div';
 import { Character, AttributeName, TraitLevel } from '../logic/character';
-import { AttributeIcon } from './AttributeIcon';
-import { Paper, makeStyles } from '@material-ui/core';
-import { DieIcon } from './DieIcon';
-import { SkillView } from './TraitLevelView';
+import { SkillView } from './SkillView';
 import { useCompendium } from './CompendiumManager';
+import { AttributeView } from './AttributeView';
+import { makeStyles } from '@material-ui/core';
 
 export interface CharacterTraitsProps {
   character: Character;
@@ -50,21 +49,30 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
     onChange(characterCopy);
   };
 
+  const handleAttributeChange = (attributeName: AttributeName) => (
+    level: TraitLevel,
+  ) => {
+    if (!onChange) {
+      return;
+    }
+    onChange({
+      ...character,
+      attributes: { ...character.attributes, [attributeName]: level },
+    });
+  };
+
   return (
     <>
-      <Div spacing row>
+      <Div spacing row className={classes.spaced}>
         {Object.entries(attributes).map(([id, attribute]) => (
-          <Div
+          <AttributeView
             key={id}
-            component={Paper}
-            align="center"
-            spacing
-            className={classes.attribute}
-            grows
-          >
-            <AttributeIcon type={id as AttributeName} size={2} />
-            <DieIcon type={attribute.base} size="large" color="secondary" />
-          </Div>
+            attribute={id as AttributeName}
+            level={attribute}
+            onChange={
+              onChange ? handleAttributeChange(id as AttributeName) : undefined
+            }
+          />
         ))}
       </Div>
       <Div spacing>
@@ -91,8 +99,7 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
 };
 
 const useStyles = makeStyles((theme) => ({
-  attribute: {
-    padding: `${theme.spacing(1)}px 0`,
-    marginBottom: theme.spacing(1),
+  spaced: {
+    paddingBottom: theme.spacing(2),
   },
 }));
