@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 import { Div } from './Div';
 import { Character, AttributeName, TraitLevel } from '../logic/character';
 import { AttributeIcon } from './AttributeIcon';
-import { Paper, Typography, makeStyles } from '@material-ui/core';
+import { Paper, makeStyles } from '@material-ui/core';
 import { DieIcon } from './DieIcon';
-import { TraitLevelView } from './TraitLevelView';
+import { SkillView } from './TraitLevelView';
 import { useCompendium } from './CompendiumManager';
 
 export interface CharacterTraitsProps {
@@ -76,23 +76,13 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
           }
 
           return (
-            <Div key={baseSkill.id} row justify="space-between" align="center">
-              <Typography
-                className={classes.skillName}
-                variant="h5"
-                component="span"
-              >
-                {baseSkill.shortcut}
-              </Typography>
-              <TraitLevelView
-                base={skill?.level.base}
-                bonus={skill?.level.bonus}
-                color="primary"
-                onChange={
-                  onChange ? handleSkillChange(baseSkill.id) : undefined
-                }
-              />
-            </Div>
+            <SkillView
+              key={baseSkill.id}
+              skillId={baseSkill.id}
+              level={skill?.level}
+              attributes={attributes}
+              onChange={onChange ? handleSkillChange(baseSkill.id) : undefined}
+            />
           );
         })}
       </Div>
@@ -101,11 +91,6 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
 };
 
 const useStyles = makeStyles((theme) => ({
-  skillName: {
-    fontFamily: 'monospace',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-  },
   attribute: {
     padding: `${theme.spacing(1)}px 0`,
     marginBottom: theme.spacing(1),
