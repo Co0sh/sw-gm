@@ -31,32 +31,34 @@ export const CharacterSheet: FC<CharacterSheetProps> = ({
 
   return (
     <Div className={cn(classes.root, className)} spacing>
-      <CharacterSheetHeader character={character} className={classes.header} />
-      <Div row align="center" spacing>
-        <Tabs
-          variant="fullWidth"
-          value={tab}
-          onChange={(_, newTab) => setTab(newTab)}
-          className={classes.tabs}
-        >
-          <Tab className={classes.tab} label="Traits" />
-          <Tab className={classes.tab} label="Info" />
-          <Tab className={classes.tab} label="Items" />
-          <Tab className={classes.tab} label="Powers" />
-        </Tabs>
-        <FastIconButton
-          color="secondary"
-          className={classes.fab}
-          size="small"
-          onClick={() => {
-            if (editing) {
-              handleSave();
-            }
-            setEditing(!editing);
-          }}
-        >
-          {!editing ? <EditIcon /> : <SaveIcon />}
-        </FastIconButton>
+      <Div className={classes.header}>
+        <CharacterSheetHeader character={character} />
+        <Div row align="center" spacing>
+          <Tabs
+            variant="fullWidth"
+            value={tab}
+            onChange={(_, newTab) => setTab(newTab)}
+            className={classes.tabs}
+          >
+            <Tab className={classes.tab} label="Traits" />
+            <Tab className={classes.tab} label="Info" />
+            <Tab className={classes.tab} label="Items" />
+            <Tab className={classes.tab} label="Powers" />
+          </Tabs>
+          <FastIconButton
+            color="secondary"
+            className={classes.fab}
+            size="small"
+            onClick={() => {
+              if (editing) {
+                handleSave();
+              }
+              setEditing(!editing);
+            }}
+          >
+            {!editing ? <EditIcon /> : <SaveIcon />}
+          </FastIconButton>
+        </Div>
       </Div>
       <Div className={classes.content}>
         {tab === 0 && (

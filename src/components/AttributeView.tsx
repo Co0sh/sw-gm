@@ -30,6 +30,7 @@ export const AttributeView: FC<AttributeViewProps> = ({
         classes={{ label: classes.column }}
         onClick={onChange ? () => setEditing(true) : undefined}
         buttonRef={anchorRef}
+        fullWidth
       >
         <AttributeIcon type={attribute} size={2} className={classes.spaced} />
         <DieIcon type={level.base} size="large" color="secondary" />
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   attribute: {
+    minWidth: 0,
     padding: `${theme.spacing(1)}px 0`,
     backgroundColor: theme.palette.background.paper,
     '&:hover': {

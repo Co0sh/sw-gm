@@ -83,11 +83,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     paddingTop: 0,
     flexGrow: 1,
+    position: 'relative',
   },
   buttonBar: {
     maxWidth: 400,
     width: '100%',
     padding: theme.spacing(2),
-    paddingTop: 0,
+    position: 'sticky',
+    background: theme.palette.background.default,
+    bottom: 56,
   },
 }));
