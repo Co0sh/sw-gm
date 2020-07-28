@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     userSelect: 'none',
     WebkitTapHighlightColor: 'transparent',
     transition: theme.transitions.create('background-color'),
-    ':not(:disabled)': {
+    '&:not(:disabled)': {
       cursor: 'pointer',
     },
   },

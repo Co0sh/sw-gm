@@ -5,6 +5,7 @@ import { Div } from './Div';
 import { ImageView } from './ImageView';
 import { useCompendium } from './CompendiumManager';
 import { byId } from '../logic/byId';
+import defaultCharacter from '../assets/defaultCharacter.svg';
 
 export interface CharacterSheetHeaderProps {
   character: Character;
@@ -25,7 +26,7 @@ export const CharacterSheetHeader: FC<CharacterSheetHeaderProps> = ({
   return (
     <Div row spacing className={className}>
       <Div className={classes.image}>
-        <ImageView src={image!} alt="Image" />
+        <ImageView src={image ?? defaultCharacter} alt="Image" />
       </Div>
       <Div>
         <Typography variant="h4" component="h1">
