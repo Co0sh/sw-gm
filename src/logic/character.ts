@@ -8,10 +8,9 @@ export interface Character {
   wounds?: number;
   fatigue?: number;
   statuses?: string[];
-  profession?: string;
   bio?: string;
   image?: string;
-  originId: string;
+  origin?: Origin;
   pace: number;
   runningDie: Die;
   toughness: number;
@@ -38,6 +37,11 @@ export interface TraitLevel {
 }
 
 export interface Origin {
+  originId: string;
+  individualName?: string;
+}
+
+export interface BaseOrigin {
   id: string;
   name: string;
   description?: string;
@@ -105,7 +109,7 @@ export interface BasePower {
 }
 
 export interface Compendium {
-  origins: Origin[];
+  baseOrigins: BaseOrigin[];
   baseSkills: BaseSkill[];
   baseEdges: BaseEdge[];
   baseHindrances: BaseHindrance[];

@@ -17,9 +17,11 @@ export const CharacterSheetHeader: FC<CharacterSheetHeaderProps> = ({
 }) => {
   const classes = useStyles();
   const { compendium } = useCompendium();
-  const { origins } = compendium;
-  const { name, image, profession, originId } = character;
-  const origin = origins.find(byId(originId))!;
+  const { baseOrigins } = compendium;
+  const { name, image, origin } = character;
+  const baseOrigin = origin
+    ? baseOrigins.find(byId(origin.originId))
+    : undefined;
   return (
     <Div row spacing className={className}>
       <Div className={classes.image}>
@@ -30,7 +32,9 @@ export const CharacterSheetHeader: FC<CharacterSheetHeaderProps> = ({
           {[name]}
         </Typography>
         <Typography variant="subtitle1">
-          {[origin.name, profession].filter(Boolean).join(', ')}
+          {[baseOrigin?.name, origin?.individualName]
+            .filter(Boolean)
+            .join(', ')}
         </Typography>
       </Div>
     </Div>

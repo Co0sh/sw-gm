@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { makeStyles, Tabs, Tab, Fab } from '@material-ui/core';
+import { makeStyles, Tabs, Tab } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import { Character } from '../logic/character';
@@ -7,6 +7,7 @@ import { Div } from './Div';
 import { cn } from '../logic/cn';
 import { CharacterSheetHeader } from './CharacterSheetHeader';
 import { CharacterTraits } from './CharacterTraits';
+import { FastIconButton } from './FastIconButton';
 
 export interface CharacterSheetProps {
   character: Character;
@@ -31,16 +32,32 @@ export const CharacterSheet: FC<CharacterSheetProps> = ({
   return (
     <Div className={cn(classes.root, className)} spacing>
       <CharacterSheetHeader character={character} className={classes.header} />
-      <Tabs
-        variant="fullWidth"
-        value={tab}
-        onChange={(_, newTab) => setTab(newTab)}
-      >
-        <Tab className={classes.tab} label="Traits" />
-        <Tab className={classes.tab} label="Info" />
-        <Tab className={classes.tab} label="Items" />
-        <Tab className={classes.tab} label="Powers" />
-      </Tabs>
+      <Div row align="center" spacing>
+        <Tabs
+          variant="fullWidth"
+          value={tab}
+          onChange={(_, newTab) => setTab(newTab)}
+          className={classes.tabs}
+        >
+          <Tab className={classes.tab} label="Traits" />
+          <Tab className={classes.tab} label="Info" />
+          <Tab className={classes.tab} label="Items" />
+          <Tab className={classes.tab} label="Powers" />
+        </Tabs>
+        <FastIconButton
+          color="secondary"
+          className={classes.fab}
+          size="small"
+          onClick={() => {
+            if (editing) {
+              handleSave();
+            }
+            setEditing(!editing);
+          }}
+        >
+          {!editing ? <EditIcon /> : <SaveIcon />}
+        </FastIconButton>
+      </Div>
       <Div className={classes.content}>
         {tab === 0 && (
           <CharacterTraits
@@ -49,18 +66,6 @@ export const CharacterSheet: FC<CharacterSheetProps> = ({
           />
         )}
       </Div>
-      <Fab
-        color="secondary"
-        className={classes.fab}
-        onClick={() => {
-          if (editing) {
-            handleSave();
-          }
-          setEditing(!editing);
-        }}
-      >
-        {!editing ? <EditIcon /> : <SaveIcon />}
-      </Fab>
     </Div>
   );
 };
@@ -76,15 +81,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     zIndex: theme.zIndex.appBar,
   },
-  content: {
-    paddingBottom: 60,
-  },
+  content: {},
   tab: {
     minWidth: 'auto',
   },
-  fab: {
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
+  tabs: {
+    flexGrow: 1,
   },
+  fab: {},
 }));

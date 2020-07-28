@@ -3,8 +3,8 @@ import {
   BaseHindrance,
   Character,
   Compendium,
-  Origin,
   BaseSkill,
+  BaseOrigin,
 } from './logic/character';
 
 export const exampleSkills: BaseSkill[] = [
@@ -76,10 +76,10 @@ export const exampleHindrances: BaseHindrance[] = [
   },
 ];
 
-export const exampleOrigins: Origin[] = [{ id: 'human', name: 'Human' }];
+export const exampleOrigins: BaseOrigin[] = [{ id: 'human', name: 'Human' }];
 
 export const exampleCompendium: Compendium = {
-  origins: exampleOrigins,
+  baseOrigins: exampleOrigins,
   baseSkills: exampleSkills,
   baseEdges: exampleEdges,
   baseHindrances: exampleHindrances,
@@ -92,8 +92,7 @@ export const exampleCharacter: Character = {
   wildCard: true,
   image:
     'https://api.culture.pl/sites/default/files/styles/1920_auto/public/2019-09/teodor_axentowicz_autoportret_1907.jpg?itok=0Kg_9FW1',
-  profession: 'Rat Catcher',
-  originId: 'human',
+  origin: { originId: 'human', individualName: 'Rat Catcher' },
   pace: 6,
   runningDie: 6,
   parry: 7,
