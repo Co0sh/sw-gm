@@ -37,6 +37,7 @@ const DiePicker: FC<DiePickerProps> = ({
         const selected = dieType === die;
         return (
           <FastIconButton
+            key={key}
             color={
               selected
                 ? type === 'regular'

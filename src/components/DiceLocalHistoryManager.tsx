@@ -1,18 +1,17 @@
 import React, {
   FC,
-  createContext,
   useState,
   useEffect,
   useCallback,
   useMemo,
   memo,
-  useContext,
 } from 'react';
 import { MultiThrowResult } from '../logic/rolls';
+import { DiceHistoryContext } from '../logic/DiceHistoryContext';
 
-export interface DiceHistoryManagerProps {}
+export interface DiceLocalHistoryManagerProps {}
 
-export const DiceHistoryManager: FC<DiceHistoryManagerProps> = memo(
+export const DiceLocalHistoryManager: FC<DiceLocalHistoryManagerProps> = memo(
   ({ children }) => {
     const initialHistory = JSON.parse(
       localStorage.getItem('diceHistory') ?? '[]',
@@ -46,23 +45,3 @@ export const DiceHistoryManager: FC<DiceHistoryManagerProps> = memo(
     );
   },
 );
-
-interface DiceHistoryContextType {
-  diceHistory: MultiThrowResult[];
-  recordDiceResult: (result: MultiThrowResult) => void;
-  clearDiceHistory: () => void;
-}
-
-const defaultContext: DiceHistoryContextType = {
-  diceHistory: [],
-  recordDiceResult: () => {},
-  clearDiceHistory: () => {},
-};
-
-const DiceHistoryContext = createContext<DiceHistoryContextType>(
-  defaultContext,
-);
-
-export const useDiceHistory = () => {
-  return useContext(DiceHistoryContext);
-};

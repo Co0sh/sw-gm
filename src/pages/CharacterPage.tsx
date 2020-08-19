@@ -3,14 +3,15 @@ import { makeStyles, Typography, Button, IconButton } from '@material-ui/core';
 import LeftIcon from '@material-ui/icons/ArrowLeft';
 import RightIcon from '@material-ui/icons/ArrowRight';
 import ListIcon from '@material-ui/icons/Menu';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { CharacterSheet } from '../components/CharacterSheet';
 import { Div } from '../components/Div';
 import { Character } from '../logic/character';
-import { Link } from 'react-router-dom';
 
 export const CharacterPage: FC<any> = ({ match }) => {
   const classes = useStyles();
   const { characterId } = match.params;
+  const { url } = useRouteMatch();
 
   const [characters, setCharacters] = useState<Character[]>(
     JSON.parse(localStorage.getItem('characters') ?? '[]'),
@@ -56,18 +57,21 @@ export const CharacterPage: FC<any> = ({ match }) => {
           fullWidth
           startIcon={<LeftIcon />}
           component={Link}
-          to={`/characters/${prev.id}`}
+          to={`${url.slice(0, url.lastIndexOf('/'))}/${prev.id}`}
         >
           {prev.name}
         </Button>
-        <IconButton component={Link} to="/characters">
+        <IconButton
+          component={Link}
+          to={`${url.slice(0, url.lastIndexOf('/'))}`}
+        >
           <ListIcon />
         </IconButton>
         <Button
           fullWidth
           endIcon={<RightIcon />}
           component={Link}
-          to={`/characters/${next.id}`}
+          to={`${url.slice(0, url.lastIndexOf('/'))}/${next.id}`}
         >
           {next.name}
         </Button>

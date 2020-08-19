@@ -19,5 +19,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     width: '100%',
     padding: theme.spacing(2),
+    paddingBottom: 0,
   },
 }));

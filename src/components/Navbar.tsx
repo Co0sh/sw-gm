@@ -1,18 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import {
   BottomNavigation,
   BottomNavigationAction,
-  SvgIcon,
   makeStyles,
 } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router';
-import CharactersIcon from '@material-ui/icons/People';
-import { DiceIcons } from '../logic/diceIcons';
-import { ReactComponent as CardsIcon } from '../assets/cards.svg';
 
-export interface NavbarProps {}
+export interface NavbarProps {
+  links?: NavLinkData[];
+}
 
-export const Navbar: FC<NavbarProps> = () => {
+export const Navbar: FC<NavbarProps> = ({ links = [] }) => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
@@ -24,24 +22,23 @@ export const Navbar: FC<NavbarProps> = () => {
       value={location.pathname}
       onChange={(_, newValue) => history.push(newValue)}
     >
-      <BottomNavigationAction
-        label="Dice"
-        value="/"
-        icon={<SvgIcon component={DiceIcons[12]} viewBox="0 0 100 100" />}
-      />
-      <BottomNavigationAction
-        label="Cards"
-        value="/cards"
-        icon={<SvgIcon component={CardsIcon} viewBox="0 0 100 100" />}
-      />
-      <BottomNavigationAction
-        label="Characters"
-        value="/characters"
-        icon={<SvgIcon component={CharactersIcon} />}
-      />
+      {links.map(({ label, url, icon }) => (
+        <BottomNavigationAction
+          key={url}
+          label={label}
+          value={url}
+          icon={icon}
+        />
+      ))}
     </BottomNavigation>
   );
 };
+
+export interface NavLinkData {
+  label: string;
+  url: string;
+  icon: ReactNode;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { makeStyles, Button } from '@material-ui/core';
 import { Div } from '../components/Div';
 import { Character } from '../logic/character';
@@ -11,6 +11,7 @@ import { NewCharacterDialog } from '../components/NewCharacterDialog';
 export const CharactersPage: FC = () => {
   const classes = useStyles();
   const { push } = useHistory();
+  const { url } = useRouteMatch();
 
   const [characters] = useState<Character[]>(
     JSON.parse(
@@ -37,7 +38,11 @@ export const CharactersPage: FC = () => {
       <Div className={classes.content} spacing>
         {characters.map((character) => {
           return (
-            <Link to={`/characters/${character.id}`} className={classes.link}>
+            <Link
+              key={character.id}
+              to={`${url}/${character.id}`}
+              className={classes.link}
+            >
               <CharacterSheetHeader character={character} />
             </Link>
           );

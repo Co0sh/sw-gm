@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { Button, makeStyles, IconButton } from '@material-ui/core';
 import ResetIcon from '@material-ui/icons/Replay';
 import HistoryIcon from '@material-ui/icons/History';
@@ -15,7 +15,7 @@ import {
 import { MultiThrowView } from './MultiThrowView';
 import { MultiThrowConfigurator } from './MultiThrowConfigurator';
 import { Div } from './Div';
-import { useDiceHistory } from './DiceHistoryManager';
+import { useDiceHistory } from '../logic/DiceHistoryContext';
 
 export interface DiceRollerProps {
   initialValue?: MultiThrowOptions;
@@ -31,6 +31,8 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
   const [result, setResult] = useState<MultiThrowResult | null>(null);
   const [options, setOptions] = useState(initialValue ?? defaultDiceOptions);
   const { recordDiceResult } = useDiceHistory();
+  const { url: rawUrl } = useRouteMatch();
+  const url = rawUrl === '/' ? '' : rawUrl;
 
   const handleRoll = () => {
     const newName =
@@ -76,7 +78,7 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
         >
           {!result ? 'Reset' : 'Back'}
         </Button>
-        <IconButton component={Link} to="/history" size="small">
+        <IconButton component={Link} to={`${url}/history`} size="small">
           <HistoryIcon />
         </IconButton>
         <Button
