@@ -40,9 +40,9 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
         ? options.name
         : `${options.name} Reroll ${rerollCounter}`;
     const result = throwDice({ ...options, name: newName });
-    setResult(result);
+    const modifiedResult = recordDiceResult(result);
+    setResult(modifiedResult);
     setRerollCounter((previousCounter) => previousCounter + 1);
-    recordDiceResult(result);
   };
 
   const clear = () => {

@@ -41,13 +41,18 @@ export const DiceRemoteHistoryManager: FC<DiceRemoteHistoryManagerProps> = memo(
 
     const recordDiceResult = useCallback(
       (result: MultiThrowResult) => {
-        setDiceHistory((previousHistory) => [...previousHistory, result]);
+        const namedResult: MultiThrowResult = {
+          ...result,
+          name: renameThrow(result.name, room.user),
+        };
+        setDiceHistory((previousHistory) => [...previousHistory, namedResult]);
         if (url) {
           Axios.post(`${url}/dice/${room.table}`, {
             name: room.user,
-            result,
+            result: namedResult,
           });
         }
+        return namedResult;
       },
       [room.user, room.table, url],
     );
@@ -68,3 +73,6 @@ export const DiceRemoteHistoryManager: FC<DiceRemoteHistoryManagerProps> = memo(
     );
   },
 );
+
+const renameThrow = (throwName: string, userName: string): string =>
+  `${userName}'s ${throwName}`;

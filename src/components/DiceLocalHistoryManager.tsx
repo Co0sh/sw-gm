@@ -27,6 +27,7 @@ export const DiceLocalHistoryManager: FC<DiceLocalHistoryManagerProps> = memo(
 
     const recordDiceResult = useCallback((result: MultiThrowResult) => {
       setDiceHistory((previousHistory) => [...previousHistory, result]);
+      return result;
     }, []);
 
     const clearDiceHistory = useCallback(() => {

@@ -3,13 +3,13 @@ import { MultiThrowResult } from './rolls';
 
 export interface DiceHistoryContextType {
   diceHistory: MultiThrowResult[];
-  recordDiceResult: (result: MultiThrowResult) => void;
+  recordDiceResult: (result: MultiThrowResult) => MultiThrowResult;
   clearDiceHistory: () => void;
 }
 
 const defaultContext: DiceHistoryContextType = {
   diceHistory: [],
-  recordDiceResult: () => {},
+  recordDiceResult: (res) => res,
   clearDiceHistory: () => {},
 };
 
