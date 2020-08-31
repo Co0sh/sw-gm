@@ -87,12 +87,12 @@ export const exampleCompendium: Compendium = {
 };
 
 export const exampleCharacter: Character = {
-  id: 'teodor',
-  name: 'Teodor',
+  id: 'john',
+  name: 'John',
   wildCard: true,
   image:
-    'https://api.culture.pl/sites/default/files/styles/1920_auto/public/2019-09/teodor_axentowicz_autoportret_1907.jpg?itok=0Kg_9FW1',
-  origin: { originId: 'human', individualName: 'Rat Catcher' },
+    'https://hips.hearstapps.com/digitalspyuk.cdnds.net/18/06/1517909336-capture66.PNG',
+  origin: { originId: 'human', individualName: 'Barbarian' },
   pace: 6,
   runningDie: 6,
   parry: 7,
