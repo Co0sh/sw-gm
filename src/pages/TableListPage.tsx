@@ -24,7 +24,7 @@ export const TableListPage: FC<TableListPageProps> = () => {
 
   const handleDelete = (table: string) => {
     const index = tables.findIndex((t) => t.table === table);
-    if (index > 0) {
+    if (index >= 0) {
       const copy = [...tables];
       copy.splice(index, 1);
       setTables(copy);
