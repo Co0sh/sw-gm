@@ -32,6 +32,7 @@ export interface MultiThrowResult {
   throwResults: ThrowResult[];
   isCriticalFail: boolean;
   uuid: string;
+  date: number;
 }
 
 export interface ThrowResult {
@@ -176,6 +177,7 @@ export const generateThrowDice = (rollFn: RollFn) => (
     throwResults: [...throwResults, ...additionalWildThrows],
     isCriticalFail,
     uuid,
+    date: new Date().getTime(),
   };
 };
 

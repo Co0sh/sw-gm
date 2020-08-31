@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { format } from 'date-fns';
 import { MultiThrowResult } from '../logic/rolls';
 import { Typography, Paper } from '@material-ui/core';
 import { ThrowView } from './ThrowView';
@@ -20,7 +21,12 @@ export const MultiThrowView: FC<MultiThrowViewProps> = ({
           CRITICAL FAILURE
         </Typography>
       )}
-      <Typography>{value.name}</Typography>
+      <Div row justify="space-between">
+        <Typography>{value.name}</Typography>
+        <Typography color="textSecondary">
+          {format(value.date, 'HH:mm:ss')}
+        </Typography>
+      </Div>
       {value.throwResults.map((throwResult) => (
         <Paper key={throwResult.key}>
           <ThrowView value={throwResult} />
