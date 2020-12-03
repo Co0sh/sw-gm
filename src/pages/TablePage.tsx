@@ -28,9 +28,13 @@ import { makeStyles } from '@material-ui/core';
 
 const backend = process.env.REACT_APP_BACKEND_URL;
 
-export const TablePage: FC<RouteProps> = (props) => {
+interface TablePageParams {
+  tableId: string;
+}
+
+export const TablePage: FC<RouteProps> = () => {
   const classes = useStyles();
-  const { tableId } = useParams();
+  const { tableId } = useParams<TablePageParams>();
   const { path: rawPath, url } = useRouteMatch();
   const path = rawPath === '/' ? '' : rawPath;
   const [tables, setTables] = useLocalState<TableData[]>('tables', []);

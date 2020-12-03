@@ -1,9 +1,11 @@
 import React from 'react';
 import { Encounter } from '../components/Encounter';
 
-export default {
+const CardsStories = {
   title: 'Cards',
 };
+
+export default CardsStories;
 
 export const _Encounter = () => {
   return (

@@ -1,9 +1,11 @@
 import React from 'react';
 import { DiceMultiThrower } from '../components/DiceMultiThrower';
 
-export default {
+const DiceStories = {
   title: 'Dice',
 };
+
+export default DiceStories;
 
 export const Basic = () => (
   <div style={{ width: 400, padding: 16 }}>
