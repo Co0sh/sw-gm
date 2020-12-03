@@ -1,8 +1,4 @@
 [[redirects]]
-  from = "/service-worker.js"
-  to = "/service-worker.js"
-
-[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
