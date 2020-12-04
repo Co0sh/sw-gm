@@ -1,19 +1,17 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import {
   BottomNavigation,
   BottomNavigationAction,
   makeStyles,
 } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router';
+import { useLinks } from './NavigationManager';
 
-export interface NavbarProps {
-  links?: NavLinkData[];
-}
-
-export const Navbar: FC<NavbarProps> = ({ links = [] }) => {
+export const Navbar: FC = () => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
+  const links = useLinks();
 
   return (
     <BottomNavigation
@@ -34,12 +32,6 @@ export const Navbar: FC<NavbarProps> = ({ links = [] }) => {
     </BottomNavigation>
   );
 };
-
-export interface NavLinkData {
-  label: string;
-  url: string;
-  icon: ReactNode;
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {

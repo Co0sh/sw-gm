@@ -17,7 +17,7 @@ import { Div } from '../components/Div';
 
 interface TableListPageProps {}
 
-export const TableListPage: FC<TableListPageProps> = () => {
+const TableListPage: FC<TableListPageProps> = () => {
   const classes = useStyles();
   const { push } = useHistory();
   const [tables, setTables] = useLocalState<TableData[]>('tables', []);
@@ -73,3 +73,5 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }));
+
+export default TableListPage;

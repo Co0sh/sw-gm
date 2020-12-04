@@ -1,13 +1,9 @@
 import React, { FC } from 'react';
 import { Div } from './Div';
 import { makeStyles } from '@material-ui/core';
-import { Navbar, NavLinkData } from './Navbar';
+import { Navbar } from './Navbar';
 
-export interface LayoutProps {
-  links?: NavLinkData[];
-}
-
-export const Layout: FC<LayoutProps> = ({ children, links }) => {
+export const Layout: FC = ({ children }) => {
   const classes = useStyles();
 
   return (
@@ -15,7 +11,7 @@ export const Layout: FC<LayoutProps> = ({ children, links }) => {
       <Div component="main" grows>
         {children}
       </Div>
-      <Navbar links={links} />
+      <Navbar />
     </Div>
   );
 };
