@@ -17,7 +17,13 @@ export const Layout: FC = ({ children }) => {
 };
 
 const useStyles = makeStyles((theme) => ({
+  '@global': {
+    body: {
+      overscrollBehaviorY: 'contain',
+    },
+  },
   root: {
     minHeight: '100vh',
+    width: '100%',
   },
 }));
