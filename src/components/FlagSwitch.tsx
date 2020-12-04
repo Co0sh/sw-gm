@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { Switch, Typography, makeStyles } from '@material-ui/core';
 import { Div } from './Div';
 import { cn } from '../logic/cn';
+import { useLabelId } from '../logic/useId';
 
 export interface FlagSwitchProps {
   title?: string;
@@ -26,14 +27,23 @@ export const FlagSwitch: FC<FlagSwitchProps> = ({
     setStateValue(newValue);
   };
 
+  const labelId = useLabelId();
+
   return (
     <Div align="center" className={cn(classes.relative, className)}>
-      <Typography variant="caption" className={classes.title}>
+      <Typography
+        variant="caption"
+        component="label"
+        htmlFor={labelId}
+        className={classes.title}
+      >
         {title}
       </Typography>
       <Switch
+        id={labelId}
         checked={value}
         onChange={(e) => handleChange(e.target.checked)}
+        size="medium"
       />
     </Div>
   );

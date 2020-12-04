@@ -49,6 +49,7 @@ export const SkillView: FC<SkillViewProps> = ({
                 onChange?.(die !== base ? { base: die } : undefined)
               }
               disabled={!onChange}
+              label={`d${die}`}
             >
               <DieIcon
                 type={die}

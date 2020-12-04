@@ -43,7 +43,11 @@ export const TableListPage: FC<TableListPageProps> = () => {
             >
               <ListItemText primary={table} secondary={user} />
               <ListItemSecondaryAction>
-                <IconButton edge="end" onClick={() => handleDelete(table)}>
+                <IconButton
+                  edge="end"
+                  onClick={() => handleDelete(table)}
+                  aria-label="Delete"
+                >
                   <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>

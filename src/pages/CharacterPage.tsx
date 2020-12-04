@@ -64,6 +64,7 @@ export const CharacterPage: FC<any> = ({ match }) => {
         <IconButton
           component={Link}
           to={`${url.slice(0, url.lastIndexOf('/'))}`}
+          aria-label="List"
         >
           <ListIcon />
         </IconButton>

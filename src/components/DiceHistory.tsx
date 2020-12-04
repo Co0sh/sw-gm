@@ -29,7 +29,7 @@ export const DiceHistory: FC<DiceHistoryProps> = ({ className }) => {
         ))}
       </Div>
       <Div row spacing className={classes.buttons}>
-        <IconButton onClick={clearDiceHistory}>
+        <IconButton onClick={clearDiceHistory} aria-label="Clear">
           <ClearIcon />
         </IconButton>
         <Button

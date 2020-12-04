@@ -52,6 +52,7 @@ export const AttributeView: FC<AttributeViewProps> = ({
                   onChange({ base: die });
                   setEditing(false);
                 }}
+                label={`d${die}`}
               >
                 <DieIcon type={die} color="secondary" />
                 {level.bonus && die === level.base && (

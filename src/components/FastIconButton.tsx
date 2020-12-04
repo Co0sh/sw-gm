@@ -8,6 +8,7 @@ export interface FastIconButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  label?: string;
 }
 
 export const FastIconButton: FC<FastIconButtonProps> = ({
@@ -17,6 +18,7 @@ export const FastIconButton: FC<FastIconButtonProps> = ({
   disabled = false,
   onClick,
   className,
+  label,
 }) => {
   const classes = useStyles();
   return (
@@ -29,6 +31,7 @@ export const FastIconButton: FC<FastIconButtonProps> = ({
       )}
       onClick={onClick}
       disabled={disabled}
+      aria-label={label}
     >
       {children}
     </button>

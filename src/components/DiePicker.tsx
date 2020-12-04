@@ -47,6 +47,7 @@ const DiePicker: FC<DiePickerProps> = ({
             }
             disabled={disabled}
             onClick={() => handleDie(dieType)}
+            label={`d${dieType}`}
           >
             <DieIcon type={dieType} size="small" />
           </FastIconButton>

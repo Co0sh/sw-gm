@@ -160,7 +160,11 @@ export const Encounter: FC<EncounterProps> = ({
               onDelete={removeCharacter}
             >
               <Div row justify="flex-end" grows align="center" spacing>
-                <IconButton size="small" onClick={() => addSlot(character.key)}>
+                <IconButton
+                  size="small"
+                  onClick={() => addSlot(character.key)}
+                  aria-label="Add"
+                >
                   <AddIcon />
                 </IconButton>
                 {new Array(slots - cards.length).fill(null).map((_, index) => (
@@ -188,7 +192,7 @@ export const Encounter: FC<EncounterProps> = ({
           fullWidth
           onChange={(e) => setName(e.target.value)}
         />
-        <IconButton size="small" onClick={addCharacter}>
+        <IconButton size="small" onClick={addCharacter} aria-label="Add">
           <AddIcon />
         </IconButton>
       </Div>

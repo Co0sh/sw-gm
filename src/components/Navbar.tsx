@@ -28,6 +28,7 @@ export const Navbar: FC<NavbarProps> = ({ links = [] }) => {
           label={label}
           value={url}
           icon={icon}
+          classes={{ selected: classes.selected }}
         />
       ))}
     </BottomNavigation>
@@ -44,5 +45,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     position: 'sticky',
     bottom: 0,
+  },
+  selected: {
+    color: theme.palette.primary.light,
   },
 }));

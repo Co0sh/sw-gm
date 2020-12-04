@@ -55,6 +55,7 @@ export const CharacterSheet: FC<CharacterSheetProps> = ({
               }
               setEditing(!editing);
             }}
+            label={editing ? 'Save' : 'Edit'}
           >
             {!editing ? <EditIcon /> : <SaveIcon />}
           </FastIconButton>

@@ -12,7 +12,9 @@ export const Layout: FC<LayoutProps> = ({ children, links }) => {
 
   return (
     <Div className={classes.root}>
-      <Div grows>{children}</Div>
+      <Div component="main" grows>
+        {children}
+      </Div>
       <Navbar links={links} />
     </Div>
   );

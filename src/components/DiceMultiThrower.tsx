@@ -78,7 +78,12 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
         >
           {!result ? 'Reset' : 'Back'}
         </Button>
-        <IconButton component={Link} to={`${url}/history`} size="small">
+        <IconButton
+          component={Link}
+          to={`${url}/history`}
+          size="small"
+          aria-label="History"
+        >
           <HistoryIcon />
         </IconButton>
         <Button

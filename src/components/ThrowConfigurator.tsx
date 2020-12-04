@@ -80,7 +80,12 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
               onChange={(newDie) => addDie(newDie)}
               className={cn(classes.newDie, classes.pr05)}
             />
-            <IconButton size="small" disabled className={classes.invisible}>
+            <IconButton
+              size="small"
+              disabled
+              className={classes.invisible}
+              aria-label="Close"
+            >
               <CloseIcon />
             </IconButton>
           </Div>
@@ -93,7 +98,11 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
               type={type}
               className={classes.pr05}
             />
-            <IconButton size="small" onClick={() => removeDie(die.key)}>
+            <IconButton
+              size="small"
+              onClick={() => removeDie(die.key)}
+              aria-label="Close"
+            >
               <CloseIcon />
             </IconButton>
           </Div>
@@ -121,7 +130,7 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
           )}
         </Div>
         {dice.length > 0 && (
-          <IconButton size="small" onClick={clearAll}>
+          <IconButton size="small" onClick={clearAll} aria-label="Clear">
             <DeleteIcon />
           </IconButton>
         )}

@@ -1,4 +1,4 @@
-import React, { FC, ComponentType } from 'react';
+import React, { FC, ElementType } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { cn } from '../logic/cn';
 
@@ -19,7 +19,7 @@ export interface DivProps {
   justify?: FlexPosition;
   spacing?: boolean;
   className?: string;
-  component?: ComponentType<{ className?: string }>;
+  component?: ElementType<{ className?: string }>;
   [key: string]: any;
 }
 

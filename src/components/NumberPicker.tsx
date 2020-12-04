@@ -47,6 +47,7 @@ export const NumberPicker: FC<NumberPickerProps> = ({
           size="small"
           disabled={isFirst}
           onClick={() => handleNumber(number - 1)}
+          aria-label="Decrease"
         >
           <MinusIcon />
         </IconButton>
@@ -59,6 +60,7 @@ export const NumberPicker: FC<NumberPickerProps> = ({
           size="small"
           disabled={isLast}
           onClick={() => handleNumber(number + 1)}
+          aria-label="Increase"
         >
           <PlusIcon />
         </IconButton>
@@ -75,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     position: 'absolute',
     top: -theme.spacing(1),
-    opacity: 0.5,
+    opacity: 0.8,
   },
   width32: {
     width: 32,

@@ -7,7 +7,7 @@ export const theme = unstable_createMuiStrictModeTheme({
       main: '#40b6de',
     },
     secondary: {
-      main: '#f0623e',
+      main: '#b72a2a',
     },
     success: {
       main: '#87d415',

@@ -18,7 +18,11 @@ export const EncounterCharacterPreview: FC<CharacterPreviewProps> = ({
   const { name, key } = character;
   return (
     <Div row align="center" className={classes.root} spacing>
-      <IconButton size="small" onClick={() => onDelete?.(key)}>
+      <IconButton
+        size="small"
+        onClick={() => onDelete?.(key)}
+        aria-label="Delete"
+      >
         <DeleteIcon />
       </IconButton>
       <Div row grows align="center">
