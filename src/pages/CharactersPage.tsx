@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { exampleCharacter } from '../exampleData';
 import { NewCharacterDialog } from '../components/NewCharacterDialog';
 
-export const CharactersPage: FC = () => {
+const CharactersPage: FC = () => {
   const classes = useStyles();
   const { push } = useHistory();
   const { url } = useRouteMatch();
@@ -75,3 +75,5 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
   },
 }));
+
+export default CharactersPage;

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, lazy, Suspense } from 'react';
 import SvgIcon from '@material-ui/icons/People';
 import {
   Route,
@@ -7,11 +7,6 @@ import {
   RouteProps,
   useParams,
 } from 'react-router';
-import { DicePage } from './DicePage';
-import { CardsPage } from './CardsPage';
-import { DiceHistoryPage } from './DiceHistoryPage';
-import { CharactersPage } from './CharactersPage';
-import { CharacterPage } from './CharacterPage';
 import CharactersIcon from '@material-ui/icons/Accessibility';
 import ExitIcon from '@material-ui/icons/ExitToApp';
 import { DiceIcons } from '../logic/diceIcons';
@@ -25,6 +20,13 @@ import { localLinks } from '../logic/localLinks';
 import { TableUserEditor } from '../components/TableUserEditor';
 import { Div } from '../components/Div';
 import { makeStyles } from '@material-ui/core';
+import LoadingView from '../components/LoadingView';
+
+const DicePage = lazy(() => import('./DicePage'));
+const CardsPage = lazy(() => import('./CardsPage'));
+const DiceHistoryPage = lazy(() => import('./DiceHistoryPage'));
+const CharactersPage = lazy(() => import('./CharactersPage'));
+const CharacterPage = lazy(() => import('./CharacterPage'));
 
 const backend = process.env.REACT_APP_BACKEND_URL;
 
@@ -82,21 +84,27 @@ export const TablePage: FC<RouteProps> = () => {
     >
       <SocketManager room={room} url={backend}>
         <DiceRemoteHistoryManager room={room} url={backend}>
-          <Switch>
-            <Route exact path={`${path}/`} component={DicePage} />
-            <Route exact path={`${path}/cards`} component={CardsPage} />
-            <Route exact path={`${path}/history`} component={DiceHistoryPage} />
-            <Route
-              exact
-              path={`${path}/characters`}
-              component={CharactersPage}
-            />
-            <Route
-              exact
-              path={`${path}/characters/:characterId`}
-              component={CharacterPage}
-            />
-          </Switch>
+          <Suspense fallback={<LoadingView />}>
+            <Switch>
+              <Route exact path={`${path}/`} component={DicePage} />
+              <Route exact path={`${path}/cards`} component={CardsPage} />
+              <Route
+                exact
+                path={`${path}/history`}
+                component={DiceHistoryPage}
+              />
+              <Route
+                exact
+                path={`${path}/characters`}
+                component={CharactersPage}
+              />
+              <Route
+                exact
+                path={`${path}/characters/:characterId`}
+                component={CharacterPage}
+              />
+            </Switch>
+          </Suspense>
         </DiceRemoteHistoryManager>
       </SocketManager>
     </Layout>

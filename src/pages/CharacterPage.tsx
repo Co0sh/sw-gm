@@ -8,7 +8,7 @@ import { CharacterSheet } from '../components/CharacterSheet';
 import { Div } from '../components/Div';
 import { Character } from '../logic/character';
 
-export const CharacterPage: FC<any> = ({ match }) => {
+const CharacterPage: FC<any> = ({ match }) => {
   const classes = useStyles();
   const { characterId } = match.params;
   const { url } = useRouteMatch();
@@ -99,3 +99,5 @@ const useStyles = makeStyles((theme) => ({
     bottom: 56,
   },
 }));
+
+export default CharacterPage;

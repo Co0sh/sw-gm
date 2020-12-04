@@ -4,7 +4,7 @@ import { RouteProps } from 'react-router';
 import { Div } from '../components/Div';
 import { DiceMultiThrower } from '../components/DiceMultiThrower';
 
-export const DicePage: FC<RouteProps> = () => {
+const DicePage: FC<RouteProps> = () => {
   const classes = useStyles();
 
   return (
@@ -21,3 +21,5 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }));
+
+export default DicePage;

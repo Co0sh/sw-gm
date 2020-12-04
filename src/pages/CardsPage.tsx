@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import { Encounter } from '../components/Encounter';
 import { Div } from '../components/Div';
 
-export const CardsPage: FC<RouteProps> = () => {
+const CardsPage: FC<RouteProps> = () => {
   const classes = useStyles();
 
   const { characters, deck } = JSON.parse(
@@ -29,3 +29,5 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }));
+
+export default CardsPage;

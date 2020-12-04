@@ -4,7 +4,7 @@ import { RouteProps } from 'react-router';
 import { Div } from '../components/Div';
 import { DiceHistory } from '../components/DiceHistory';
 
-export const DiceHistoryPage: FC<RouteProps> = () => {
+const DiceHistoryPage: FC<RouteProps> = () => {
   const classes = useStyles();
 
   return (
@@ -22,3 +22,5 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 0,
   },
 }));
+
+export default DiceHistoryPage;
