@@ -4,8 +4,14 @@ import { getKey } from './key';
 
 export type ThrowType = 'regular' | 'wild';
 
+export interface ThrowOptionsKey extends String {
+  __throwOptionsKey: never;
+}
+
+export const asThrowOptionsKey = (key: string): ThrowOptionsKey => key as any;
+
 export interface ThrowOptions {
-  key: string;
+  key: ThrowOptionsKey;
   name: string;
   type: ThrowType;
   dice: UniqueDie[];
@@ -13,8 +19,14 @@ export interface ThrowOptions {
   modifier: number;
 }
 
+export interface UniqueDieKey extends String {
+  __uniqueDieKey: never;
+}
+
+export const asUniqueDieKey = (key: string): UniqueDieKey => key as any;
+
 export interface UniqueDie {
-  key: string;
+  key: UniqueDieKey;
   sides: Die;
 }
 
@@ -27,16 +39,29 @@ export interface MultiThrowOptions {
   globalModifier: number;
 }
 
+export interface MultiThrowResultUUID extends String {
+  __multiThrowResultUUID: never;
+}
+
+export const asMultiThrowResultUUID = (key: string): MultiThrowResultUUID =>
+  key as any;
+
 export interface MultiThrowResult {
   name: string;
   throwResults: ThrowResult[];
   isCriticalFail: boolean;
-  uuid: string;
+  uuid: MultiThrowResultUUID;
   date: number;
 }
 
+export interface ThrowResultKey extends String {
+  __throwResultKey: never;
+}
+
+export const asThrowResultKey = (key: string): ThrowResultKey => key as any;
+
 export interface ThrowResult {
-  key: string;
+  key: ThrowResultKey;
   name: string;
   multiRolls: MultiRollResult[];
   type: ThrowType;
@@ -45,13 +70,26 @@ export interface ThrowResult {
   isAdditional: boolean;
 }
 
+export interface UniqueRollKey extends String {
+  __uniqueRollKey: never;
+}
+
+export const asUniqueRollKey = (key: string): UniqueRollKey => key as any;
+
 export interface UniqueRoll {
-  key: string;
+  key: UniqueRollKey;
   result: number;
 }
 
+export interface MultiRollResulttKey extends String {
+  __multiRollResulttKey: never;
+}
+
+export const asMultiRollResulttKey = (key: string): MultiRollResulttKey =>
+  key as any;
+
 export interface MultiRollResult {
-  key: string;
+  key: MultiRollResulttKey;
   die: Die;
   rolls: UniqueRoll[];
   sum: number;
@@ -112,7 +150,7 @@ export const generateThrowDice = (rollFn: RollFn) => (
     ...options,
   };
 
-  const uuid = v4();
+  const uuid = asMultiThrowResultUUID(v4());
 
   const chosenRollFn = acing ? ace(rollFn) : notAce(rollFn);
 

@@ -28,7 +28,7 @@ export const MultiRollView: FC<MultiRollViewProps> = ({
         <Div row spacing className={classes.results}>
           {value.rolls.map((roll, index) => (
             <RollView
-              key={roll.key}
+              key={String(roll.key)}
               type={type}
               ace={roll.result === value.die && index < value.rolls.length - 1}
               value={roll.result}

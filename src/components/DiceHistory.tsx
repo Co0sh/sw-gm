@@ -22,7 +22,7 @@ export const DiceHistory: FC<DiceHistoryProps> = ({ className }) => {
       <Div spacing className={classes.paddingBottom}>
         {diceHistory.map((throwResult) => (
           <MultiThrowView
-            key={throwResult.uuid}
+            key={String(throwResult.uuid)}
             className={classes.wide}
             value={throwResult}
           />

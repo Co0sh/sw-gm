@@ -7,6 +7,7 @@ import {
   defaultRegularThrow,
   ThrowType,
   defaultRegularDie,
+  UniqueDieKey,
 } from '../logic/rolls';
 import { Die } from '../logic/die';
 import { DiePicker } from './DiePicker';
@@ -48,14 +49,14 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
     handleChange({ dice: [{ key: getKey(), sides: dieToAdd }, ...dice] });
   };
 
-  const removeDie = (key: string) => {
+  const removeDie = (key: UniqueDieKey) => {
     const diceCopy = [...dice];
     const index = diceCopy.findIndex((d) => d.key === key);
     diceCopy.splice(index, 1);
     handleChange({ dice: diceCopy });
   };
 
-  const changeDie = (key: string, die: Die) => {
+  const changeDie = (key: UniqueDieKey, die: Die) => {
     const diceCopy = [...dice];
     const index = diceCopy.findIndex((d) => d.key === key);
     diceCopy.splice(index, 1, { key, sides: die });
@@ -91,7 +92,7 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
           </Div>
         )}
         {dice.map((die) => (
-          <Div key={die.key} row justify="space-between" align="center">
+          <Div key={String(die.key)} row justify="space-between" align="center">
             <DiePicker
               value={die.sides}
               onChange={(newDie) => changeDie(die.key, newDie)}

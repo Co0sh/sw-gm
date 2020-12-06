@@ -43,7 +43,7 @@ export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
           )}
         >
           {multiRolls.map((multiRoll) => (
-            <ListItem dense key={multiRoll.key}>
+            <ListItem dense key={String(multiRoll.key)}>
               <MultiRollView
                 value={multiRoll}
                 type={type}

@@ -5,6 +5,7 @@ import {
   ThrowOptions,
   defaultThrowName,
   defaultWildThrowName,
+  ThrowOptionsKey,
 } from '../logic/rolls';
 import { makeStyles } from '@material-ui/core';
 import { ThrowConfigurator } from './ThrowConfigurator';
@@ -71,7 +72,9 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
     });
   };
 
-  const modifyThrow = (key: string) => (throwOptions: ThrowOptions) => {
+  const modifyThrow = (key: ThrowOptionsKey) => (
+    throwOptions: ThrowOptions,
+  ) => {
     const throwsCopy = [...throws];
     const index = throwsCopy.findIndex((t) => t.key === key);
     if (throwOptions.dice.length) {
@@ -125,7 +128,7 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
         {regularThrows.map((aThrow, index) => {
           return (
             <ThrowConfigurator
-              key={aThrow.key}
+              key={String(aThrow.key)}
               value={aThrow}
               onChange={modifyThrow(aThrow.key)}
             />

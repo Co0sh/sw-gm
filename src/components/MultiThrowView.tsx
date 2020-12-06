@@ -28,7 +28,7 @@ export const MultiThrowView: FC<MultiThrowViewProps> = ({
         </Typography>
       </Div>
       {value.throwResults.map((throwResult) => (
-        <Paper key={throwResult.key}>
+        <Paper key={String(throwResult.key)}>
           <ThrowView value={throwResult} />
         </Paper>
       ))}
