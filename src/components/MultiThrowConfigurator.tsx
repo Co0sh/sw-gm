@@ -1,11 +1,8 @@
 import React, { FC, useState } from 'react';
 import {
-  MultiThrowOptions,
   defaultDiceOptions,
-  ThrowOptions,
   defaultThrowName,
   defaultWildThrowName,
-  ThrowOptionsKey,
 } from '../logic/rolls';
 import { makeStyles } from '@material-ui/core';
 import { ThrowConfigurator } from './ThrowConfigurator';
@@ -13,6 +10,8 @@ import { NumberPicker } from './NumberPicker';
 import { getKey } from '../logic/key';
 import { FlagSwitch } from './FlagSwitch';
 import { Div } from './Div';
+import { MultiThrowOptions } from '../model/multiThrowOptions.model';
+import { ThrowOptions, ThrowOptionsKey } from '../model/throwOptions.model';
 
 export interface RollConfiguratorProps {
   initialValue?: MultiThrowOptions;

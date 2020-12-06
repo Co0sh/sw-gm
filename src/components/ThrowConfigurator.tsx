@@ -2,19 +2,16 @@ import React, { FC, useState } from 'react';
 import { Paper, makeStyles, IconButton, Theme } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {
-  ThrowOptions,
-  defaultRegularThrow,
-  ThrowType,
-  defaultRegularDie,
-  UniqueDieKey,
-} from '../logic/rolls';
-import { Die } from '../logic/die';
+import { defaultRegularThrow, defaultRegularDie } from '../logic/rolls';
+import { Die } from '../model/die.model';
 import { DiePicker } from './DiePicker';
 import { NumberPicker } from './NumberPicker';
 import { getKey } from '../logic/key';
 import { Div } from './Div';
 import { cn } from '../logic/cn';
+import { ThrowOptions } from '../model/throwOptions.model';
+import { UniqueDieKey } from '../model/uniqueDie.model';
+import { ThrowType } from '../model/throwType.model';
 
 export interface ThrowConfiguratorProps {
   initialValue?: ThrowOptions;

@@ -6,16 +6,13 @@ import HistoryIcon from '@material-ui/icons/History';
 import RollIcon from '@material-ui/icons/Check';
 import RerollIcon from '@material-ui/icons/Cached';
 import BackIcon from '@material-ui/icons/ArrowBack';
-import {
-  MultiThrowOptions,
-  MultiThrowResult,
-  defaultDiceOptions,
-  throwDice,
-} from '../logic/rolls';
+import { defaultDiceOptions, throwDice } from '../logic/rolls';
 import { MultiThrowView } from './MultiThrowView';
 import { MultiThrowConfigurator } from './MultiThrowConfigurator';
 import { Div } from './Div';
 import { useDiceHistory } from '../logic/DiceHistoryContext';
+import { MultiThrowOptions } from '../model/multiThrowOptions.model';
+import { MultiThrowResult } from '../model/multiThrowResult.model';
 
 export interface DiceRollerProps {
   initialValue?: MultiThrowOptions;

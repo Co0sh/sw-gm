@@ -7,10 +7,10 @@ import React, {
   memo,
 } from 'react';
 import Axios from 'axios';
-import { MultiThrowResult } from '../logic/rolls';
 import { DiceHistoryContext } from '../logic/DiceHistoryContext';
 import { useSubscribe } from './SocketManager';
 import { TableData } from '../logic/tableData';
+import { MultiThrowResult } from '../model/multiThrowResult.model';
 
 export interface DiceRemoteHistoryManagerProps {
   url?: string;

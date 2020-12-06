@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { DiceIcons } from '../logic/diceIcons';
-import { Die } from '../logic/die';
+import { Die } from '../model/die.model';
 import { cn } from '../logic/cn';
 
 export interface DieIconProps {

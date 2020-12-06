@@ -1,4 +1,4 @@
-import { Die } from './die';
+import { Die } from '../model/die.model';
 
 export interface Character {
   id: string;

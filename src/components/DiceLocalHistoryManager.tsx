@@ -6,8 +6,8 @@ import React, {
   useMemo,
   memo,
 } from 'react';
-import { MultiThrowResult } from '../logic/rolls';
 import { DiceHistoryContext } from '../logic/DiceHistoryContext';
+import { MultiThrowResult } from '../model/multiThrowResult.model';
 
 export interface DiceLocalHistoryManagerProps {}
 

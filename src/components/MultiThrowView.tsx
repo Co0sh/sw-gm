@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { format } from 'date-fns';
-import { MultiThrowResult } from '../logic/rolls';
 import { Typography, Paper } from '@material-ui/core';
 import { ThrowView } from './ThrowView';
 import { Div } from './Div';
+import { MultiThrowResult } from '../model/multiThrowResult.model';
 
 export interface MultiThrowViewProps {
   value: MultiThrowResult;

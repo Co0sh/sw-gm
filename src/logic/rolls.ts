@@ -1,99 +1,15 @@
 import { v4 } from 'uuid';
-import { Die } from './die';
+import { MultiRollResult } from '../model/multiRollResult.model';
+import { MultiThrowOptions } from '../model/multiThrowOptions.model';
+import {
+  asMultiThrowResultUUID,
+  MultiThrowResult,
+} from '../model/multiThrowResult.model';
+import { ThrowOptions } from '../model/throwOptions.model';
+import { ThrowResult } from '../model/throwResult.model';
+import { UniqueRoll } from '../model/uniqueRoll.model';
+import { Die } from '../model/die.model';
 import { getKey } from './key';
-
-export type ThrowType = 'regular' | 'wild';
-
-export interface ThrowOptionsKey extends String {
-  __throwOptionsKey: never;
-}
-
-export const asThrowOptionsKey = (key: string): ThrowOptionsKey => key as any;
-
-export interface ThrowOptions {
-  key: ThrowOptionsKey;
-  name: string;
-  type: ThrowType;
-  dice: UniqueDie[];
-  target: number;
-  modifier: number;
-}
-
-export interface UniqueDieKey extends String {
-  __uniqueDieKey: never;
-}
-
-export const asUniqueDieKey = (key: string): UniqueDieKey => key as any;
-
-export interface UniqueDie {
-  key: UniqueDieKey;
-  sides: Die;
-}
-
-export interface MultiThrowOptions {
-  name: string;
-  throws: ThrowOptions[];
-  acing: boolean;
-  canFail: boolean;
-  globalTarget: number;
-  globalModifier: number;
-}
-
-export interface MultiThrowResultUUID extends String {
-  __multiThrowResultUUID: never;
-}
-
-export const asMultiThrowResultUUID = (key: string): MultiThrowResultUUID =>
-  key as any;
-
-export interface MultiThrowResult {
-  name: string;
-  throwResults: ThrowResult[];
-  isCriticalFail: boolean;
-  uuid: MultiThrowResultUUID;
-  date: number;
-}
-
-export interface ThrowResultKey extends String {
-  __throwResultKey: never;
-}
-
-export const asThrowResultKey = (key: string): ThrowResultKey => key as any;
-
-export interface ThrowResult {
-  key: ThrowResultKey;
-  name: string;
-  multiRolls: MultiRollResult[];
-  type: ThrowType;
-  target: number;
-  modifier: number;
-  isAdditional: boolean;
-}
-
-export interface UniqueRollKey extends String {
-  __uniqueRollKey: never;
-}
-
-export const asUniqueRollKey = (key: string): UniqueRollKey => key as any;
-
-export interface UniqueRoll {
-  key: UniqueRollKey;
-  result: number;
-}
-
-export interface MultiRollResulttKey extends String {
-  __multiRollResulttKey: never;
-}
-
-export const asMultiRollResulttKey = (key: string): MultiRollResulttKey =>
-  key as any;
-
-export interface MultiRollResult {
-  key: MultiRollResulttKey;
-  die: Die;
-  rolls: UniqueRoll[];
-  sum: number;
-}
 
 export type RollFn = (dice: Die) => number;
 

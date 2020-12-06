@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { MultiThrowResult } from './rolls';
+import { MultiThrowResult } from '../model/multiThrowResult.model';
 
 export interface DiceHistoryContextType {
   diceHistory: MultiThrowResult[];

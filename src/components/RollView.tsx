@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
-import { ThrowType } from '../logic/rolls';
 import { Div } from './Div';
+import { ThrowType } from '../model/throwType.model';
 
 export interface RollViewProps {
   value: number;

@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import { MultiRollResult, ThrowType } from '../logic/rolls';
 import { makeStyles } from '@material-ui/core';
 import { RollView } from './RollView';
 import { Div } from './Div';
 import { DieIcon } from './DieIcon';
+import { MultiRollResult } from '../model/multiRollResult.model';
+import { ThrowType } from '../model/throwType.model';
 
 export interface MultiRollViewProps {
   value: MultiRollResult;

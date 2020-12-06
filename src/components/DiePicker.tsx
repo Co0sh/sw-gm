@@ -1,10 +1,10 @@
 import React, { FC, useState, memo } from 'react';
-import { Die } from '../logic/die';
+import { Die } from '../model/die.model';
 import { DiceIcons } from '../logic/diceIcons';
-import { ThrowType } from '../logic/rolls';
 import { Div } from './Div';
 import { DieIcon } from './DieIcon';
 import { FastIconButton } from './FastIconButton';
+import { ThrowType } from '../model/throwType.model';
 
 export interface DiePickerProps {
   initialValue?: Die | null;
