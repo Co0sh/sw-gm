@@ -1,4 +1,5 @@
 import { Reducer } from 'react';
+import { produce } from 'immer';
 import { Die } from '../model/die.model';
 import { MultiThrowOptions } from '../model/multiThrowOptions.model';
 import { ThrowOptions, ThrowOptionsKey } from '../model/throwOptions.model';
@@ -103,120 +104,117 @@ export const multiThrowReducer: Reducer<MultiThrowOptions, MultiThrowAction> = (
       return action.value;
     }
     case 'setAcing': {
-      return { ...state, acing: action.acing };
+      return produce(state, (state) => {
+        state.acing = action.acing;
+      });
     }
     case 'setCanFail': {
-      return { ...state, canFail: action.canFail };
+      return produce(state, (state) => {
+        state.canFail = action.canFail;
+      });
     }
     case 'setGlobalTarget': {
-      return {
-        ...state,
-        globalTarget: action.globalTarget,
-        throws: state.throws.map((aThrow) => ({
-          ...aThrow,
-          target: action.globalTarget,
-        })),
-      };
+      return produce(state, (state) => {
+        state.globalTarget = action.globalTarget;
+        state.throws.forEach((aThrow) => {
+          aThrow.target = action.globalTarget;
+        });
+      });
     }
     case 'setGlobalModifier': {
-      return {
-        ...state,
-        globalModifier: action.globalModifier,
-        throws: state.throws.map((aThrow) => ({
-          ...aThrow,
-          modifier: action.globalModifier,
-        })),
-      };
+      return produce(state, (state) => {
+        state.globalModifier = action.globalModifier;
+        state.throws.forEach((aThrow) => {
+          aThrow.modifier = action.globalModifier;
+        });
+      });
     }
     case 'setName': {
-      return { ...state, name: action.name };
+      return produce(state, (state) => {
+        state.name = action.name;
+      });
     }
     case 'addThrow': {
-      const defaultThrow = {
-        regular: defaultRegularThrow,
-        wild: defaultWildThrow,
-      } as const;
-      const newThrow: ThrowOptions = {
-        ...defaultThrow[action.throwType],
-        key: getKey(),
-        name: '',
-        dice: [{ key: getKey(), sides: action.die }],
-      };
-      return { ...state, throws: [newThrow, ...state.throws] };
+      return produce(state, (state) => {
+        const defaultThrow = {
+          regular: defaultRegularThrow,
+          wild: defaultWildThrow,
+        } as const;
+        const newThrow: ThrowOptions = {
+          ...defaultThrow[action.throwType],
+          key: getKey(),
+          name:
+            action.throwType === 'wild'
+              ? defaultWildThrow.name
+              : state.throwNameTemplate,
+          dice: [{ key: getKey(), sides: action.die }],
+        };
+        if (action.throwType === 'wild') {
+          state.throws.push(newThrow);
+        } else {
+          state.throws.unshift(newThrow);
+        }
+        recalculateThrowNames(state);
+      });
     }
     case 'removeThrow': {
-      return {
-        ...state,
-        throws: state.throws.filter(({ key }) => key !== action.key),
-      };
+      return produce(state, (state) => {
+        state.throws = state.throws.filter(({ key }) => key !== action.key);
+        recalculateThrowNames(state);
+      });
     }
     case 'addDie': {
-      return {
-        ...state,
-        throws: state.throws.map((aThrow) =>
-          aThrow.key !== action.throwKey
-            ? aThrow
-            : {
-                ...aThrow,
-                dice: [{ key: getKey(), sides: action.die }, ...aThrow.dice],
-              },
-        ),
-      };
+      return produce(state, (state) => {
+        const aThrow = state.throws.find(({ key }) => key === action.throwKey);
+        aThrow?.dice.unshift({ key: getKey(), sides: action.die });
+      });
     }
     case 'changeDie': {
-      return {
-        ...state,
-        throws: state.throws.map((aThrow) =>
-          aThrow.key !== action.throwKey
-            ? aThrow
-            : {
-                ...aThrow,
-                dice: aThrow.dice.map((uniqueDie) =>
-                  uniqueDie.key !== action.dieKey
-                    ? uniqueDie
-                    : { ...uniqueDie, sides: action.die },
-                ),
-              },
-        ),
-      };
+      return produce(state, (state) => {
+        const aThrow = state.throws.find(({ key }) => key === action.throwKey);
+        const die = aThrow?.dice.find(({ key }) => key === action.dieKey);
+        if (die) {
+          die.sides = action.die;
+        }
+      });
     }
     case 'removeDie': {
-      return {
-        ...state,
-        throws: state.throws
-          .map((aThrow) =>
-            aThrow.key !== action.throwKey
-              ? aThrow
-              : {
-                  ...aThrow,
-                  dice: aThrow.dice.filter(({ key }) => key !== action.dieKey),
-                },
-          )
-          .filter((aThrow) => aThrow.dice.length > 0),
-      };
+      return produce(state, (state) => {
+        const aThrow = state.throws.find(({ key }) => key === action.throwKey);
+        aThrow?.dice.splice(
+          aThrow.dice.findIndex(({ key }) => key === action.dieKey),
+          1,
+        );
+      });
     }
     case 'setThrowModifier': {
-      return {
-        ...state,
-        throws: state.throws.map((aThrow) =>
-          aThrow.key !== action.throwKey
-            ? aThrow
-            : { ...aThrow, modifier: action.modifier },
-        ),
-      };
+      return produce(state, (state) => {
+        const aThrow = state.throws.find(({ key }) => key === action.throwKey);
+        if (aThrow) {
+          aThrow.modifier = action.modifier;
+        }
+      });
     }
     case 'setThrowTarget': {
-      return {
-        ...state,
-        throws: state.throws.map((aThrow) =>
-          aThrow.key !== action.throwKey
-            ? aThrow
-            : { ...aThrow, target: action.target },
-        ),
-      };
+      return produce(state, (state) => {
+        const aThrow = state.throws.find(({ key }) => key === action.throwKey);
+        if (aThrow) {
+          aThrow.target = action.target;
+        }
+      });
     }
     default: {
       return state;
     }
   }
+};
+
+const recalculateThrowNames = (state: MultiThrowOptions): MultiThrowOptions => {
+  const regulars = state.throws.filter(({ type }) => type === 'regular');
+  if (regulars.length > 1) {
+    regulars.forEach((aThrow, index) => {
+      aThrow.name = `${state.throwNameTemplate} ${index + 1}`;
+    });
+  }
+  return state;
 };

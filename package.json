@@ -26,6 +26,7 @@
     "axios": "^0.21.0",
     "babel-loader": "8.1.0",
     "date-fns": "^2.16.1",
+    "immer": "^8.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
