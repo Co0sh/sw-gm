@@ -140,6 +140,7 @@ export const multiThrowReducer: Reducer<MultiThrowOptions, MultiThrowAction> = (
         ...defaultThrow[action.throwType],
         key: getKey(),
         name: '',
+        dice: [{ key: getKey(), sides: action.die }],
       };
       return { ...state, throws: [newThrow, ...state.throws] };
     }
