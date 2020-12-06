@@ -1,10 +1,10 @@
 import React, { FC, memo } from 'react';
-import { Die } from '../model/die.model';
-import { DiceIcons } from '../logic/diceIcons';
+import { Die, DIE_TYPES } from '../model/die.model';
 import { Div } from './Div';
 import { DieIcon } from './DieIcon';
 import { FastIconButton } from './FastIconButton';
 import { ThrowType } from '../model/throwType.model';
+import { makeStyles } from '@material-ui/core';
 
 export interface DiePickerProps {
   value: Die | null;
@@ -12,6 +12,7 @@ export interface DiePickerProps {
   type?: ThrowType;
   disabled?: boolean;
   className?: string;
+  enabledDice?: Die[];
 }
 
 const DiePicker: FC<DiePickerProps> = ({
@@ -20,12 +21,17 @@ const DiePicker: FC<DiePickerProps> = ({
   type = 'regular',
   disabled = false,
   className,
+  enabledDice = DIE_TYPES,
 }) => {
+  const classes = useStyles();
   const die = value;
 
   return (
     <Div row align="center" justify="space-between" grows className={className}>
-      {Object.keys(DiceIcons).map((key) => {
+      {DIE_TYPES.map((key) => {
+        if (!enabledDice.includes(key)) {
+          return <div key={key} className={classes.placeholder} />;
+        }
         const dieType = Number(key) as Die;
         const selected = dieType === die;
         return (
@@ -49,5 +55,12 @@ const DiePicker: FC<DiePickerProps> = ({
     </Div>
   );
 };
+
+const useStyles = makeStyles({
+  placeholder: {
+    width: 40,
+    height: 40,
+  },
+});
 
 export default memo(DiePicker);

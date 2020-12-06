@@ -33,7 +33,7 @@ export const defaultWildThrowName = 'Wild Die';
 
 export const defaultRegularThrow: ThrowOptions = {
   key: getKey(),
-  name: `${defaultThrowName} 1`,
+  name: defaultThrowName,
   type: 'regular',
   dice: [{ key: getKey(), sides: defaultRegularDie }],
   target: defaultTarget,
@@ -51,6 +51,7 @@ export const defaultWildThrow: ThrowOptions = {
 
 export const defaultDiceOptions: MultiThrowOptions = {
   name: defaultMultiThrowName,
+  throwNameTemplate: defaultRegularThrow.name,
   throws: [defaultRegularThrow, defaultWildThrow],
   acing: true,
   canFail: true,

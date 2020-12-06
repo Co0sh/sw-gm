@@ -2,7 +2,7 @@ import React, { Dispatch, FC, memo, useCallback } from 'react';
 import { Paper, makeStyles, IconButton, Theme } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Die } from '../model/die.model';
+import { Die, DIE_TYPES } from '../model/die.model';
 import DiePicker from './DiePicker';
 import NumberPicker from './NumberPicker';
 import { Div } from './Div';
@@ -72,6 +72,7 @@ const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
               onChange={dice.length ? addDie : addThrow}
               type={throwType}
               className={cn(classes.newDie, classes.paddingRight)}
+              enabledDice={throwType === 'wild' ? [6, 10] : DIE_TYPES}
             />
             <IconButton
               size="small"
@@ -153,6 +154,7 @@ const RollConfigurator: FC<RollConfiguratorProps> = memo(
           onChange={changeDie}
           type={throwType}
           className={classes.paddingRight}
+          enabledDice={throwType === 'wild' ? [6, 10] : DIE_TYPES}
         />
         <IconButton size="small" onClick={removeDie} aria-label="Close">
           <CloseIcon />
