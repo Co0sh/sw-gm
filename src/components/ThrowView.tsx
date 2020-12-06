@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
 import { MultiRollView } from './MultiRollView';
 import { cn } from '../logic/cn';
-import { NumberPicker } from './NumberPicker';
+import NumberPicker from './NumberPicker';
 import { RaiseBar } from './RaiseBar';
 import { Div } from './Div';
 import { ThrowResult } from '../model/throwResult.model';

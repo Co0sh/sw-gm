@@ -1,68 +1,62 @@
-import React, { FC, useState } from 'react';
+import React, { Dispatch, FC, memo, useCallback } from 'react';
 import { Paper, makeStyles, IconButton, Theme } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { defaultRegularThrow, defaultRegularDie } from '../logic/rolls';
 import { Die } from '../model/die.model';
-import { DiePicker } from './DiePicker';
-import { NumberPicker } from './NumberPicker';
-import { getKey } from '../logic/key';
+import DiePicker from './DiePicker';
+import NumberPicker from './NumberPicker';
 import { Div } from './Div';
 import { cn } from '../logic/cn';
-import { ThrowOptions } from '../model/throwOptions.model';
-import { UniqueDieKey } from '../model/uniqueDie.model';
+import { ThrowOptions, ThrowOptionsKey } from '../model/throwOptions.model';
+import { UniqueDie } from '../model/uniqueDie.model';
 import { ThrowType } from '../model/throwType.model';
+import { MultiThrowAction } from '../logic/multiThrowReducer';
 
 export interface ThrowConfiguratorProps {
-  initialValue?: ThrowOptions;
-  value?: ThrowOptions;
-  onChange?: (value: ThrowOptions) => void;
+  value: ThrowOptions;
+  onChange: Dispatch<MultiThrowAction>;
   maxRolls?: number;
   hasTarget?: boolean;
   hasModifier?: boolean;
 }
 
-export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
-  value: propValue,
+const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
+  value,
   onChange,
-  initialValue = defaultRegularThrow,
   maxRolls,
   hasTarget = true,
   hasModifier = true,
 }) => {
-  const [stateValue, setStateValue] = useState(propValue ?? initialValue);
-  const value = propValue ?? stateValue;
-  const { dice, type, modifier, target } = value;
-  const classes = useStyles({ type });
+  const { dice, type: throwType, modifier, target, key: throwKey } = value;
+  const classes = useStyles({ throwType });
 
-  const handleChange = (partialOptions: Partial<ThrowOptions>) => {
-    const updatedOptions = { ...value, ...partialOptions };
-    onChange?.(updatedOptions);
-    setStateValue(updatedOptions);
-  };
-
-  const addDie = (die?: Die) => {
-    const dieToAdd = die ?? defaultRegularDie;
-    handleChange({ dice: [{ key: getKey(), sides: dieToAdd }, ...dice] });
-  };
-
-  const removeDie = (key: UniqueDieKey) => {
-    const diceCopy = [...dice];
-    const index = diceCopy.findIndex((d) => d.key === key);
-    diceCopy.splice(index, 1);
-    handleChange({ dice: diceCopy });
-  };
-
-  const changeDie = (key: UniqueDieKey, die: Die) => {
-    const diceCopy = [...dice];
-    const index = diceCopy.findIndex((d) => d.key === key);
-    diceCopy.splice(index, 1, { key, sides: die });
-    handleChange({ dice: diceCopy });
-  };
-
-  const clearAll = () => {
-    handleChange({ dice: [] });
-  };
+  const addThrow = useCallback(
+    (die: Die) => {
+      onChange({ type: 'addThrow', die, throwType });
+    },
+    [onChange, throwType],
+  );
+  const addDie = useCallback(
+    (die: Die) => {
+      onChange({ type: 'addDie', die, throwKey });
+    },
+    [onChange, throwKey],
+  );
+  const clearAll = useCallback(() => {
+    onChange({ type: 'removeThrow', key: throwKey });
+  }, [onChange, throwKey]);
+  const setTarget = useCallback(
+    (target: number) => {
+      onChange({ type: 'setThrowTarget', target, throwKey });
+    },
+    [onChange, throwKey],
+  );
+  const setModifier = useCallback(
+    (modifier: number) => {
+      onChange({ type: 'setThrowModifier', modifier, throwKey });
+    },
+    [onChange, throwKey],
+  );
 
   return (
     <Div
@@ -75,7 +69,8 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
           <Div row justify="space-between" align="center">
             <DiePicker
               value={null}
-              onChange={(newDie) => addDie(newDie)}
+              onChange={dice.length ? addDie : addThrow}
+              type={throwType}
               className={cn(classes.newDie, classes.paddingRight)}
             />
             <IconButton
@@ -89,21 +84,13 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
           </Div>
         )}
         {dice.map((die) => (
-          <Div key={String(die.key)} row justify="space-between" align="center">
-            <DiePicker
-              value={die.sides}
-              onChange={(newDie) => changeDie(die.key, newDie)}
-              type={type}
-              className={classes.paddingRight}
-            />
-            <IconButton
-              size="small"
-              onClick={() => removeDie(die.key)}
-              aria-label="Close"
-            >
-              <CloseIcon />
-            </IconButton>
-          </Div>
+          <RollConfigurator
+            key={String(die.key)}
+            die={die}
+            onChange={onChange}
+            throwKey={throwKey}
+            throwType={throwType}
+          />
         ))}
       </Div>
       <Div row align="center">
@@ -112,7 +99,7 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             <NumberPicker
               title="Target"
               value={target}
-              onChange={(target) => handleChange({ target })}
+              onChange={setTarget}
               min={0}
               max={99}
             />
@@ -121,7 +108,7 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             <NumberPicker
               title="Modifier"
               value={modifier}
-              onChange={(modifier) => handleChange({ modifier })}
+              onChange={setModifier}
               min={-99}
               max={99}
             />
@@ -137,7 +124,45 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
   );
 };
 
-const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
+interface RollConfiguratorProps {
+  die: UniqueDie;
+  throwKey: ThrowOptionsKey;
+  throwType: ThrowType;
+  onChange: Dispatch<MultiThrowAction>;
+}
+
+const RollConfigurator: FC<RollConfiguratorProps> = memo(
+  ({ die, throwKey, throwType, onChange }) => {
+    const classes = useStyles({ throwType });
+    const { sides, key: dieKey } = die;
+
+    const changeDie = useCallback(
+      (die: Die) => {
+        onChange({ type: 'changeDie', die, dieKey, throwKey });
+      },
+      [dieKey, onChange, throwKey],
+    );
+    const removeDie = useCallback(() => {
+      onChange({ type: 'removeDie', dieKey, throwKey });
+    }, [dieKey, onChange, throwKey]);
+
+    return (
+      <Div row justify="space-between" align="center">
+        <DiePicker
+          value={sides}
+          onChange={changeDie}
+          type={throwType}
+          className={classes.paddingRight}
+        />
+        <IconButton size="small" onClick={removeDie} aria-label="Close">
+          <CloseIcon />
+        </IconButton>
+      </Div>
+    );
+  },
+);
+
+const useStyles = makeStyles<Theme, { throwType: ThrowType }>((theme) => ({
   invisible: {
     opacity: 0,
   },
@@ -154,15 +179,17 @@ const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
   border: {
     borderLeftWidth: 4,
     borderLeftStyle: 'solid',
-    borderLeftColor: ({ type }) =>
-      type === 'regular'
+    borderLeftColor: ({ throwType }) =>
+      throwType === 'regular'
         ? theme.palette.primary.main
         : theme.palette.secondary.main,
     borderRightWidth: 4,
     borderRightStyle: 'solid',
-    borderRightColor: ({ type }) =>
-      type === 'regular'
+    borderRightColor: ({ throwType }) =>
+      throwType === 'regular'
         ? theme.palette.primary.main
         : theme.palette.secondary.main,
   },
 }));
+
+export default memo(ThrowConfigurator);

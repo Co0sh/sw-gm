@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, memo, useReducer, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { Button, makeStyles, IconButton } from '@material-ui/core';
 import ResetIcon from '@material-ui/icons/Replay';
@@ -8,25 +8,26 @@ import RerollIcon from '@material-ui/icons/Cached';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import { defaultDiceOptions, throwDice } from '../logic/rolls';
 import { MultiThrowView } from './MultiThrowView';
-import { MultiThrowConfigurator } from './MultiThrowConfigurator';
+import MultiThrowConfigurator from './MultiThrowConfigurator';
 import { Div } from './Div';
 import { useDiceHistory } from '../logic/DiceHistoryContext';
 import { MultiThrowOptions } from '../model/multiThrowOptions.model';
 import { MultiThrowResult } from '../model/multiThrowResult.model';
+import { multiThrowReducer } from '../logic/multiThrowReducer';
 
 export interface DiceRollerProps {
   initialValue?: MultiThrowOptions;
   className?: string;
 }
 
-export const DiceMultiThrower: FC<DiceRollerProps> = ({
-  initialValue,
-  className,
-}) => {
+const DiceMultiThrower: FC<DiceRollerProps> = ({ initialValue, className }) => {
   const classes = useStyles();
   const [rerollCounter, setRerollCounter] = useState(0);
   const [result, setResult] = useState<MultiThrowResult | null>(null);
-  const [options, setOptions] = useState(initialValue ?? defaultDiceOptions);
+  const [options, dispatch] = useReducer(
+    multiThrowReducer,
+    initialValue ?? defaultDiceOptions,
+  );
   const { recordDiceResult } = useDiceHistory();
   const { url: rawUrl } = useRouteMatch();
   const url = rawUrl === '/' ? '' : rawUrl;
@@ -48,7 +49,7 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
   };
 
   const reset = () => {
-    setOptions(initialValue ?? defaultDiceOptions);
+    dispatch({ type: 'reset', value: initialValue ?? defaultDiceOptions });
     setRerollCounter(0);
   };
 
@@ -61,7 +62,7 @@ export const DiceMultiThrower: FC<DiceRollerProps> = ({
       )}
       {!result && (
         <Div className={classes.pb2}>
-          <MultiThrowConfigurator value={options} onChange={setOptions} />
+          <MultiThrowConfigurator value={options} onChange={dispatch} />
         </Div>
       )}
       <Div row spacing align="center">
@@ -103,3 +104,5 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
   },
 }));
+
+export default memo(DiceMultiThrower);

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, memo } from 'react';
 import { IconButton, Typography, makeStyles } from '@material-ui/core';
 import PlusIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
@@ -7,7 +7,6 @@ import { cn } from '../logic/cn';
 
 export interface NumberPickerProps {
   title?: string;
-  initialValue?: number;
   value?: number;
   onChange?: (value: number) => void;
   min?: number;
@@ -15,21 +14,17 @@ export interface NumberPickerProps {
   className?: string;
 }
 
-export const NumberPicker: FC<NumberPickerProps> = ({
+const NumberPicker: FC<NumberPickerProps> = ({
   title,
-  initialValue = 0,
-  value: propValue,
+  value: number = 0,
   onChange = () => {},
   min = -20,
   max = 20,
   className,
 }) => {
   const classes = useStyles();
-  const [stateNumber, setStateNumber] = useState(propValue ?? initialValue);
-  const number = propValue ?? stateNumber;
   const handleNumber = (number: number) => {
     onChange(number);
-    setStateNumber(number);
   };
 
   const isFirst = number === min;
@@ -83,3 +78,5 @@ const useStyles = makeStyles((theme) => ({
     width: 32,
   },
 }));
+
+export default memo(NumberPicker);

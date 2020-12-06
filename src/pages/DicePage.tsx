@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { RouteProps } from 'react-router';
 import { Div } from '../components/Div';
-import { DiceMultiThrower } from '../components/DiceMultiThrower';
+import DiceMultiThrower from '../components/DiceMultiThrower';
 
 const DicePage: FC<RouteProps> = () => {
   const classes = useStyles();

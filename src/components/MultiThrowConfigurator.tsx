@@ -1,142 +1,106 @@
-import React, { FC, useState } from 'react';
-import {
-  defaultDiceOptions,
-  defaultThrowName,
-  defaultWildThrowName,
-} from '../logic/rolls';
+import React, { Dispatch, FC, memo, useCallback, useMemo } from 'react';
+import { defaultThrowName, defaultWildThrowName } from '../logic/rolls';
 import { makeStyles } from '@material-ui/core';
-import { ThrowConfigurator } from './ThrowConfigurator';
-import { NumberPicker } from './NumberPicker';
+import ThrowConfigurator from './ThrowConfigurator';
+import NumberPicker from './NumberPicker';
 import { getKey } from '../logic/key';
 import { FlagSwitch } from './FlagSwitch';
 import { Div } from './Div';
 import { MultiThrowOptions } from '../model/multiThrowOptions.model';
-import { ThrowOptions, ThrowOptionsKey } from '../model/throwOptions.model';
+import { ThrowOptions } from '../model/throwOptions.model';
+import { MultiThrowAction } from '../logic/multiThrowReducer';
 
 export interface RollConfiguratorProps {
-  initialValue?: MultiThrowOptions;
-  value?: MultiThrowOptions;
-  onChange?: (value: MultiThrowOptions) => void;
+  value: MultiThrowOptions;
+  onChange: Dispatch<MultiThrowAction>;
 }
 
-export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
-  initialValue = defaultDiceOptions,
-  value: propValue,
+const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
+  value,
   onChange,
 }) => {
   const classes = useStyles();
-  const [stateValue, setStateValue] = useState(propValue ?? initialValue);
-  const value = propValue ?? stateValue;
   const { throws, acing, canFail, globalModifier, globalTarget } = value;
 
   const regularThrows = throws.filter((t) => t.type === 'regular');
-  const emptyRegularThrow: ThrowOptions = {
-    key: getKey(),
-    name: defaultThrowName,
-    dice: [],
-    modifier: globalModifier,
-    target: globalTarget,
-    type: 'regular',
-  };
+  const emptyRegularThrow: ThrowOptions = useMemo(
+    () => ({
+      key: getKey(),
+      name: defaultThrowName,
+      dice: [],
+      modifier: globalModifier,
+      target: globalTarget,
+      type: 'regular',
+    }),
+    [globalModifier, globalTarget],
+  );
 
   const wildThrow = throws.find((t) => t.type !== 'regular');
-  const emptyWildThrow: ThrowOptions = {
-    key: getKey(),
-    name: defaultWildThrowName,
-    dice: [],
-    modifier: globalModifier,
-    target: globalTarget,
-    type: 'wild',
-  };
-
-  const handleChange = (partialOptions: Partial<MultiThrowOptions>) => {
-    const updatedOptions = { ...value, ...partialOptions };
-    onChange?.(updatedOptions);
-    setStateValue(updatedOptions);
-  };
-
-  const addThrow = (throwOptions: ThrowOptions) => {
-    handleChange({
-      throws: [
-        {
-          ...throwOptions,
-          key: getKey(),
-          name:
-            throwOptions.type === 'wild'
-              ? throwOptions.name
-              : `${throwOptions.name} ${regularThrows.length + 1}`,
-        },
-        ...throws,
-      ],
-    });
-  };
-
-  const modifyThrow = (key: ThrowOptionsKey) => (
-    throwOptions: ThrowOptions,
-  ) => {
-    const throwsCopy = [...throws];
-    const index = throwsCopy.findIndex((t) => t.key === key);
-    if (throwOptions.dice.length) {
-      throwsCopy.splice(index, 1, throwOptions);
-    } else {
-      throwsCopy.splice(index, 1);
-    }
-    handleChange({ throws: throwsCopy });
-  };
-
-  const modifyWildThrow = (throwOptions: ThrowOptions) => {
-    const currentWildThrow = throws.find((t) => t.type !== 'regular');
-    const shouldAdd = throwOptions.dice.length > 0;
-
-    if (currentWildThrow) {
-      modifyThrow(currentWildThrow.key)(throwOptions);
-    } else if (shouldAdd) {
-      addThrow(throwOptions);
-    }
-  };
+  const emptyWildThrow: ThrowOptions = useMemo(
+    () => ({
+      key: getKey(),
+      name: defaultWildThrowName,
+      dice: [],
+      modifier: globalModifier,
+      target: globalTarget,
+      type: 'wild',
+    }),
+    [globalModifier, globalTarget],
+  );
 
   const isGlobalTargetUsed = throws.every((t) => t.target === globalTarget);
   const isGlobalModifierUsed = throws.every(
     (t) => t.modifier === globalModifier,
   );
 
-  const handleGlobalTarget = (target: number) => {
-    handleChange({
-      throws: throws.map((t) => ({ ...t, target })),
-      globalTarget: target,
-    });
-  };
-
-  const handleGlobalModifier = (modifier: number) => {
-    handleChange({
-      throws: throws.map((t) => ({ ...t, modifier })),
-      globalModifier: modifier,
-    });
-  };
+  const handleGlobalTarget = useCallback(
+    (globalTarget: number) => {
+      onChange({ type: 'setGlobalTarget', globalTarget });
+    },
+    [onChange],
+  );
+  const handleGlobalModifier = useCallback(
+    (globalModifier: number) => {
+      onChange({ type: 'setGlobalModifier', globalModifier });
+    },
+    [onChange],
+  );
+  const handleAcing = useCallback(
+    (acing: boolean) => {
+      onChange({ type: 'setAcing', acing });
+    },
+    [onChange],
+  );
+  const handleCanFail = useCallback(
+    (canFail: boolean) => {
+      onChange({ type: 'setCanFail', canFail });
+    },
+    [onChange],
+  );
 
   return (
     <Div>
       <Div spacing className={classes.spacing}>
         <ThrowConfigurator
           value={emptyRegularThrow}
-          onChange={addThrow}
+          onChange={onChange}
           hasModifier={false}
           hasTarget={false}
         />
 
-        {regularThrows.map((aThrow, index) => {
+        {regularThrows.map((aThrow) => {
           return (
             <ThrowConfigurator
               key={String(aThrow.key)}
               value={aThrow}
-              onChange={modifyThrow(aThrow.key)}
+              onChange={onChange}
             />
           );
         })}
 
         <ThrowConfigurator
           value={wildThrow ?? emptyWildThrow}
-          onChange={modifyWildThrow}
+          onChange={onChange}
           maxRolls={1}
           hasTarget={Boolean(wildThrow)}
           hasModifier={Boolean(wildThrow)}
@@ -156,16 +120,8 @@ export const MultiThrowConfigurator: FC<RollConfiguratorProps> = ({
           onChange={handleGlobalModifier}
           className={isGlobalModifierUsed ? undefined : classes.translucent}
         />
-        <FlagSwitch
-          title="Acing"
-          value={acing}
-          onChange={(acing) => handleChange({ acing })}
-        />
-        <FlagSwitch
-          title="Can Fail"
-          value={canFail}
-          onChange={(canFail) => handleChange({ canFail })}
-        />
+        <FlagSwitch title="Acing" value={acing} onChange={handleAcing} />
+        <FlagSwitch title="Can Fail" value={canFail} onChange={handleCanFail} />
       </Div>
     </Div>
   );
@@ -179,3 +135,5 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.5,
   },
 }));
+
+export default memo(MultiThrowConfigurator);
