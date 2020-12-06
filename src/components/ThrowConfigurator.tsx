@@ -78,7 +78,7 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
             <DiePicker
               value={null}
               onChange={(newDie) => addDie(newDie)}
-              className={cn(classes.newDie, classes.pr05)}
+              className={cn(classes.newDie, classes.paddingRight)}
             />
             <IconButton
               size="small"
@@ -96,7 +96,7 @@ export const ThrowConfigurator: FC<ThrowConfiguratorProps> = ({
               value={die.sides}
               onChange={(newDie) => changeDie(die.key, newDie)}
               type={type}
-              className={classes.pr05}
+              className={classes.paddingRight}
             />
             <IconButton
               size="small"
@@ -150,8 +150,8 @@ const useStyles = makeStyles<Theme, { type: ThrowType }>((theme) => ({
     padding: theme.spacing(1),
     paddingBottom: 0,
   },
-  pr05: {
-    paddingRight: theme.spacing(0.5),
+  paddingRight: {
+    paddingRight: theme.spacing(3),
   },
   border: {
     borderLeftWidth: 4,
