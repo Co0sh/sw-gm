@@ -1,15 +1,22 @@
 import React, { FC } from 'react';
 import { Div } from './Div';
 import { DieIcon } from './DieIcon';
-import { makeStyles, Typography } from '@material-ui/core';
+import { Button, makeStyles, Typography } from '@material-ui/core';
 import { RaiseBar } from './RaiseBar';
 import { TraitLevel, Attributes } from '../logic/character';
 import { useCompendium } from './CompendiumManager';
 import { byId } from '../logic/byId';
 import { AttributeIcon } from './AttributeIcon';
 import { FastIconButton } from './FastIconButton';
+import { cn } from '../logic/cn';
+import { useDice } from '../logic/DiceContext';
+import { prepareMultiThrow } from '../logic/prepareMultiThrow';
+import { defaultRegularDie } from '../logic/rolls';
+import { Die } from '../model/die.model';
 
 export interface SkillViewProps {
+  characterName: string;
+  wildDie?: Die;
   skillId: string;
   attributes: Attributes;
   level?: TraitLevel;
@@ -17,6 +24,8 @@ export interface SkillViewProps {
 }
 
 export const SkillView: FC<SkillViewProps> = ({
+  characterName,
+  wildDie,
   skillId,
   attributes,
   level,
@@ -26,14 +35,27 @@ export const SkillView: FC<SkillViewProps> = ({
   const { compendium } = useCompendium();
   const baseSkill = compendium.baseSkills.find(byId(skillId));
 
+  const throwDice = useDice();
+
   const { base, bonus } = level ?? {};
 
   if (!baseSkill) {
     return null;
   }
 
-  return (
-    <Div row justify="space-between" align="center">
+  const roll = () => {
+    const options = prepareMultiThrow({
+      type: 'trait',
+      name: `${characterName}'s ${baseSkill.name}`,
+      traitDie: level?.base ?? defaultRegularDie,
+      modifier: level?.bonus ?? level?.base !== undefined ? 0 : -2,
+      wildDie,
+    });
+    throwDice(options);
+  };
+
+  const content = (
+    <>
       <Div row align="center" spacing className={classes.skillNameRow}>
         <AttributeIcon type={baseSkill.attribute} size={1.5} />
         <Typography className={classes.skillName} variant="h5" component="span">
@@ -42,15 +64,8 @@ export const SkillView: FC<SkillViewProps> = ({
       </Div>
       <Div row>
         {traitDice.map((die) => {
-          return (
-            <FastIconButton
-              key={die}
-              onClick={() =>
-                onChange?.(die !== base ? { base: die } : undefined)
-              }
-              disabled={!onChange}
-              label={`d${die}`}
-            >
+          const dieContent = (
+            <>
               <DieIcon
                 type={die}
                 color={
@@ -69,11 +84,48 @@ export const SkillView: FC<SkillViewProps> = ({
               {bonus && die === base && (
                 <RaiseBar className={classes.bonus} value={bonus} />
               )}
-            </FastIconButton>
+            </>
           );
+          if (onChange) {
+            return (
+              <FastIconButton
+                key={die}
+                onClick={() =>
+                  onChange?.(die !== base ? { base: die } : undefined)
+                }
+                disabled={!onChange}
+                label={`d${die}`}
+              >
+                {dieContent}
+              </FastIconButton>
+            );
+          }
+          return dieContent;
         })}
       </Div>
-    </Div>
+    </>
+  );
+
+  if (onChange) {
+    return (
+      <Div
+        row
+        justify="space-between"
+        align="center"
+        className={classes.skillPadding}
+      >
+        {content}
+      </Div>
+    );
+  }
+
+  return (
+    <Button
+      className={cn(classes.skillButton, classes.skillPadding)}
+      onClick={roll}
+    >
+      {content}
+    </Button>
   );
 };
 
@@ -97,5 +149,15 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: '100%',
     bottom: -8,
+  },
+  skillButton: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    textTransform: 'none',
+    cursor: 'pointer',
+  },
+  skillPadding: {
+    padding: `${theme.spacing(0.25)}px ${theme.spacing(1)}px`,
   },
 }));

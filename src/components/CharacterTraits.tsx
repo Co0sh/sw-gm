@@ -68,6 +68,7 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
           <AttributeView
             key={id}
             characterName={character.name}
+            wildDie={character.wildCard ? 6 : undefined}
             attribute={id as AttributeName}
             level={attribute}
             onChange={
@@ -87,6 +88,8 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
           return (
             <SkillView
               key={baseSkill.id}
+              characterName={character.name}
+              wildDie={character.wildCard ? 6 : undefined}
               skillId={baseSkill.id}
               level={skill?.level}
               attributes={attributes}

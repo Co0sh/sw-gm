@@ -8,9 +8,11 @@ import { RaiseBar } from './RaiseBar';
 import { FastIconButton } from './FastIconButton';
 import { prepareMultiThrow } from '../logic/prepareMultiThrow';
 import { useDice } from '../logic/DiceContext';
+import { Die } from '../model/die.model';
 
 export interface AttributeViewProps {
   characterName: string;
+  wildDie?: Die;
   attribute: AttributeName;
   level: TraitLevel;
   onChange?: (level: TraitLevel) => void;
@@ -18,6 +20,7 @@ export interface AttributeViewProps {
 
 export const AttributeView: FC<AttributeViewProps> = ({
   characterName,
+  wildDie,
   attribute,
   level,
   onChange,
@@ -33,6 +36,7 @@ export const AttributeView: FC<AttributeViewProps> = ({
       name: `${characterName}'s ${attribute}`,
       traitDie: level.base,
       modifier: level.bonus,
+      wildDie,
     });
     throwDice(options);
   };
