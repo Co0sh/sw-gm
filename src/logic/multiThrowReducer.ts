@@ -180,11 +180,23 @@ export const multiThrowReducer: Reducer<MultiThrowOptions, MultiThrowAction> = (
     }
     case 'removeDie': {
       return produce(state, (state) => {
-        const aThrow = state.throws.find(({ key }) => key === action.throwKey);
-        aThrow?.dice.splice(
-          aThrow.dice.findIndex(({ key }) => key === action.dieKey),
-          1,
+        const index = state.throws.findIndex(
+          ({ key }) => key === action.throwKey,
         );
+        if (index < 0) {
+          return;
+        }
+        const aThrow = state.throws[index];
+        const dieIndex = aThrow.dice.findIndex(
+          ({ key }) => key === action.dieKey,
+        );
+        if (dieIndex < 0) {
+          return;
+        }
+        aThrow.dice.splice(dieIndex, 1);
+        if (aThrow.dice.length === 0) {
+          state.throws.splice(index, 1);
+        }
       });
     }
     case 'setThrowModifier': {
