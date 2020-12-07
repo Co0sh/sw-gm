@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState, useRef, Dispatch, memo } from 'react';
 import { AttributeName, TraitLevel } from '../logic/character';
 import { makeStyles, Button, lighten, Popover } from '@material-ui/core';
 import { AttributeIcon } from './AttributeIcon';
@@ -9,16 +9,17 @@ import { FastIconButton } from './FastIconButton';
 import { prepareMultiThrow } from '../logic/prepareMultiThrow';
 import { useDice } from '../logic/DiceContext';
 import { Die } from '../model/die.model';
+import { CharacterAction } from '../logic/characterReducer';
 
 export interface AttributeViewProps {
   characterName: string;
   wildDie?: Die;
   attribute: AttributeName;
   level: TraitLevel;
-  onChange?: (level: TraitLevel) => void;
+  onChange?: Dispatch<CharacterAction>;
 }
 
-export const AttributeView: FC<AttributeViewProps> = ({
+const AttributeView: FC<AttributeViewProps> = ({
   characterName,
   wildDie,
   attribute,
@@ -68,7 +69,11 @@ export const AttributeView: FC<AttributeViewProps> = ({
               <FastIconButton
                 key={die}
                 onClick={() => {
-                  onChange({ base: die });
+                  onChange({
+                    type: 'setAttribute',
+                    attribute,
+                    level: { base: die }, // TODO implement skill bonus
+                  });
                   setEditing(false);
                 }}
                 label={`d${die}`}
@@ -115,3 +120,5 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
 }));
+
+export default memo(AttributeView);

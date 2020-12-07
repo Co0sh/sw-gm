@@ -1,4 +1,4 @@
-import { Character } from './character';
+import { asCharacterId, asSkillId, Character } from './character';
 import { v4 } from 'uuid';
 import { useCompendium } from '../components/CompendiumManager';
 
@@ -11,7 +11,7 @@ export const useCreateCharacter = () => {
     const defaultSkills = baseSkills.filter((s) => s.isDefault);
 
     return {
-      id: v4(),
+      id: asCharacterId(v4()),
       name: 'Character',
       attributes: {
         strength: { base: 4 },
@@ -22,7 +22,11 @@ export const useCreateCharacter = () => {
       },
       edges: [],
       hindrances: [],
-      skills: defaultSkills.map((s) => ({ skillId: s.id, level: { base: 4 } })),
+      skills: defaultSkills.map((s) => ({
+        id: asSkillId(v4()),
+        skillId: s.id,
+        level: { base: 4 },
+      })),
       pace: 6,
       runningDie: 6,
       parry: 2,

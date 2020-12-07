@@ -1,2 +1,5 @@
-export const byId = (targetId: string) => ({ id: sourceId }: { id: string }) =>
-  targetId === sourceId;
+export const byId = <T extends String>(targetId: T) => ({
+  id: sourceId,
+}: {
+  id: T;
+}) => targetId === sourceId;

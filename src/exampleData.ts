@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import {
   BaseEdge,
   BaseHindrance,
@@ -5,53 +6,63 @@ import {
   Compendium,
   BaseSkill,
   BaseOrigin,
+  asBaseSkillId,
+  asBaseEdgeId,
+  asBaseHindranceId,
+  asBaseOriginId,
+  asCompendiumId,
+  asCharacterId,
+  asOriginId,
+  asSkillId,
+  asHindranceId,
+  asEdgeId,
 } from './logic/character';
 
 export const exampleSkills: BaseSkill[] = [
   {
-    id: 'notice',
+    id: asBaseSkillId('notice'),
     name: 'Notice',
     shortcut: 'Notice',
     attribute: 'smarts',
     isDefault: true,
   },
   {
-    id: 'athletics',
+    id: asBaseSkillId('athletics'),
     name: 'Athlethics',
     shortcut: 'Athlethics',
     attribute: 'agility',
     isDefault: true,
   },
   {
-    id: 'commonKnowledge',
+    id: asBaseSkillId('commonKnowledge'),
     name: 'Common Knowledge',
     shortcut: 'Common Kn',
     attribute: 'smarts',
     isDefault: true,
   },
   {
-    id: 'stealth',
+    id: asBaseSkillId('stealth'),
     name: 'Stealth',
     shortcut: 'Stealth',
     attribute: 'agility',
     isDefault: true,
   },
   {
-    id: 'persuasion',
+    id: asBaseSkillId('persuasion'),
     name: 'Persuasion',
     shortcut: 'Persuasion',
     attribute: 'spirits',
     isDefault: true,
   },
   {
-    id: 'fighting',
+    id: asBaseSkillId('fighting'),
     name: 'Fighting',
     shortcut: 'Fighting',
     attribute: 'agility',
     isDefault: false,
   },
   {
-    id: 'shooting',
+    id: asBaseSkillId('shooting'),
     name: 'Shooting',
     shortcut: 'Shooting',
     attribute: 'agility',
@@ -61,7 +72,7 @@ export const exampleSkills: BaseSkill[] = [
 
 export const exampleEdges: BaseEdge[] = [
   {
-    id: 'ambidextrous',
+    id: asBaseEdgeId('ambidextrous'),
     name: 'Ambidextrous',
     requiredRank: 'novice',
     requiredAttributes: [{ name: 'agility', value: 8 }],
@@ -70,15 +81,19 @@ export const exampleEdges: BaseEdge[] = [
 
 export const exampleHindrances: BaseHindrance[] = [
   {
-    id: 'allThumbs',
+    id: asBaseHindranceId('allThumbs'),
     name: 'All Thumbs',
     levels: ['minor'],
   },
 ];
 
-export const exampleOrigins: BaseOrigin[] = [{ id: 'human', name: 'Human' }];
+export const exampleOrigins: BaseOrigin[] = [
+  { id: asBaseOriginId('human'), name: 'Human' },
+];
 
 export const exampleCompendium: Compendium = {
+  id: asCompendiumId('example'),
+  name: 'Example',
   baseOrigins: exampleOrigins,
   baseSkills: exampleSkills,
   baseEdges: exampleEdges,
@@ -87,12 +102,16 @@ export const exampleCompendium: Compendium = {
 };
 
 export const exampleCharacter: Character = {
-  id: 'john',
+  id: asCharacterId(v4()),
   name: 'John',
   wildCard: true,
   image:
     'https://hips.hearstapps.com/digitalspyuk.cdnds.net/18/06/1517909336-capture66.PNG',
-  origin: { originId: 'human', individualName: 'Barbarian' },
+  origin: {
+    id: asOriginId(v4()),
+    originId: exampleOrigins[0].id,
+    individualName: 'Barbarian',
+  },
   pace: 6,
   runningDie: 6,
   parry: 7,
@@ -105,13 +124,19 @@ export const exampleCharacter: Character = {
     spirits: { base: 6 },
   },
   skills: [
-    { skillId: 'notice', level: { base: 6 } },
-    { skillId: 'athletics', level: { base: 8 } },
-    { skillId: 'commonKnowledge', level: { base: 4 } },
-    { skillId: 'stealth', level: { base: 8 } },
-    { skillId: 'persuasion', level: { base: 6 } },
-    { skillId: 'fighting', level: { base: 10 } },
+    { id: asSkillId(v4()), skillId: exampleSkills[0].id, level: { base: 6 } },
+    { id: asSkillId(v4()), skillId: exampleSkills[1].id, level: { base: 8 } },
+    { id: asSkillId(v4()), skillId: exampleSkills[2].id, level: { base: 4 } },
+    { id: asSkillId(v4()), skillId: exampleSkills[3].id, level: { base: 8 } },
+    { id: asSkillId(v4()), skillId: exampleSkills[4].id, level: { base: 6 } },
+    { id: asSkillId(v4()), skillId: exampleSkills[5].id, level: { base: 10 } },
   ],
-  edges: [{ edgeId: 'ambidextrous' }],
-  hindrances: [{ hindranceId: 'allThumbs', level: 'minor' }],
+  edges: [{ id: asEdgeId(v4()), edgeId: exampleEdges[0].id }],
+  hindrances: [
+    {
+      id: asHindranceId(v4()),
+      hindranceId: exampleHindrances[0].id,
+      level: 'minor',
+    },
+  ],
 };

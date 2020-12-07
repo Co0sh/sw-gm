@@ -1,10 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, memo, useCallback } from 'react';
 import { makeStyles, Typography, Button, IconButton } from '@material-ui/core';
 import LeftIcon from '@material-ui/icons/ArrowLeft';
 import RightIcon from '@material-ui/icons/ArrowRight';
 import ListIcon from '@material-ui/icons/Menu';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { CharacterSheet } from '../components/CharacterSheet';
+import CharacterSheet from '../components/CharacterSheet';
 import { Div } from '../components/Div';
 import { Character } from '../logic/character';
 
@@ -13,7 +13,7 @@ const CharacterPage: FC<any> = ({ match }) => {
   const { characterId } = match.params;
   const { url } = useRouteMatch();
 
-  const [characters, setCharacters] = useState<Character[]>(
+  const [characters, setCharacters] = useState<Character[]>(() =>
     JSON.parse(localStorage.getItem('characters') ?? '[]'),
   );
 
@@ -27,15 +27,17 @@ const CharacterPage: FC<any> = ({ match }) => {
   const prev =
     characters[(characterIndex + characters.length - 1) % characters.length];
 
-  const setCharacter = (c: Character) => {
-    const index = characters.findIndex(({ id }) => id === c.id);
-    if (index < 0) {
-      return;
-    }
-    const copy = [...characters];
-    copy.splice(index, 1, c);
-    setCharacters(copy);
-  };
+  const setCharacter = useCallback((c: Character) => {
+    setCharacters((prev) => {
+      const index = prev.findIndex(({ id }) => id === c.id);
+      if (index < 0) {
+        return prev;
+      }
+      const copy = [...prev];
+      copy.splice(index, 1, c);
+      return copy;
+    });
+  }, []);
 
   if (!character) {
     return (
@@ -100,4 +102,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default CharacterPage;
+export default memo(CharacterPage);

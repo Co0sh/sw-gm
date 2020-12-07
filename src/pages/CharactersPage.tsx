@@ -39,7 +39,7 @@ const CharactersPage: FC = () => {
         {characters.map((character) => {
           return (
             <Link
-              key={character.id}
+              key={String(character.id)}
               to={`${url}/${character.id}`}
               className={classes.link}
             >

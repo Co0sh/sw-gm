@@ -1,65 +1,22 @@
-import React, { FC } from 'react';
+import React, { Dispatch, FC, memo } from 'react';
 import { Div } from './Div';
-import { Character, AttributeName, TraitLevel } from '../logic/character';
-import { SkillView } from './SkillView';
+import { Character, AttributeName } from '../logic/character';
+import SkillView from './SkillView';
+import AttributeView from './AttributeView';
 import { useCompendium } from './CompendiumManager';
-import { AttributeView } from './AttributeView';
 import { makeStyles } from '@material-ui/core';
+import { CharacterAction } from '../logic/characterReducer';
 
 export interface CharacterTraitsProps {
   character: Character;
-  onChange?: (character: Character) => void;
+  onChange?: Dispatch<CharacterAction>;
 }
 
-export const CharacterTraits: FC<CharacterTraitsProps> = ({
-  character,
-  onChange,
-}) => {
+const CharacterTraits: FC<CharacterTraitsProps> = ({ character, onChange }) => {
   const classes = useStyles();
   const { compendium } = useCompendium();
   const { baseSkills } = compendium;
   const { attributes, skills } = character;
-
-  const handleSkillChange = (skillId: string) => (level?: TraitLevel) => {
-    if (!onChange) {
-      return;
-    }
-    const characterCopy = { ...character };
-    const skillsCopy = [...characterCopy.skills];
-    const skillIndex = skillsCopy.findIndex(
-      (skill) => skill.skillId === skillId,
-    );
-    const skillCopy = level
-      ? skillIndex < 0
-        ? { skillId, level }
-        : { ...skillsCopy[skillIndex], level }
-      : undefined;
-    if (skillIndex < 0) {
-      if (skillCopy) {
-        skillsCopy.push(skillCopy);
-      }
-    } else {
-      if (skillCopy) {
-        skillsCopy.splice(skillIndex, 1, skillCopy);
-      } else {
-        skillsCopy.splice(skillIndex, 1);
-      }
-    }
-    characterCopy.skills = skillsCopy;
-    onChange(characterCopy);
-  };
-
-  const handleAttributeChange = (attributeName: AttributeName) => (
-    level: TraitLevel,
-  ) => {
-    if (!onChange) {
-      return;
-    }
-    onChange({
-      ...character,
-      attributes: { ...character.attributes, [attributeName]: level },
-    });
-  };
 
   return (
     <>
@@ -71,9 +28,7 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
             wildDie={character.wildCard ? 6 : undefined}
             attribute={id as AttributeName}
             level={attribute}
-            onChange={
-              onChange ? handleAttributeChange(id as AttributeName) : undefined
-            }
+            onChange={onChange}
           />
         ))}
       </Div>
@@ -87,13 +42,13 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
 
           return (
             <SkillView
-              key={baseSkill.id}
+              key={String(baseSkill.id)}
               characterName={character.name}
               wildDie={character.wildCard ? 6 : undefined}
               skillId={baseSkill.id}
               level={skill?.level}
               attributes={attributes}
-              onChange={onChange ? handleSkillChange(baseSkill.id) : undefined}
+              onChange={onChange}
             />
           );
         })}
@@ -107,3 +62,5 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
   },
 }));
+
+export default memo(CharacterTraits);

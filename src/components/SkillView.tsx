@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { Dispatch, FC, memo } from 'react';
 import { Div } from './Div';
 import { DieIcon } from './DieIcon';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import { RaiseBar } from './RaiseBar';
-import { TraitLevel, Attributes } from '../logic/character';
+import { TraitLevel, Attributes, BaseSkillId } from '../logic/character';
 import { useCompendium } from './CompendiumManager';
 import { byId } from '../logic/byId';
 import { AttributeIcon } from './AttributeIcon';
@@ -13,17 +13,18 @@ import { useDice } from '../logic/DiceContext';
 import { prepareMultiThrow } from '../logic/prepareMultiThrow';
 import { defaultRegularDie } from '../logic/rolls';
 import { Die } from '../model/die.model';
+import { CharacterAction } from '../logic/characterReducer';
 
 export interface SkillViewProps {
   characterName: string;
   wildDie?: Die;
-  skillId: string;
+  skillId: BaseSkillId;
   attributes: Attributes;
   level?: TraitLevel;
-  onChange?: (level?: TraitLevel) => void;
+  onChange?: Dispatch<CharacterAction>;
 }
 
-export const SkillView: FC<SkillViewProps> = ({
+const SkillView: FC<SkillViewProps> = ({
   characterName,
   wildDie,
   skillId,
@@ -90,9 +91,20 @@ export const SkillView: FC<SkillViewProps> = ({
             return (
               <FastIconButton
                 key={die}
-                onClick={() =>
-                  onChange?.(die !== base ? { base: die } : undefined)
-                }
+                onClick={() => {
+                  if (die !== base) {
+                    onChange({
+                      type: 'setSkill',
+                      skill: baseSkill.id,
+                      level: { base: die },
+                    });
+                  } else {
+                    onChange({
+                      type: 'clearSkill',
+                      skill: baseSkill.id,
+                    });
+                  }
+                }}
                 disabled={!onChange}
                 label={`d${die}`}
               >
@@ -161,3 +173,5 @@ const useStyles = makeStyles((theme) => ({
     padding: `${theme.spacing(0.25)}px ${theme.spacing(1)}px`,
   },
 }));
+
+export default memo(SkillView);

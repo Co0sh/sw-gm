@@ -1,7 +1,13 @@
 import { Die } from '../model/die.model';
 
+export interface CharacterId extends String {
+  __CharacterId: never;
+}
+
+export const asCharacterId = (id: string): CharacterId => id as any;
+
 export interface Character {
-  id: string;
+  id: CharacterId;
   name: string;
   wildCard: boolean;
   bennies?: number;
@@ -36,25 +42,51 @@ export interface TraitLevel {
   bonus?: number;
 }
 
+export interface OriginId extends String {
+  __OriginId: never;
+}
+
+export const asOriginId = (id: string): OriginId => id as any;
+
 export interface Origin {
-  originId: string;
+  id: OriginId;
+  originId: BaseOriginId;
   individualName?: string;
 }
 
+export interface BaseOriginId extends String {
+  __BaseOriginId: never;
+}
+
+export const asBaseOriginId = (id: string): BaseOriginId => id as any;
+
 export interface BaseOrigin {
-  id: string;
+  id: BaseOriginId;
   name: string;
   description?: string;
   defaultImage?: string;
 }
 
+export interface SkillId extends String {
+  __SkillId: never;
+}
+
+export const asSkillId = (id: string): SkillId => id as any;
+
 export interface Skill {
-  skillId: string;
+  id: SkillId;
+  skillId: BaseSkillId;
   level: TraitLevel;
 }
 
+export interface BaseSkillId extends String {
+  __BaseSkillId: never;
+}
+
+export const asBaseSkillId = (id: string): BaseSkillId => id as any;
+
 export interface BaseSkill {
-  id: string;
+  id: BaseSkillId;
   name: string;
   shortcut: string;
   shortDescription?: string;
@@ -63,16 +95,29 @@ export interface BaseSkill {
   isDefault: boolean;
 }
 
+export interface EdgeId extends String {
+  __EdgeId: never;
+}
+
+export const asEdgeId = (id: string): EdgeId => id as any;
+
 export interface Edge {
-  edgeId: string;
+  id: EdgeId;
+  edgeId: BaseEdgeId;
   trappings?: string;
   extendedTrappings?: string;
 }
 
 export type Rank = 'novice' | 'seasoned' | 'veteran' | 'legendary';
 
+export interface BaseEdgeId extends String {
+  __BaseEdgeId: never;
+}
+
+export const asBaseEdgeId = (id: string): BaseEdgeId => id as any;
+
 export interface BaseEdge {
-  id: string;
+  id: BaseEdgeId;
   name: string;
   shortDescription?: string;
   description?: string;
@@ -84,31 +129,65 @@ export interface BaseEdge {
 
 export type HindranceLevel = 'minor' | 'major';
 
+export interface HindranceId extends String {
+  __HindranceId: never;
+}
+
+export const asHindranceId = (id: string): HindranceId => id as any;
+
 export interface Hindrance {
-  hindranceId: string;
+  id: HindranceId;
+  hindranceId: BaseHindranceId;
   level: HindranceLevel;
   trappings?: string;
   extendedTrappings?: string;
 }
 
+export interface BaseHindranceId extends String {
+  __BaseHindranceId: never;
+}
+
+export const asBaseHindranceId = (id: string): BaseHindranceId => id as any;
+
 export interface BaseHindrance {
-  id: string;
+  id: BaseHindranceId;
   name: string;
   shortDescription?: string;
   description?: string;
   levels: HindranceLevel[];
 }
 
-export interface Power {
-  powerId: string;
+export interface PowerId extends String {
+  __PowerId: never;
 }
 
+export const asPowerId = (id: string): PowerId => id as any;
+
+export interface Power {
+  id: PowerId;
+  powerId: BasePowerId;
+}
+
+export interface BasePowerId extends String {
+  __BasePowerId: never;
+}
+
+export const asBasePowerId = (id: string): BasePowerId => id as any;
+
 export interface BasePower {
-  id: string;
+  id: BasePowerId;
   name: string;
 }
 
+export interface CompendiumId extends String {
+  __CompendiumId: never;
+}
+
+export const asCompendiumId = (id: string): CompendiumId => id as any;
+
 export interface Compendium {
+  id: CompendiumId;
+  name: string;
   baseOrigins: BaseOrigin[];
   baseSkills: BaseSkill[];
   baseEdges: BaseEdge[];

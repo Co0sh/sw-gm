@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, memo, useReducer, useState } from 'react';
 import { makeStyles, Tabs, Tab } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
@@ -6,8 +6,9 @@ import { Character } from '../logic/character';
 import { Div } from './Div';
 import { cn } from '../logic/cn';
 import { CharacterSheetHeader } from './CharacterSheetHeader';
-import { CharacterTraits } from './CharacterTraits';
+import CharacterTraits from './CharacterTraits';
 import { FastIconButton } from './FastIconButton';
+import { characterReducer } from '../logic/characterReducer';
 
 export interface CharacterSheetProps {
   character: Character;
@@ -15,14 +16,14 @@ export interface CharacterSheetProps {
   className?: string;
 }
 
-export const CharacterSheet: FC<CharacterSheetProps> = ({
+const CharacterSheet: FC<CharacterSheetProps> = ({
   character: initialCharacter,
   onChange,
   className,
 }) => {
   const classes = useStyles();
   const [tab, setTab] = useState(0);
-  const [character, setCharacter] = useState(initialCharacter);
+  const [character, dispatch] = useReducer(characterReducer, initialCharacter);
   const [editing, setEditing] = useState(false);
 
   const handleSave = () => {
@@ -65,7 +66,7 @@ export const CharacterSheet: FC<CharacterSheetProps> = ({
         {tab === 0 && (
           <CharacterTraits
             character={character}
-            onChange={editing ? setCharacter : undefined}
+            onChange={editing ? dispatch : undefined}
           />
         )}
       </Div>
@@ -93,3 +94,5 @@ const useStyles = makeStyles((theme) => ({
   },
   fab: {},
 }));
+
+export default memo(CharacterSheet);
