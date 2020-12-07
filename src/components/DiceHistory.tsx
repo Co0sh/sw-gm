@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { IconButton, Button, makeStyles } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import BackIcon from '@material-ui/icons/ArrowBack';
-import { useRouteMatch, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Div } from './Div';
 import { MultiThrowView } from './MultiThrowView';
 import { useDiceHistory } from '../logic/DiceHistoryContext';
@@ -15,15 +15,15 @@ export interface DiceHistoryProps {
 export const DiceHistory: FC<DiceHistoryProps> = ({ className }) => {
   const classes = useStyles();
   const { diceHistory, clearDiceHistory } = useDiceHistory();
-  const { url } = useRouteMatch();
+  const { goBack } = useHistory();
 
   return (
     <Div className={cn(classes.root, className)}>
-      <Div spacing className={classes.paddingBottom}>
+      <Div className={classes.reversed}>
         {diceHistory.map((throwResult) => (
           <MultiThrowView
             key={String(throwResult.uuid)}
-            className={classes.wide}
+            className={cn(classes.wide, classes.spaced)}
             value={throwResult}
           />
         ))}
@@ -33,8 +33,7 @@ export const DiceHistory: FC<DiceHistoryProps> = ({ className }) => {
           <ClearIcon />
         </IconButton>
         <Button
-          component={Link}
-          to={url.slice(0, url.lastIndexOf('/'))}
+          onClick={goBack}
           variant="contained"
           color="secondary"
           fullWidth
@@ -61,8 +60,10 @@ const useStyles = makeStyles((theme) => ({
   wide: {
     width: '100%',
   },
-  paddingBottom: {
-    paddingBottom: theme.spacing(2),
+  reversed: {
     flexDirection: 'column-reverse',
+  },
+  spaced: {
+    marginBottom: theme.spacing(4),
   },
 }));

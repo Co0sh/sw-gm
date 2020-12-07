@@ -75,4 +75,4 @@ export const DiceRemoteHistoryManager: FC<DiceRemoteHistoryManagerProps> = memo(
 );
 
 const renameThrow = (throwName: string, userName: string): string =>
-  `${userName}'s ${throwName}`;
+  `${userName}: ${throwName}`;

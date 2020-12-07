@@ -67,6 +67,7 @@ export const CharacterTraits: FC<CharacterTraitsProps> = ({
         {Object.entries(attributes).map(([id, attribute]) => (
           <AttributeView
             key={id}
+            characterName={character.name}
             attribute={id as AttributeName}
             level={attribute}
             onChange={

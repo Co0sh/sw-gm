@@ -29,7 +29,7 @@ export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
   const raises = passed ? Math.floor((total - target) / 4) : 0;
 
   return (
-    <Div>
+    <>
       <Div className={classes.padding}>
         <Typography variant="body2">{name}</Typography>
       </Div>
@@ -80,7 +80,7 @@ export const ThrowView: FC<ThrowViewProps> = ({ value, className }) => {
           max={99}
         />
       </Div>
-    </Div>
+    </>
   );
 };
 

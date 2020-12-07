@@ -6,14 +6,18 @@ import { DieIcon } from './DieIcon';
 import { Div } from './Div';
 import { RaiseBar } from './RaiseBar';
 import { FastIconButton } from './FastIconButton';
+import { prepareMultiThrow } from '../logic/prepareMultiThrow';
+import { useDice } from '../logic/DiceContext';
 
 export interface AttributeViewProps {
+  characterName: string;
   attribute: AttributeName;
   level: TraitLevel;
   onChange?: (level: TraitLevel) => void;
 }
 
 export const AttributeView: FC<AttributeViewProps> = ({
+  characterName,
   attribute,
   level,
   onChange,
@@ -21,6 +25,17 @@ export const AttributeView: FC<AttributeViewProps> = ({
   const classes = useStyles();
   const [editing, setEditing] = useState(false);
   const anchorRef = useRef();
+  const throwDice = useDice();
+
+  const roll = () => {
+    const options = prepareMultiThrow({
+      type: 'trait',
+      name: `${characterName}'s ${attribute}`,
+      traitDie: level.base,
+      modifier: level.bonus,
+    });
+    throwDice(options);
+  };
 
   return (
     <>
@@ -28,7 +43,7 @@ export const AttributeView: FC<AttributeViewProps> = ({
         variant="contained"
         className={classes.attribute}
         classes={{ label: classes.column }}
-        onClick={onChange ? () => setEditing(true) : undefined}
+        onClick={onChange ? () => setEditing(true) : roll}
         buttonRef={anchorRef}
         fullWidth
       >
