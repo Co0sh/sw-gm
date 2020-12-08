@@ -2,6 +2,7 @@ import React from 'react';
 import SvgIcon from '@material-ui/icons/People';
 import CharactersIcon from '@material-ui/icons/Accessibility';
 import RoomsIcon from '@material-ui/icons/People';
+import HistoryIcon from '@material-ui/icons/History';
 import { DiceIcons } from '../logic/diceIcons';
 import { ReactComponent as CardsIcon } from '../assets/cards.svg';
 
@@ -10,6 +11,11 @@ export const localLinks = [
     label: 'Dice',
     url: '/',
     icon: <SvgIcon component={DiceIcons[12]} viewBox="0 0 100 100" />,
+  },
+  {
+    label: 'Dice',
+    url: '/history',
+    icon: <SvgIcon component={HistoryIcon} />,
   },
   {
     label: 'Cards',
