@@ -148,6 +148,8 @@ export const multiThrowReducer: Reducer<MultiThrowOptions, MultiThrowAction> = (
               ? defaultWildThrow.name
               : state.throwNameTemplate,
           dice: [{ key: getKey(), sides: action.die }],
+          modifier: state.globalModifier,
+          target: state.globalTarget,
         };
         if (action.throwType === 'wild') {
           state.throws.push(newThrow);
