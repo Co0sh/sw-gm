@@ -60,7 +60,7 @@ const SkillView: FC<SkillViewProps> = ({
       <Div row align="center" spacing className={classes.skillNameRow}>
         <AttributeIcon type={baseSkill.attribute} size={1.5} />
         <Typography className={classes.skillName} variant="h5" component="span">
-          {baseSkill.shortcut}
+          {baseSkill.name}
         </Typography>
       </Div>
       <Div row>
@@ -147,6 +147,10 @@ const useStyles = makeStyles((theme) => ({
   skillName: {
     fontFamily: 'monospace',
     whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    paddingRight: theme.spacing(1),
+    textAlign: 'start',
   },
   skillNameRow: {
     overflow: 'hidden',

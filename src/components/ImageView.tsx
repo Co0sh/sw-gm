@@ -18,11 +18,7 @@ export const ImageView: FC<ImageViewProps> = ({
   const classes = useStyles();
   const Component = onClick ? ButtonBase : 'div';
   return (
-    <Component
-      focusRipple
-      className={cn(classes.root, className)}
-      onClick={onClick}
-    >
+    <Component className={cn(classes.root, className)} onClick={onClick}>
       <div className={classes.container}>
         <img className={classes.image} src={src} alt={alt} />
       </div>

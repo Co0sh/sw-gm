@@ -33,7 +33,7 @@ export type AttributeName =
   | 'agility'
   | 'vigor'
   | 'smarts'
-  | 'spirits';
+  | 'spirit';
 
 export type Attributes = { [key in AttributeName]: TraitLevel };
 
@@ -88,7 +88,6 @@ export const asBaseSkillId = (id: string): BaseSkillId => id as any;
 export interface BaseSkill {
   id: BaseSkillId;
   name: string;
-  shortcut: string;
   shortDescription?: string;
   description?: string;
   attribute: AttributeName;

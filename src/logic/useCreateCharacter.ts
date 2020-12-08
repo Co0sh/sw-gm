@@ -18,7 +18,7 @@ export const useCreateCharacter = () => {
         agility: { base: 4 },
         vigor: { base: 4 },
         smarts: { base: 4 },
-        spirits: { base: 4 },
+        spirit: { base: 4 },
       },
       edges: [],
       hindrances: [],
