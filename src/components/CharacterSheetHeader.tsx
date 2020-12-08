@@ -1,4 +1,4 @@
-import React, { Dispatch, FC } from 'react';
+import React, { Dispatch, FC, useState } from 'react';
 import { Character } from '../logic/character';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Div } from './Div';
@@ -8,6 +8,7 @@ import { byId } from '../logic/byId';
 import defaultCharacter from '../assets/defaultCharacter.svg';
 import { CharacterAction } from '../logic/characterReducer';
 import EditableTypography from './EditableTypography';
+import { CharacterImageEditDialog } from './CharacterImageEditDialog';
 
 export interface CharacterSheetHeaderProps {
   character: Character;
@@ -21,6 +22,7 @@ export const CharacterSheetHeader: FC<CharacterSheetHeaderProps> = ({
   className,
 }) => {
   const classes = useStyles();
+  const [editImg, setEditImg] = useState(false);
   const { compendium } = useCompendium();
   const { baseOrigins } = compendium;
   const { name, image, origin } = character;
@@ -33,7 +35,19 @@ export const CharacterSheetHeader: FC<CharacterSheetHeaderProps> = ({
   return (
     <Div row spacing className={className}>
       <Div className={classes.image}>
-        <ImageView src={image ?? defaultCharacter} alt="Image" />
+        <ImageView
+          onClick={onChange ? () => setEditImg(true) : undefined}
+          src={image ?? defaultCharacter}
+          alt="Image"
+        />
+        {onChange && (
+          <CharacterImageEditDialog
+            open={editImg}
+            onClose={() => setEditImg(false)}
+            initialValue={image}
+            onAccept={(src) => onChange({ type: 'setImage', src })}
+          />
+        )}
       </Div>
       <Div grows>
         <Typography variant="caption">Name</Typography>

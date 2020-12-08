@@ -1,5 +1,4 @@
-import React, { FC, useState, KeyboardEvent } from 'react';
-import { Character } from '../logic/character';
+import React, { FC, useState, KeyboardEvent, useRef, useEffect } from 'react';
 import {
   Dialog,
   makeStyles,
@@ -9,35 +8,42 @@ import {
 } from '@material-ui/core';
 import { cn } from '../logic/cn';
 import { Div } from './Div';
-import { useCreateCharacter } from '../logic/useCreateCharacter';
 
-export interface NewCharacterDialogProps {
+export interface CharacterImageEditDialogProps {
   open: boolean;
-  onAccept: (character: Character) => void;
+  initialValue?: string;
+  onAccept: (src: string) => void;
   onClose: () => void;
   className?: string;
 }
 
-export const NewCharacterDialog: FC<NewCharacterDialogProps> = ({
+export const CharacterImageEditDialog: FC<CharacterImageEditDialogProps> = ({
   open,
+  initialValue,
   onAccept,
   onClose,
   className,
 }) => {
   const classes = useStyles();
-  const createCharacter = useCreateCharacter();
-  const [name, setName] = useState('');
+  const [src, setSrc] = useState(initialValue ?? '');
 
-  const handleCreate = () => {
-    if (name) {
-      onAccept(createCharacter({ name }));
+  const inputRef = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  }, []);
+
+  const handleSave = () => {
+    if (src) {
+      onAccept(src);
     }
     onClose();
   };
 
   const handleKey = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
-      handleCreate();
+      handleSave();
     }
   };
 
@@ -49,12 +55,14 @@ export const NewCharacterDialog: FC<NewCharacterDialogProps> = ({
     >
       <Div spacing>
         <Typography variant="h4" component="h1" align="center">
-          New Character
+          Edit Image
         </Typography>
         <TextField
-          onChange={(e) => setName(e.target.value)}
-          label="Name"
+          onChange={(e) => setSrc(e.target.value)}
+          label="Link"
           autoFocus
+          inputRef={inputRef}
+          value={src}
           onKeyDown={handleKey}
         />
         <Div row spacing>
@@ -63,12 +71,12 @@ export const NewCharacterDialog: FC<NewCharacterDialogProps> = ({
           </Button>
           <Button
             fullWidth
-            onClick={handleCreate}
-            disabled={!name}
+            onClick={handleSave}
+            disabled={!src}
             color="secondary"
             variant="contained"
           >
-            Create
+            Save
           </Button>
         </Div>
       </Div>
@@ -79,6 +87,6 @@ export const NewCharacterDialog: FC<NewCharacterDialogProps> = ({
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
-    minWidth: 360,
+    minWidth: 600,
   },
 }));
