@@ -33,7 +33,10 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
   return (
     <Div className={cn(classes.root, className)} spacing>
       <Div className={classes.header}>
-        <CharacterSheetHeader character={character} />
+        <CharacterSheetHeader
+          character={character}
+          onChange={editing ? dispatch : undefined}
+        />
         <Div row align="center" spacing>
           <Tabs
             variant="fullWidth"

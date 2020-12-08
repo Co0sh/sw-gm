@@ -9,7 +9,12 @@ import {
   TraitLevel,
 } from './character';
 
-export type CharacterAction = SetAttribute | SetSkill | ClearSkill;
+export type CharacterAction =
+  | SetAttribute
+  | SetSkill
+  | ClearSkill
+  | Rename
+  | SetImage;
 
 interface SetAttribute {
   type: 'setAttribute';
@@ -26,6 +31,16 @@ interface SetSkill {
 interface ClearSkill {
   type: 'clearSkill';
   skill: BaseSkillId;
+}
+
+interface Rename {
+  type: 'rename';
+  name: string;
+}
+
+interface SetImage {
+  type: 'setImage';
+  src: string;
 }
 
 export const characterReducer: Reducer<Character, CharacterAction> = (
@@ -62,6 +77,16 @@ export const characterReducer: Reducer<Character, CharacterAction> = (
         if (index !== -1) {
           state.skills.splice(index, 1);
         }
+      });
+    }
+    case 'rename': {
+      return produce(state, (state) => {
+        state.name = action.name;
+      });
+    }
+    case 'setImage': {
+      return produce(state, (state) => {
+        state.image = action.src;
       });
     }
     default: {

@@ -72,7 +72,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     position: 'absolute',
     top: -theme.spacing(1),
-    opacity: 0.8,
   },
   width32: {
     width: 32,

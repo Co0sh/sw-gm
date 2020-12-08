@@ -13,6 +13,11 @@ export const theme = unstable_createMuiStrictModeTheme({
       main: '#87d415',
     },
   },
+  typography: {
+    caption: {
+      opacity: 0.8,
+    },
+  },
   props: {
     MuiButtonBase: {
       disableRipple: true,

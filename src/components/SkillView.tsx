@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, memo } from 'react';
+import React, { Dispatch, FC, Fragment, memo } from 'react';
 import { Div } from './Div';
 import { DieIcon } from './DieIcon';
 import { Button, makeStyles, Typography } from '@material-ui/core';
@@ -66,7 +66,7 @@ const SkillView: FC<SkillViewProps> = ({
       <Div row>
         {traitDice.map((die) => {
           const dieContent = (
-            <>
+            <Fragment key={die}>
               <DieIcon
                 type={die}
                 color={
@@ -85,7 +85,7 @@ const SkillView: FC<SkillViewProps> = ({
               {bonus && die === base && (
                 <RaiseBar className={classes.bonus} value={bonus} />
               )}
-            </>
+            </Fragment>
           );
           if (onChange) {
             return (
