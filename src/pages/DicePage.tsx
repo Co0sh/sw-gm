@@ -14,8 +14,6 @@ const DicePage: FC<RouteProps> = () => {
   const { state } = useLocation<DicePageState | undefined>();
   const { initialConfig } = state ?? {};
 
-  console.log(initialConfig);
-
   return (
     <Div justify="flex-end" align="center" grows>
       <DiceMultiThrower
