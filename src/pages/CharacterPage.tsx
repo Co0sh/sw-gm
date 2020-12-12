@@ -1,5 +1,10 @@
-import React, { FC, useState, useEffect, memo, useCallback } from 'react';
-import { makeStyles, Typography, Button, IconButton } from '@material-ui/core';
+import React, { FC, useEffect, memo, useCallback, useContext } from 'react';
+import {
+  makeStyles,
+  Button,
+  IconButton,
+  CircularProgress,
+} from '@material-ui/core';
 import LeftIcon from '@material-ui/icons/ArrowLeft';
 import RightIcon from '@material-ui/icons/ArrowRight';
 import ListIcon from '@material-ui/icons/Menu';
@@ -7,45 +12,36 @@ import { Link, useRouteMatch } from 'react-router-dom';
 import CharacterSheet from '../components/CharacterSheet';
 import { Div } from '../components/Div';
 import { Character } from '../logic/character';
+import { CharacterContext } from '../logic/CharacterContext';
 
 const CharacterPage: FC<any> = ({ match }) => {
   const classes = useStyles();
   const { characterId } = match.params;
   const { url } = useRouteMatch();
 
-  const [characters, setCharacters] = useState<Character[]>(() =>
-    JSON.parse(localStorage.getItem('characters') ?? '[]'),
+  const { get, character, edit, list: characters } = useContext(
+    CharacterContext,
   );
 
   useEffect(() => {
-    localStorage.setItem('characters', JSON.stringify(characters));
-  }, [characters]);
+    get(characterId);
+  }, [characterId, get]);
+
+  const setCharacter = useCallback(
+    (c: Character) => {
+      edit({ character: c, characterId: c.id });
+    },
+    [edit],
+  );
+
+  if (!characters || !character) {
+    return <CircularProgress />;
+  }
 
   const characterIndex = characters.findIndex(({ id }) => id === characterId);
-  const character = characters[characterIndex];
   const next = characters[(characterIndex + 1) % characters.length];
   const prev =
     characters[(characterIndex + characters.length - 1) % characters.length];
-
-  const setCharacter = useCallback((c: Character) => {
-    setCharacters((prev) => {
-      const index = prev.findIndex(({ id }) => id === c.id);
-      if (index < 0) {
-        return prev;
-      }
-      const copy = [...prev];
-      copy.splice(index, 1, c);
-      return copy;
-    });
-  }, []);
-
-  if (!character) {
-    return (
-      <Typography variant="h3" component="h1">
-        Not found
-      </Typography>
-    );
-  }
 
   return (
     <Div justify="flex-end" align="center" grows>

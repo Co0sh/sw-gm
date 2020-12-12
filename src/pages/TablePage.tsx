@@ -23,6 +23,7 @@ import { makeStyles } from '@material-ui/core';
 import LoadingView from '../components/LoadingView';
 import { useSetLinks } from '../components/NavigationManager';
 import DiceManagerUsingRoute from '../components/DiceManagerUsingRoute';
+import RemoteCharacterManager from '../components/RemoteCharacterManager';
 
 const DicePage = lazy(() => import('./DicePage'));
 const CardsPage = lazy(() => import('./CardsPage'));
@@ -94,27 +95,29 @@ const TablePage: FC<RouteProps> = () => {
     <SocketManager room={room} url={backend}>
       <DiceRemoteHistoryManager room={room} url={backend}>
         <DiceManagerUsingRoute diceThrowerPath={`/table/${room.table}`}>
-          <Suspense fallback={<LoadingView />}>
-            <Switch>
-              <Route exact path={`${path}/`} component={DicePage} />
-              <Route exact path={`${path}/cards`} component={CardsPage} />
-              <Route
-                exact
-                path={`${path}/history`}
-                component={DiceHistoryPage}
-              />
-              <Route
-                exact
-                path={`${path}/characters`}
-                component={CharactersPage}
-              />
-              <Route
-                exact
-                path={`${path}/characters/:characterId`}
-                component={CharacterPage}
-              />
-            </Switch>
-          </Suspense>
+          <RemoteCharacterManager room={room.table}>
+            <Suspense fallback={<LoadingView />}>
+              <Switch>
+                <Route exact path={`${path}/`} component={DicePage} />
+                <Route exact path={`${path}/cards`} component={CardsPage} />
+                <Route
+                  exact
+                  path={`${path}/history`}
+                  component={DiceHistoryPage}
+                />
+                <Route
+                  exact
+                  path={`${path}/characters`}
+                  component={CharactersPage}
+                />
+                <Route
+                  exact
+                  path={`${path}/characters/:characterId`}
+                  component={CharacterPage}
+                />
+              </Switch>
+            </Suspense>
+          </RemoteCharacterManager>
         </DiceManagerUsingRoute>
       </DiceRemoteHistoryManager>
     </SocketManager>

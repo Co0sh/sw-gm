@@ -1,37 +1,34 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { makeStyles, Button } from '@material-ui/core';
+import { makeStyles, Button, CircularProgress } from '@material-ui/core';
 import { Div } from '../components/Div';
 import { Character } from '../logic/character';
 import { CharacterSheetHeader } from '../components/CharacterSheetHeader';
 import { Link } from 'react-router-dom';
-import { exampleCharacter } from '../exampleData';
 import { NewCharacterDialog } from '../components/NewCharacterDialog';
+import { CharacterContext } from '../logic/CharacterContext';
 
 const CharactersPage: FC = () => {
   const classes = useStyles();
   const { push } = useHistory();
   const { url } = useRouteMatch();
 
-  const [characters] = useState<Character[]>(
-    JSON.parse(
-      localStorage.getItem('characters') ?? JSON.stringify([exampleCharacter]),
-    ),
-  );
+  const { room, list: characters, create, get } = useContext(CharacterContext);
 
-  useEffect(() => {
-    localStorage.setItem('characters', JSON.stringify(characters));
-  }, [characters]);
+  const addCharacter = (character: Character) => {
+    create({ character });
+    if (room) {
+      push(`/tables/${room}/characters/${character.id}`);
+    } else {
+      push(`/characters/${character.id}`);
+    }
+  };
 
   const [addDialogOpen, setAddDialogOpen] = useState(false);
 
-  const addCharacter = (character: Character) => {
-    localStorage.setItem(
-      'characters',
-      JSON.stringify([...characters, character]),
-    );
-    push(`/characters/${character.id}`);
-  };
+  if (!characters) {
+    return <CircularProgress />;
+  }
 
   return (
     <Div justify="flex-end" align="center" grows>
@@ -41,6 +38,7 @@ const CharactersPage: FC = () => {
             <Link
               key={String(character.id)}
               to={`${url}/${character.id}`}
+              onClick={() => get(character.id)}
               className={classes.link}
             >
               <CharacterSheetHeader character={character} />

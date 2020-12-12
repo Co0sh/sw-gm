@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, useState } from 'react';
-import { Character } from '../logic/character';
+import { PartialCharacter } from '../logic/character';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Div } from './Div';
 import { ImageView } from './ImageView';
@@ -11,7 +11,7 @@ import EditableTypography from './EditableTypography';
 import { CharacterImageEditDialog } from './CharacterImageEditDialog';
 
 export interface CharacterSheetHeaderProps {
-  character: Character;
+  character: PartialCharacter;
   onChange?: Dispatch<CharacterAction>;
   className?: string;
 }

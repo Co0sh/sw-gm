@@ -28,6 +28,11 @@ export interface Character {
   powers?: Power[];
 }
 
+export type PartialCharacter = Pick<
+  Character,
+  'id' | 'name' | 'image' | 'origin'
+>;
+
 export type AttributeName =
   | 'strength'
   | 'agility'
