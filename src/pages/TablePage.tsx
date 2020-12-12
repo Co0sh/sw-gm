@@ -9,6 +9,7 @@ import {
 } from 'react-router';
 import CharactersIcon from '@material-ui/icons/Accessibility';
 import ExitIcon from '@material-ui/icons/ExitToApp';
+import HistoryIcon from '@material-ui/icons/History';
 import { DiceIcons } from '../logic/diceIcons';
 import { ReactComponent as CardsIcon } from '../assets/cards.svg';
 import { TableData } from '../logic/tableData';
@@ -49,6 +50,11 @@ const TablePage: FC<RouteProps> = () => {
         label: 'Dice',
         url: `${url}`,
         icon: <SvgIcon component={DiceIcons[12]} viewBox="0 0 100 100" />,
+      },
+      {
+        label: 'History',
+        url: `${url}/history`,
+        icon: <SvgIcon component={HistoryIcon} />,
       },
       {
         label: 'Cards',

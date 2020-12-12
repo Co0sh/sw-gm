@@ -13,7 +13,7 @@ export const localLinks = [
     icon: <SvgIcon component={DiceIcons[12]} viewBox="0 0 100 100" />,
   },
   {
-    label: 'Dice',
+    label: 'History',
     url: '/history',
     icon: <SvgIcon component={HistoryIcon} />,
   },
