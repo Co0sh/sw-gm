@@ -19,7 +19,7 @@ const LocalCharacterManager: FC = ({ children }) => {
     setCharacters((prev) => {
       const index = prev.findIndex(({ id }) => id === c.id);
       if (index < 0) {
-        return prev;
+        return [...prev, c];
       }
       const copy = [...prev];
       copy.splice(index, 1, c);
