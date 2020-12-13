@@ -5,13 +5,12 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Providers } from './components/Providers';
 
-ReactDOM.render(
+ReactDOM.unstable_createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Providers>
       <App />
     </Providers>
   </React.StrictMode>,
-  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

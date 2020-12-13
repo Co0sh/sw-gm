@@ -1,4 +1,10 @@
-import React, { FC, memo, useReducer, useState } from 'react';
+import React, {
+  FC,
+  memo,
+  useReducer,
+  useState,
+  unstable_useTransition as useTransition,
+} from 'react';
 import { makeStyles, Tabs, Tab } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
@@ -26,6 +32,8 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
   const [character, dispatch] = useReducer(characterReducer, initialCharacter);
   const [editing, setEditing] = useState(false);
 
+  const [startTransition, isPending] = useTransition();
+
   const handleSave = () => {
     onChange?.(character);
   };
@@ -50,14 +58,16 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
             <Tab className={classes.tab} label="Powers" />
           </Tabs>
           <FastIconButton
-            color="secondary"
+            color={isPending ? 'primary' : 'secondary'}
             className={classes.fab}
             size="small"
             onClick={() => {
               if (editing) {
                 handleSave();
               }
-              setEditing(!editing);
+              startTransition(() => {
+                setEditing(!editing);
+              });
             }}
             label={editing ? 'Save' : 'Edit'}
           >
