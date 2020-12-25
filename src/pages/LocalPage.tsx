@@ -12,6 +12,7 @@ const CardsPage = lazy(() => import('../pages/CardsPage'));
 const DiceHistoryPage = lazy(() => import('../pages/DiceHistoryPage'));
 const CharactersPage = lazy(() => import('../pages/CharactersPage'));
 const CharacterPage = lazy(() => import('../pages/CharacterPage'));
+const LocationsPage = lazy(() => import('./LocationsPage'));
 const TableListPage = lazy(() => import('../pages/TableListPage'));
 
 const LocalPage: FC = () => {
@@ -32,6 +33,7 @@ const LocalPage: FC = () => {
                 path="/characters/:characterId"
                 component={CharacterPage}
               />
+              <Route exact path="/locations" component={LocationsPage} />
               <Route exact path="/tables" component={TableListPage} />
             </Switch>
           </Suspense>
