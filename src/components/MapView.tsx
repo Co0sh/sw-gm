@@ -1,29 +1,35 @@
-import {
-  Box,
-  Button,
-  Input,
-  List,
-  ListItem,
-  MenuItem,
-  Select,
-  Typography,
-} from '@material-ui/core';
+import { List, makeStyles, Typography } from '@material-ui/core';
+import Delete from '@material-ui/icons/Delete';
+import Back from '@material-ui/icons/ArrowBack';
+import Add from '@material-ui/icons/Add';
+import Save from '@material-ui/icons/Save';
+import Edit from '@material-ui/icons/Edit';
 import { Dispatch, FC, memo, SetStateAction, useRef, useState } from 'react';
 import { v4 } from 'uuid';
 import DoorItem from './DoorItem';
-import { asDoorId, asRoomId, Map, MapId } from '../model/map.model';
+import { asDoorId, Map, MapId } from '../model/map.model';
 import { MapsAction } from '../logic/maps.reducer';
+import ConfirmButton from './ConfirmButton';
+import { FastIconButton } from './FastIconButton';
+import { Div } from './Div';
+import DoorEdit from './DoorEdit';
+import { cn } from '../logic/cn';
 
 export interface MapViewProps {
   map: Map;
   dispatch: Dispatch<MapsAction>;
   setCurrentMap: Dispatch<SetStateAction<MapId | null>>;
+  className?: string;
 }
 
-const MapView: FC<MapViewProps> = ({ map, setCurrentMap, dispatch }) => {
-  const [name, setName] = useState('');
-  const [targetRoom, setTargetRoom] = useState('');
-  const [targetRoomName, setTargetRoomName] = useState('');
+const MapView: FC<MapViewProps> = ({
+  map,
+  setCurrentMap,
+  dispatch,
+  className,
+}) => {
+  const classes = useStyles();
+  const [newDoorOpen, setNewDoorOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [currentRoom, setCurrentRoom] = useState(map.startingRoom);
   const nameRef = useRef<HTMLHeadingElement>(null);
@@ -35,79 +41,53 @@ const MapView: FC<MapViewProps> = ({ map, setCurrentMap, dispatch }) => {
   }
 
   return (
-    <Box>
-      <Typography variant="h1">{map.name}</Typography>
-      <Typography
-        variant="h2"
-        contentEditable={editing}
-        ref={nameRef}
-        dangerouslySetInnerHTML={{ __html: room.name }}
-      />
-      <Typography
-        contentEditable={editing}
-        ref={descriptionRef}
-        dangerouslySetInnerHTML={{ __html: room.description }}
-      />
-      <Button
-        onClick={() => {
-          if (editing) {
-            dispatch({
-              type: 'editRoom',
-              roomId: room.id,
-              mapId: map.id,
-              name: nameRef.current?.innerHTML ?? '',
-              description: descriptionRef.current?.innerHTML ?? '',
-            });
-          }
-          setEditing(!editing);
-        }}
-      >
-        {editing ? 'Save' : 'Edit'}
-      </Button>
-      <List>
-        {room.doors.map((door) => (
-          <ListItem key={String(door.id)}>
-            <DoorItem
-              map={map}
-              room={room}
-              door={door}
-              setCurrentRoom={setCurrentRoom}
-              dispatch={dispatch}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Box>
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
-        <Select
-          value={String(targetRoom)}
-          onChange={(e) => setTargetRoom(e.target.value as any)}
+    <>
+      <Div grows spacing className={cn(classes.root, className)}>
+        <Typography
+          variant="h3"
+          component="h1"
+          align="center"
+          gutterBottom
+          color="textSecondary"
         >
-          {map.rooms.map((r) => (
-            <MenuItem value={String(r.id)} key={String(r.id)}>
-              {r.name}
-            </MenuItem>
-          ))}
-          <MenuItem value="">New Room</MenuItem>
-        </Select>
-        {!targetRoom && (
-          <Input
-            value={targetRoomName}
-            onChange={(e) => setTargetRoomName(e.target.value)}
-          />
-        )}
-        <Button
-          onClick={() => {
+          {map.name}
+        </Typography>
+        <Typography
+          variant="h4"
+          component="h2"
+          contentEditable={editing}
+          ref={nameRef}
+          dangerouslySetInnerHTML={{ __html: room.name }}
+        />
+        <Typography
+          contentEditable={editing}
+          ref={descriptionRef}
+          dangerouslySetInnerHTML={{ __html: room.description }}
+        />
+        <List className={classes.list}>
+          {room.doors.map((door) => {
+            return (
+              <DoorItem
+                key={String(door.id)}
+                map={map}
+                room={room}
+                door={door}
+                setCurrentRoom={setCurrentRoom}
+                dispatch={dispatch}
+              />
+            );
+          })}
+        </List>
+        <DoorEdit
+          key={String(newDoorOpen)}
+          open={newDoorOpen}
+          dispatch={dispatch}
+          onClose={() => setNewDoorOpen(false)}
+          map={map}
+          label="Create Door"
+          onSave={(name, targetRoomId) => {
             const doorId = asDoorId(v4());
-            const targetRoomId = asRoomId(targetRoom ? targetRoom : v4());
-            if (!targetRoom) {
-              dispatch({
-                type: 'createRoom',
-                name: targetRoomName,
-                map: map.id,
-                roomId: targetRoomId,
-              });
-            }
+            const backDoorId = asDoorId(v4());
             dispatch({
               type: 'createDoor',
               roomId: room.id,
@@ -119,31 +99,69 @@ const MapView: FC<MapViewProps> = ({ map, setCurrentMap, dispatch }) => {
             dispatch({
               type: 'createDoor',
               roomId: targetRoomId,
-              doorId: doorId,
+              doorId: backDoorId,
               mapId: map.id,
               name: 'Back',
               targetRoomId: room.id,
             });
-            setTargetRoomName('');
-            setName('');
+            setNewDoorOpen(false);
           }}
-          disabled={!name || (!targetRoom && !targetRoomName)}
+        />
+      </Div>
+      <Div row spacing justify="center" className={classes.sticky}>
+        <FastIconButton onClick={() => setCurrentMap(null)}>
+          <Back />
+        </FastIconButton>
+        <FastIconButton onClick={() => setNewDoorOpen(true)}>
+          <Add />
+        </FastIconButton>
+        <ConfirmButton
+          onClick={() => {
+            dispatch({ type: 'deleteRoom', roomId: room.id, map: map.id });
+            setCurrentRoom(map.startingRoom);
+          }}
+          disabled={room.id === map.startingRoom}
+          ButtonComponent={FastIconButton}
+          title="Delete Room?"
         >
-          Create Door
-        </Button>
-      </Box>
-      <Button onClick={() => setCurrentMap(null)}>Back</Button>
-      <Button
-        onClick={() => {
-          dispatch({ type: 'deleteRoom', roomId: room.id, map: map.id });
-          setCurrentRoom(map.startingRoom);
-        }}
-        disabled={room.id === map.startingRoom}
-      >
-        Delete
-      </Button>
-    </Box>
+          <Delete />
+        </ConfirmButton>
+        <FastIconButton
+          onClick={() => {
+            if (editing) {
+              dispatch({
+                type: 'editRoom',
+                roomId: room.id,
+                mapId: map.id,
+                name: nameRef.current?.innerHTML ?? '',
+                description: descriptionRef.current?.innerHTML ?? '',
+              });
+            }
+            setEditing(!editing);
+          }}
+        >
+          {editing ? <Save /> : <Edit />}
+        </FastIconButton>
+      </Div>
+    </>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  list: {
+    flexGrow: 1,
+  },
+  root: {
+    padding: theme.spacing(1),
+  },
+  sticky: {
+    maxWidth: 400,
+    width: '100%',
+    padding: theme.spacing(2),
+    position: 'sticky',
+    background: theme.palette.background.default,
+    bottom: 56,
+  },
+}));
 
 export default memo(MapView);

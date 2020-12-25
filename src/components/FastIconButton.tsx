@@ -1,10 +1,10 @@
-import React, { FC } from "react";
-import { makeStyles } from "@material-ui/core";
-import { cn } from "../logic/cn";
+import React, { FC } from 'react';
+import { makeStyles } from '@material-ui/core';
+import { cn } from '../logic/cn';
 
 export interface FastIconButtonProps {
-  size?: "small" | "medium" | "large";
-  color?: "primary" | "secondary" | "default";
+  size?: 'small' | 'medium' | 'large';
+  color?: 'primary' | 'secondary' | 'default';
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
@@ -13,8 +13,8 @@ export interface FastIconButtonProps {
 
 export const FastIconButton: FC<FastIconButtonProps> = ({
   children,
-  size = "medium",
-  color = "default",
+  size = 'medium',
+  color = 'default',
   disabled = false,
   onClick,
   className,
@@ -40,35 +40,38 @@ export const FastIconButton: FC<FastIconButtonProps> = ({
 
 const useStyles = makeStyles((theme) => ({
   iconButton: {
-    borderRadius: "50%",
-    border: "none",
+    borderRadius: '50%',
+    border: 'none',
     padding: 0,
     color: theme.palette.text.primary,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    outline: "none",
-    userSelect: "none",
-    WebkitTapHighlightColor: "transparent",
-    "&:not(:disabled)": {
-      cursor: "pointer",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    outline: 'none',
+    userSelect: 'none',
+    WebkitTapHighlightColor: 'transparent',
+    '&:not(:disabled)': {
+      cursor: 'pointer',
+    },
+    '&:disabled': {
+      opacity: 0.3,
     },
   },
   primary: {
     backgroundColor: theme.palette.primary.main,
-    "&:hover:not(:disabled)": {
+    '&:hover:not(:disabled)': {
       backgroundColor: theme.palette.primary.dark,
     },
   },
   secondary: {
     backgroundColor: theme.palette.secondary.main,
-    "&:hover:not(:disabled)": {
+    '&:hover:not(:disabled)': {
       backgroundColor: theme.palette.secondary.dark,
     },
   },
   default: {
-    backgroundColor: "transparent",
-    "&:hover:not(:disabled)": {
+    backgroundColor: 'transparent',
+    '&:hover:not(:disabled)': {
       backgroundColor: theme.palette.action.hover,
     },
   },

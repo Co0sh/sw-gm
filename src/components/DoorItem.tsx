@@ -1,7 +1,17 @@
-import { Button, Typography } from '@material-ui/core';
-import { Dispatch, FC, memo, SetStateAction, useRef, useState } from 'react';
+import {
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+} from '@material-ui/core';
+import Edit from '@material-ui/icons/Edit';
+import Delete from '@material-ui/icons/Delete';
+import { Dispatch, FC, memo, SetStateAction, useState } from 'react';
 import { Door, Map, Room, RoomId } from '../model/map.model';
 import { MapsAction } from '../logic/maps.reducer';
+import ConfirmButton from './ConfirmButton';
+import { FastIconButton } from './FastIconButton';
+import { makeStyles } from '@material-ui/styles';
+import DoorEdit from './DoorEdit';
 
 export interface DoorItemProps {
   map: Map;
@@ -18,49 +28,62 @@ const DoorItem: FC<DoorItemProps> = ({
   setCurrentRoom,
   dispatch,
 }) => {
+  const classes = useStyles();
   const [editing, setEditing] = useState(false);
-  const nameRef = useRef<HTMLParagraphElement>(null);
   return (
     <>
-      <Button onClick={() => setCurrentRoom(door.targetRoom)}>
-        {map.rooms.find((r) => r.id === door.targetRoom)?.name}
-      </Button>
-      <Typography
-        ref={nameRef}
-        contentEditable={editing}
-        dangerouslySetInnerHTML={{ __html: door.name }}
-      />
-      <Button
-        onClick={() => {
-          if (editing) {
-            dispatch({
-              type: 'editDoor',
-              name: nameRef.current?.innerHTML ?? '',
-              mapId: map.id,
-              roomId: room.id,
-              doorId: door.id,
-              targetRoomId: door.targetRoom,
-            });
-          }
-          setEditing(!editing);
-        }}
-      >
-        {editing ? 'Save' : 'Edit'}
-      </Button>
-      <Button
-        onClick={() =>
-          dispatch({
-            type: 'deleteDoor',
-            mapId: map.id,
-            roomId: room.id,
-            doorId: door.id,
-          })
-        }
-      >
-        Delete
-      </Button>
+      <ListItem button onClick={() => setCurrentRoom(door.targetRoom)}>
+        <ListItemText
+          primary={door.name}
+          secondary={map.rooms.find((r) => r.id === door.targetRoom)?.name}
+        />
+        <ListItemSecondaryAction className={classes.actions}>
+          <FastIconButton onClick={() => setEditing(true)}>
+            <Edit />
+          </FastIconButton>
+          <ConfirmButton
+            onClick={() =>
+              dispatch({
+                type: 'deleteDoor',
+                mapId: map.id,
+                roomId: room.id,
+                doorId: door.id,
+              })
+            }
+            ButtonComponent={FastIconButton}
+            title="Delete Door"
+            confirmLabel="Delete"
+          >
+            <Delete />
+          </ConfirmButton>
+          <DoorEdit
+            open={editing}
+            onClose={() => setEditing(false)}
+            map={map}
+            door={door}
+            dispatch={dispatch}
+            onSave={(name, targetRoom) => {
+              dispatch({
+                type: 'editDoor',
+                name: name,
+                mapId: map.id,
+                roomId: room.id,
+                doorId: door.id,
+                targetRoomId: targetRoom,
+              });
+              setEditing(false);
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
     </>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  actions: {
+    display: 'flex',
+  },
+}));
 
 export default memo(DoorItem);

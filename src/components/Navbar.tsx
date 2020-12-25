@@ -1,13 +1,13 @@
-import React, { FC, unstable_useTransition as useTransition } from "react";
+import React, { FC, unstable_useTransition as useTransition } from 'react';
 import {
   BottomNavigation,
   BottomNavigationAction,
   Fade,
   LinearProgress,
   makeStyles,
-} from "@material-ui/core";
-import { useHistory, useLocation } from "react-router";
-import { useLinks } from "./NavigationManager";
+} from '@material-ui/core';
+import { useHistory, useLocation } from 'react-router';
+import { useLinks } from './NavigationManager';
 
 export const Navbar: FC = () => {
   const history = useHistory();
@@ -25,7 +25,7 @@ export const Navbar: FC = () => {
     >
       <Fade
         in={isPending}
-        style={{ transitionDelay: isPending ? "100ms" : "0ms" }}
+        style={{ transitionDelay: isPending ? '100ms' : '0ms' }}
         unmountOnExit
       >
         <LinearProgress className={classes.floating} />
@@ -45,18 +45,19 @@ export const Navbar: FC = () => {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    position: "sticky",
+    position: 'sticky',
     bottom: 0,
+    overflowX: 'auto',
   },
   selected: {
     color: theme.palette.primary.light,
   },
   container: {
-    position: "relative",
+    position: 'relative',
   },
   floating: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
     top: -4,
   },
 }));

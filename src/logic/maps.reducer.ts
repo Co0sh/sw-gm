@@ -1,10 +1,11 @@
-import { Reducer } from "react";
-import { produce } from "immer";
+import { Reducer } from 'react';
+import { produce } from 'immer';
 
-import { DoorId, Map, MapId, RoomId } from "../model/map.model";
+import { DoorId, Map, MapId, RoomId } from '../model/map.model';
 
 export type MapsAction =
   | CreateMap
+  | EditMap
   | DeleteMap
   | ResetMap
   | CreateRoom
@@ -15,31 +16,38 @@ export type MapsAction =
   | DeleteDoor;
 
 interface CreateMap {
-  type: "create";
+  type: 'create';
   name: string;
   mapId: MapId;
   roomId: RoomId;
 }
 
+interface EditMap {
+  type: 'edit';
+  name: string;
+  mapId: MapId;
+  startingRoom: RoomId;
+}
+
 interface DeleteMap {
-  type: "delete";
+  type: 'delete';
   id: MapId;
 }
 
 interface ResetMap {
-  type: "reset";
+  type: 'reset';
   maps: Map[];
 }
 
 interface CreateRoom {
-  type: "createRoom";
+  type: 'createRoom';
   map: MapId;
   roomId: RoomId;
   name: string;
 }
 
 interface EditRoom {
-  type: "editRoom";
+  type: 'editRoom';
   mapId: MapId;
   roomId: RoomId;
   name: string;
@@ -47,13 +55,13 @@ interface EditRoom {
 }
 
 interface DeleteRoom {
-  type: "deleteRoom";
+  type: 'deleteRoom';
   map: MapId;
   roomId: RoomId;
 }
 
 interface CreateDoor {
-  type: "createDoor";
+  type: 'createDoor';
   mapId: MapId;
   roomId: RoomId;
   doorId: DoorId;
@@ -62,7 +70,7 @@ interface CreateDoor {
 }
 
 interface EditDoor {
-  type: "editDoor";
+  type: 'editDoor';
   mapId: MapId;
   roomId: RoomId;
   doorId: DoorId;
@@ -71,7 +79,7 @@ interface EditDoor {
 }
 
 interface DeleteDoor {
-  type: "deleteDoor";
+  type: 'deleteDoor';
   mapId: MapId;
   roomId: RoomId;
   doorId: DoorId;
@@ -80,15 +88,15 @@ interface DeleteDoor {
 export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
   produce(state, (state) => {
     switch (action.type) {
-      case "create": {
+      case 'create': {
         state.push({
           id: action.mapId,
           name: action.name,
           rooms: [
             {
               id: action.roomId,
-              name: "Default",
-              description: "This is the default room",
+              name: 'Default',
+              description: 'This is the default room',
               doors: [],
             },
           ],
@@ -96,7 +104,16 @@ export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
         });
         return;
       }
-      case "delete": {
+      case 'edit': {
+        const map = state.find((m) => m.id === action.mapId);
+        if (!map) {
+          return;
+        }
+        map.name = action.name;
+        map.startingRoom = action.startingRoom;
+        return;
+      }
+      case 'delete': {
         const index = state.findIndex((map) => map.id === action.id);
         if (index < 0) {
           return;
@@ -104,10 +121,10 @@ export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
         state.splice(index, 1);
         return;
       }
-      case "reset": {
+      case 'reset': {
         return action.maps;
       }
-      case "createRoom": {
+      case 'createRoom': {
         const map = state.find((m) => m.id === action.map);
         if (!map) {
           return;
@@ -115,12 +132,12 @@ export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
         map.rooms.push({
           id: action.roomId,
           name: action.name,
-          description: "New room",
+          description: 'New room',
           doors: [],
         });
         return;
       }
-      case "editRoom": {
+      case 'editRoom': {
         const map = state.find((m) => m.id === action.mapId);
         if (!map) {
           return;
@@ -133,7 +150,7 @@ export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
         room.description = action.description;
         return;
       }
-      case "deleteRoom": {
+      case 'deleteRoom': {
         const map = state.find((m) => m.id === action.map);
         if (!map) {
           return;
@@ -156,7 +173,7 @@ export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
         });
         return;
       }
-      case "createDoor": {
+      case 'createDoor': {
         const map = state.find((m) => m.id === action.mapId);
         if (!map) {
           return;
@@ -172,7 +189,7 @@ export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
         });
         return;
       }
-      case "editDoor": {
+      case 'editDoor': {
         const map = state.find((m) => m.id === action.mapId);
         if (!map) {
           return;
@@ -189,7 +206,7 @@ export const mapsReducer: Reducer<Map[], MapsAction> = (state, action) =>
         door.targetRoom = action.targetRoomId;
         return;
       }
-      case "deleteDoor": {
+      case 'deleteDoor': {
         const map = state.find((m) => m.id === action.mapId);
         if (!map) {
           return;
