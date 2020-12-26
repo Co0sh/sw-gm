@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
     paddingTop: theme.spacing(2),
     backgroundColor: theme.palette.background.default,
-    bottom: 56,
+    bottom: 0,
   },
   wide: {
     width: '100%',

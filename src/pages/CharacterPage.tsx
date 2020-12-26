@@ -20,7 +20,7 @@ const CharacterPage: FC<any> = ({ match }) => {
   const { url } = useRouteMatch();
 
   const { get, character, edit, list: characters } = useContext(
-    CharacterContext,
+    CharacterContext
   );
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const CharacterPage: FC<any> = ({ match }) => {
     (c: Character) => {
       edit({ character: c, characterId: c.id });
     },
-    [edit],
+    [edit]
   );
 
   if (!characters || !character) {
@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     position: 'sticky',
     background: theme.palette.background.default,
-    bottom: 56,
+    bottom: 0,
   },
 }));
 

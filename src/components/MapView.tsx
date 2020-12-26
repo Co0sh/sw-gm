@@ -160,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     position: 'sticky',
     background: theme.palette.background.default,
-    bottom: 56,
+    bottom: 0,
   },
 }));
 

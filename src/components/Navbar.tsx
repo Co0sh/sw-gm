@@ -1,28 +1,62 @@
-import React, { FC, unstable_useTransition as useTransition } from 'react';
+import React, {
+  FC,
+  unstable_useTransition as useTransition,
+  useState,
+} from 'react';
 import {
-  BottomNavigation,
-  BottomNavigationAction,
   Fade,
   LinearProgress,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   makeStyles,
+  SwipeableDrawer,
 } from '@material-ui/core';
+import Menu from '@material-ui/icons/Menu';
 import { useHistory, useLocation } from 'react-router';
 import { useLinks } from './NavigationManager';
+import { FastIconButton } from './FastIconButton';
 
 export const Navbar: FC = () => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
   const links = useLinks();
+  const [open, setOpen] = useState(false);
   const [startTransition, isPending] = useTransition();
 
   return (
-    <BottomNavigation
-      showLabels
-      className={classes.root}
-      value={location.pathname}
-      onChange={(_, newValue) => startTransition(() => history.push(newValue))}
-    >
+    <>
+      <SwipeableDrawer
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        anchor="bottom"
+      >
+        <List>
+          {links.map(({ label, url, icon }) => (
+            <ListItem
+              key={url}
+              button
+              onClick={() => {
+                setOpen(false);
+                startTransition(() => history.push(url));
+              }}
+              selected={location.pathname === url}
+            >
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={label} />
+            </ListItem>
+          ))}
+        </List>
+      </SwipeableDrawer>
+      <FastIconButton
+        onClick={() => setOpen(true)}
+        className={classes.menuButton}
+      >
+        <Menu />
+      </FastIconButton>
       <Fade
         in={isPending}
         style={{ transitionDelay: isPending ? '100ms' : '0ms' }}
@@ -30,34 +64,19 @@ export const Navbar: FC = () => {
       >
         <LinearProgress className={classes.floating} />
       </Fade>
-      {links.map(({ label, url, icon }) => (
-        <BottomNavigationAction
-          key={url}
-          label={label}
-          value={url}
-          icon={icon}
-          classes={{ selected: classes.selected }}
-        />
-      ))}
-    </BottomNavigation>
+    </>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'sticky',
-    bottom: 0,
-    overflowX: 'auto',
-  },
-  selected: {
-    color: theme.palette.primary.light,
-  },
-  container: {
-    position: 'relative',
-  },
   floating: {
     position: 'absolute',
     width: '100%',
-    top: -4,
+    bottom: 0,
+  },
+  menuButton: {
+    position: 'fixed',
+    top: theme.spacing(1),
+    right: theme.spacing(1),
   },
 }));
