@@ -23,7 +23,12 @@ const RoomItem: FC<RoomItemProps> = ({ room, map, onClick, dispatch }) => {
     r.doors.find((d) => d.targetRoom === room.id)
   );
   const hasExits = room.doors.length > 0;
-  const issues = [!hasEntrances && 'No Entrances', !hasExits && 'No Exits']
+  const hasDoorsWithoutTarget = room.doors.some((d) => !d.targetRoom);
+  const issues = [
+    !hasEntrances && 'No Entrances',
+    !hasExits && 'No Exits',
+    hasDoorsWithoutTarget && 'Empty Doors',
+  ]
     .filter(Boolean)
     .join(', ');
 
@@ -32,6 +37,7 @@ const RoomItem: FC<RoomItemProps> = ({ room, map, onClick, dispatch }) => {
       <ListItemText
         primary={room.name}
         secondary={issues ? issues : undefined}
+        secondaryTypographyProps={{ color: 'error' }}
       />
       <ListItemSecondaryAction>
         <ConfirmButton
