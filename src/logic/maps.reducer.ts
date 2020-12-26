@@ -66,7 +66,7 @@ interface CreateDoor {
   roomId: RoomId;
   doorId: DoorId;
   name: string;
-  targetRoomId: RoomId;
+  targetRoomId: RoomId | undefined;
 }
 
 interface EditDoor {
@@ -75,7 +75,7 @@ interface EditDoor {
   roomId: RoomId;
   doorId: DoorId;
   name: string;
-  targetRoomId: RoomId;
+  targetRoomId: RoomId | undefined;
 }
 
 interface DeleteDoor {

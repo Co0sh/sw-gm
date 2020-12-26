@@ -32,10 +32,18 @@ const DoorItem: FC<DoorItemProps> = ({
   const [editing, setEditing] = useState(false);
   return (
     <>
-      <ListItem button onClick={() => setCurrentRoom(door.targetRoom)}>
+      <ListItem
+        button
+        disabled={!door.targetRoom}
+        onClick={() => door.targetRoom && setCurrentRoom(door.targetRoom)}
+      >
         <ListItemText
           primary={door.name}
-          secondary={map.rooms.find((r) => r.id === door.targetRoom)?.name}
+          secondary={
+            map.rooms.find((r) => r.id === door.targetRoom)?.name ?? (
+              <em>None</em>
+            )
+          }
         />
         <ListItemSecondaryAction className={classes.actions}>
           <FastIconButton onClick={() => setEditing(true)}>
@@ -54,7 +62,8 @@ const DoorItem: FC<DoorItemProps> = ({
             title="Delete Door"
             confirmLabel="Delete"
             additionalActions={[
-              ...(door.targetRoom !== map.startingRoom &&
+              ...(door.targetRoom &&
+              door.targetRoom !== map.startingRoom &&
               map.rooms
                 .find((r) => r.id === door.targetRoom)
                 ?.doors.filter((d) => d.targetRoom !== room.id).length === 0
@@ -63,6 +72,9 @@ const DoorItem: FC<DoorItemProps> = ({
                       id: 'delete' as any,
                       text: 'Delete the target room',
                       action: () => {
+                        if (!door.targetRoom) {
+                          return;
+                        }
                         dispatch({
                           type: 'deleteRoom',
                           map: map.id,

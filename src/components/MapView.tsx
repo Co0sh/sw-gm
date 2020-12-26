@@ -4,7 +4,15 @@ import Back from '@material-ui/icons/ArrowBack';
 import Add from '@material-ui/icons/Add';
 import Save from '@material-ui/icons/Save';
 import Edit from '@material-ui/icons/Edit';
-import { Dispatch, FC, memo, SetStateAction, useRef, useState } from 'react';
+import {
+  Dispatch,
+  FC,
+  memo,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { v4 } from 'uuid';
 import DoorItem from './DoorItem';
 import { asDoorId, Map, MapId } from '../model/map.model';
@@ -35,6 +43,13 @@ const MapView: FC<MapViewProps> = ({
   const nameRef = useRef<HTMLHeadingElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const room = map.rooms.find((r) => r.id === currentRoom);
+
+  useEffect(() => {
+    const div = descriptionRef.current;
+    if (editing && div) {
+      div.focus();
+    }
+  }, [editing]);
 
   if (!room) {
     throw new Error("Room doesn't exist");
@@ -90,7 +105,6 @@ const MapView: FC<MapViewProps> = ({
           confirmLabel="Create"
           onSave={(name, targetRoomId) => {
             const doorId = asDoorId(v4());
-            const backDoorId = asDoorId(v4());
             dispatch({
               type: 'createDoor',
               roomId: room.id,
@@ -98,14 +112,6 @@ const MapView: FC<MapViewProps> = ({
               mapId: map.id,
               name,
               targetRoomId: targetRoomId,
-            });
-            dispatch({
-              type: 'createDoor',
-              roomId: targetRoomId,
-              doorId: backDoorId,
-              mapId: map.id,
-              name: 'Back',
-              targetRoomId: room.id,
             });
             setNewDoorOpen(false);
           }}

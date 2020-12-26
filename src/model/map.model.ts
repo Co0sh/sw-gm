@@ -31,5 +31,5 @@ export interface Room {
 export interface Door {
   id: DoorId;
   name: string;
-  targetRoom: RoomId;
+  targetRoom?: RoomId;
 }

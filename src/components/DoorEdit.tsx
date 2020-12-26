@@ -13,7 +13,14 @@ import { Dispatch, FC, memo, useState } from 'react';
 import { v4 } from 'uuid';
 import { cn } from '../logic/cn';
 import { MapsAction } from '../logic/maps.reducer';
-import { asRoomId, Door, Map, Room, RoomId } from '../model/map.model';
+import {
+  asDoorId,
+  asRoomId,
+  Door,
+  Map,
+  Room,
+  RoomId,
+} from '../model/map.model';
 import { Div } from './Div';
 
 export interface DoorEditProps {
@@ -22,7 +29,7 @@ export interface DoorEditProps {
   door?: Door;
   open: boolean;
   onClose: () => void;
-  onSave: (name: string, targetRoom: RoomId) => void;
+  onSave: (name: string, targetRoom: RoomId | undefined) => void;
   dispatch: Dispatch<MapsAction>;
   label?: string;
   confirmLabel?: string;
@@ -93,18 +100,30 @@ const DoorEdit: FC<DoorEditProps> = ({
           </Button>
           <Button
             onClick={() => {
-              const targetRoomId = asRoomId(targetRoom ? targetRoom : v4());
-              if (!targetRoom) {
+              const targetRoomId =
+                targetRoomName || targetRoom
+                  ? asRoomId(targetRoom ? targetRoom : v4())
+                  : undefined;
+              if (!targetRoom && targetRoomId) {
                 dispatch({
                   type: 'createRoom',
                   name: targetRoomName,
                   map: map.id,
                   roomId: targetRoomId,
                 });
+                const backDoorId = asDoorId(v4());
+                dispatch({
+                  type: 'createDoor',
+                  roomId: targetRoomId,
+                  doorId: backDoorId,
+                  mapId: map.id,
+                  name: 'Back',
+                  targetRoomId: room.id,
+                });
               }
               onSave(name, targetRoomId);
             }}
-            disabled={!name || (!targetRoom && !targetRoomName)}
+            disabled={!name}
             variant="contained"
             color="primary"
             fullWidth
