@@ -51,6 +51,7 @@ const Prompt: FC<PromptProps> = ({
           label={inputLabel}
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          autoFocus
         />
         <Div row spacing>
           <Button onClick={onClose} fullWidth>

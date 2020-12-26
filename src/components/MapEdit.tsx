@@ -1,4 +1,4 @@
-import { Button, Dialog, Input, MenuItem, Select } from '@material-ui/core';
+import { Button, Dialog, MenuItem, Select, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import { Dispatch, FC, memo, useState } from 'react';
 import { cn } from '../logic/cn';
@@ -33,7 +33,12 @@ const MapEdit: FC<DoorEditProps> = ({
       classes={{ paper: cn(classes.root, className) }}
     >
       <Div spacing>
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
+        <TextField
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          label="Map Name"
+          autoFocus
+        />
         <Select
           value={String(startingRoom)}
           displayEmpty
