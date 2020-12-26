@@ -4,6 +4,7 @@ import Back from '@material-ui/icons/ArrowBack';
 import Add from '@material-ui/icons/Add';
 import Save from '@material-ui/icons/Save';
 import Edit from '@material-ui/icons/Edit';
+import RoomIcon from '@material-ui/icons/Room';
 import {
   Dispatch,
   FC,
@@ -22,6 +23,7 @@ import { FastIconButton } from './FastIconButton';
 import { Div } from './Div';
 import DoorEdit from './DoorEdit';
 import { cn } from '../logic/cn';
+import RoomList from './RoomList';
 
 export interface MapViewProps {
   map: Map;
@@ -37,6 +39,7 @@ const MapView: FC<MapViewProps> = ({
   className,
 }) => {
   const classes = useStyles();
+  const [listOpen, setListOpen] = useState(false);
   const [newDoorOpen, setNewDoorOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [currentRoom, setCurrentRoom] = useState(map.startingRoom);
@@ -151,7 +154,17 @@ const MapView: FC<MapViewProps> = ({
         >
           {editing ? <Save /> : <Edit />}
         </FastIconButton>
+        <FastIconButton onClick={() => setListOpen(true)}>
+          <RoomIcon />
+        </FastIconButton>
       </Div>
+      <RoomList
+        open={listOpen}
+        onClose={() => setListOpen(false)}
+        setCurrentRoom={setCurrentRoom}
+        map={map}
+        dispatch={dispatch}
+      />
     </>
   );
 };
