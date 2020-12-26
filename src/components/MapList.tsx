@@ -84,7 +84,7 @@ const MapItem: FC<MapItemProps> = ({ map, setCurrentMap, dispatch }) => {
   const [editing, setEditing] = useState(false);
   return (
     <ListItem button onClick={() => setCurrentMap(map.id)}>
-      <ListItemText primary={map.name} />
+      <ListItemText primary={<strong>{map.name}</strong>} />
       <ListItemSecondaryAction className={classes.actions}>
         <FastIconButton onClick={() => setEditing(true)}>
           <Edit />
