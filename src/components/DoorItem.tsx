@@ -53,6 +53,26 @@ const DoorItem: FC<DoorItemProps> = ({
             ButtonComponent={FastIconButton}
             title="Delete Door"
             confirmLabel="Delete"
+            additionalActions={[
+              ...(door.targetRoom !== map.startingRoom &&
+              map.rooms
+                .find((r) => r.id === door.targetRoom)
+                ?.doors.filter((d) => d.targetRoom !== room.id).length === 0
+                ? [
+                    {
+                      id: 'delete' as any,
+                      text: 'Delete the target room',
+                      action: () => {
+                        dispatch({
+                          type: 'deleteRoom',
+                          map: map.id,
+                          roomId: door.targetRoom,
+                        });
+                      },
+                    },
+                  ]
+                : []),
+            ]}
           >
             <Delete />
           </ConfirmButton>
@@ -60,6 +80,7 @@ const DoorItem: FC<DoorItemProps> = ({
             open={editing}
             onClose={() => setEditing(false)}
             map={map}
+            room={room}
             door={door}
             dispatch={dispatch}
             onSave={(name, targetRoom) => {

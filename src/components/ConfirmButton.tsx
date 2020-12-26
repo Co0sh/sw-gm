@@ -2,7 +2,9 @@ import { FC, memo, useState } from 'react';
 import {
   Button,
   ButtonProps,
+  Checkbox,
   Dialog,
+  FormControlLabel,
   makeStyles,
   Typography,
 } from '@material-ui/core';
@@ -13,7 +15,18 @@ export interface ConfirmButtonProps extends ButtonProps {
   description?: string;
   confirmLabel?: string;
   cancelLable?: string;
+  additionalActions?: AdditionalAction[];
   ButtonComponent?: any;
+}
+
+interface AdditionalActionId extends String {
+  __additionalActionId: never;
+}
+
+interface AdditionalAction {
+  id: AdditionalActionId;
+  text: string;
+  action: () => void;
 }
 
 const ConfirmButton: FC<ConfirmButtonProps> = ({
@@ -23,11 +36,27 @@ const ConfirmButton: FC<ConfirmButtonProps> = ({
   cancelLable = 'Cancel',
   children,
   onClick,
+  additionalActions = [],
   ButtonComponent = Button,
   ...buttonProps
 }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [checked, setChecked] = useState<AdditionalActionId[]>([]);
+
+  const toggle = (actionId: AdditionalActionId) => () => {
+    setChecked((prev) => {
+      const index = checked.indexOf(actionId);
+      if (index >= 0) {
+        const copy = [...prev];
+        copy.splice(index, 1);
+        return copy;
+      } else {
+        return [...prev, actionId];
+      }
+    });
+  };
+
   return (
     <>
       <ButtonComponent {...buttonProps} onClick={() => setOpen(true)}>
@@ -42,6 +71,18 @@ const ConfirmButton: FC<ConfirmButtonProps> = ({
           {title ?? children}
         </Typography>
         {description !== undefined && <Typography>{description}</Typography>}
+        {additionalActions.map((action) => (
+          <FormControlLabel
+            key={String(action.id)}
+            control={
+              <Checkbox
+                checked={checked.includes(action.id)}
+                onChange={toggle(action.id)}
+              />
+            }
+            label={action.text}
+          />
+        ))}
         <Div row spacing>
           <Button onClick={() => setOpen(false)} fullWidth>
             {cancelLable}
@@ -51,6 +92,11 @@ const ConfirmButton: FC<ConfirmButtonProps> = ({
             variant="contained"
             onClick={(e) => {
               onClick?.(e);
+              additionalActions.forEach(({ id, action }) => {
+                if (checked.includes(id)) {
+                  action();
+                }
+              });
               setOpen(false);
             }}
             fullWidth

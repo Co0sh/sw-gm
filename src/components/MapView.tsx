@@ -48,7 +48,7 @@ const MapView: FC<MapViewProps> = ({
           component="h1"
           align="center"
           gutterBottom
-          color="textSecondary"
+          color="primary"
         >
           {map.name}
         </Typography>
@@ -58,6 +58,7 @@ const MapView: FC<MapViewProps> = ({
           contentEditable={editing}
           ref={nameRef}
           dangerouslySetInnerHTML={{ __html: room.name }}
+          color="secondary"
         />
         <Typography
           contentEditable={editing}
@@ -84,7 +85,9 @@ const MapView: FC<MapViewProps> = ({
           dispatch={dispatch}
           onClose={() => setNewDoorOpen(false)}
           map={map}
+          room={room}
           label="Create Door"
+          confirmLabel="Create"
           onSave={(name, targetRoomId) => {
             const doorId = asDoorId(v4());
             const backDoorId = asDoorId(v4());

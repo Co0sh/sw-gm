@@ -1,20 +1,31 @@
-import { Button, Dialog, Input, MenuItem, Select } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import { Dispatch, FC, memo, useState } from 'react';
 import { v4 } from 'uuid';
 import { cn } from '../logic/cn';
 import { MapsAction } from '../logic/maps.reducer';
-import { asRoomId, Door, Map, RoomId } from '../model/map.model';
+import { asRoomId, Door, Map, Room, RoomId } from '../model/map.model';
 import { Div } from './Div';
 
 export interface DoorEditProps {
   map: Map;
+  room: Room;
   door?: Door;
   open: boolean;
   onClose: () => void;
   onSave: (name: string, targetRoom: RoomId) => void;
   dispatch: Dispatch<MapsAction>;
   label?: string;
+  confirmLabel?: string;
   className?: string;
 }
 
@@ -23,9 +34,11 @@ const DoorEdit: FC<DoorEditProps> = ({
   onClose,
   onSave,
   door,
+  room,
   map,
   dispatch,
-  label = 'Save',
+  label = 'Edit Door',
+  confirmLabel = 'Save',
   className,
 }) => {
   const classes = useStyles();
@@ -39,42 +52,66 @@ const DoorEdit: FC<DoorEditProps> = ({
       classes={{ paper: cn(classes.root, className) }}
     >
       <Div spacing>
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
-        <Select
-          value={String(targetRoom)}
-          displayEmpty
-          onChange={(e) => setTargetRoom(e.target.value as any)}
-        >
-          {map.rooms.map((r) => (
-            <MenuItem value={String(r.id)} key={String(r.id)}>
-              {r.name}
+        <Typography variant="h4" component="h1" align="center" gutterBottom>
+          {label}
+        </Typography>
+        <TextField
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          label="Door Name"
+          autoFocus
+        />
+        <FormControl>
+          <InputLabel shrink>Target Room</InputLabel>
+          <Select
+            value={String(targetRoom)}
+            displayEmpty
+            onChange={(e) => setTargetRoom(e.target.value as any)}
+          >
+            {map.rooms
+              .filter((r) => r.id !== room.id)
+              .map((r) => (
+                <MenuItem value={String(r.id)} key={String(r.id)}>
+                  {r.name}
+                </MenuItem>
+              ))}
+            <MenuItem value="">
+              <em>New Room</em>
             </MenuItem>
-          ))}
-          <MenuItem value="">New Room</MenuItem>
-        </Select>
+          </Select>
+        </FormControl>
         {!targetRoom && (
-          <Input
+          <TextField
             value={targetRoomName}
             onChange={(e) => setTargetRoomName(e.target.value)}
+            label="New Room Name"
           />
         )}
-        <Button
-          onClick={() => {
-            const targetRoomId = asRoomId(targetRoom ? targetRoom : v4());
-            if (!targetRoom) {
-              dispatch({
-                type: 'createRoom',
-                name: targetRoomName,
-                map: map.id,
-                roomId: targetRoomId,
-              });
-            }
-            onSave(name, targetRoomId);
-          }}
-          disabled={!name || (!targetRoom && !targetRoomName)}
-        >
-          {label}
-        </Button>
+        <Div row spacing>
+          <Button onClick={onClose} fullWidth>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              const targetRoomId = asRoomId(targetRoom ? targetRoom : v4());
+              if (!targetRoom) {
+                dispatch({
+                  type: 'createRoom',
+                  name: targetRoomName,
+                  map: map.id,
+                  roomId: targetRoomId,
+                });
+              }
+              onSave(name, targetRoomId);
+            }}
+            disabled={!name || (!targetRoom && !targetRoomName)}
+            variant="contained"
+            color="primary"
+            fullWidth
+          >
+            {confirmLabel}
+          </Button>
+        </Div>
       </Div>
     </Dialog>
   );
